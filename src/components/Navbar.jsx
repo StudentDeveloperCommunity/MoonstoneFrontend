@@ -9,7 +9,7 @@ export default function Navbar() {
       {/* MAIN NAVBAR */}
       <nav
         className="fixed top-4 left-1/2 -translate-x-1/2
-        bg-zinc-300 backdrop-blur-md shadow-xl z-50
+        bg-gradient-to-r from-slate-100 via-slate-300 to-slate-700 backdrop-blur-md shadow-xl z-50
         w-[90%] md:w-[60%] lg:w-[40%]
         rounded-full py-4 px-6 flex items-center justify-between"
       >
