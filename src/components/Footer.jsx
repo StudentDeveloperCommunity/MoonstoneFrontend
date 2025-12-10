@@ -44,11 +44,11 @@ const Footer = () => {
         {/* Center Section */}
         <div className="w-full md:w-[36%] py-8 md:py-10 flex flex-col justify-between items-center text-sm sm:text-base">
           <div className="grid grid-cols-2 pl-4 sm:pl-10 sm:grid-cols-2 gap-y-3 gap-x-10 pb-15">
-            <span className="cursor-pointer hover:underline hover:text-blue-500">Home</span>
-            <span className="cursor-pointer hover:underline hover:text-blue-500">About</span>
-            <span className="cursor-pointer hover:underline hover:text-blue-500">Events Techno</span>
-            <span className="cursor-pointer hover:underline hover:text-blue-500">Events Sports</span>
-            <span className="cursor-pointer hover:underline hover:text-blue-500">Events Cultural</span>
+            <a href="/" className="cursor-pointer hover:underline hover:text-blue-500">Home</a>
+            <a href="/aboutus" className="cursor-pointer hover:underline hover:text-blue-500">About</a>
+            <a href="/club?id=1" className="cursor-pointer hover:underline hover:text-blue-500">Events Techno</a>
+            <a href="/club?id=2" className="cursor-pointer hover:underline hover:text-blue-500">Events Sports</a>
+            <a href="/club?id=3" className="cursor-pointer hover:underline hover:text-blue-500">Events Cultural</a>
             
           </div>
           <div className="w-full h-[1px] bg-white/90" />
