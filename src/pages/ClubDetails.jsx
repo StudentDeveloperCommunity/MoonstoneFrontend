@@ -46,7 +46,7 @@ export default function ClubDetails() {
 console.log(events);
 console.log(clubid);
   return (
-    <div className="w-full flex flex-col items-center justify-center pt-20 pb-10">
+    <div className="w-full bg-black text-white flex flex-col items-center justify-center ">
 
       {/* ---------- TOP SECTION (FULL WIDTH IMAGE) ---------- */}
       <section className="w-full mb-12">
@@ -58,7 +58,7 @@ console.log(clubid);
 
         <div className="px-8 mt-6">
           <h2 className="text-3xl md:text-4xl font-bold mb-3">{top.title}</h2>
-          <p className="text-lg text-gray-700 leading-relaxed">
+          <p className="text-lg text-gray-300 leading-relaxed">
             {top.desc}
           </p>
         </div>
@@ -73,7 +73,7 @@ console.log(clubid);
           {events.map((event, index) => (
             <div
               key={event.id}
-              className={`grid md:grid-cols-2 gap-10 items-center ${
+              className={`grid md:grid-cols-2 mb-5 gap-10 items-center ${
                 index % 2 !== 0 ? "md:flex-row-reverse" : ""
               }`}
             >
@@ -91,7 +91,7 @@ console.log(clubid);
                 index % 2 !== 0 ? "md:order-1" : ""
               }`}>
                 <h4 className="text-2xl font-bold mb-3">{event.title}</h4>
-                <p className="text-gray-700 text-lg leading-relaxed">
+                <p className="text-gray-300 text-lg leading-relaxed">
                   {event.desc}
                 </p>
 

@@ -6,7 +6,7 @@ import img3 from "../assets/club/cultural-club-banner.png";
 
 export default function AboutUs() {
   return (
-    <div className="w-full flex mt-8 flex-col items-center justify-center pt-20 pb-10">
+    <div className="w-full flex mt-0 flex-col bg-black text-white items-center justify-center pt-20 pb-10">
 
       {/* ---------- TOP SECTION (FULL WIDTH IMAGE) ---------- */}
       <section className="w-full h-full  mb-20">
@@ -24,7 +24,7 @@ export default function AboutUs() {
             Moonstone at Medi-Caps
           </h2>
 
-          <p className="text-lg leading-relaxed px-10 text-gray-700 text-center md:text-left">
+          <p className="text-lg leading-relaxed px-10 text-gray-300 text-center md:text-left">
             Moonstone at Medi-Caps University is a dynamic student-driven initiative 
             that brings together creativity, innovation, and leadership.
             It serves as a platform for students to explore opportunities, 
@@ -53,7 +53,7 @@ export default function AboutUs() {
         {/* Right Text */}
         <div className="flex flex-col justify-center">
           <h3 className="text-2xl font-bold mb-3">Techno Club</h3>
-          <p className="text-gray-700 text-lg leading-relaxed">
+          <p className="text-gray-300 text-lg leading-relaxed">
             The Techno Club empowers students interested in programming, robotics, AI, 
             and modern tech innovations. Through workshops, hackathons, mentorship 
             sessions, and technical events, the club helps students develop strong 
@@ -88,7 +88,7 @@ export default function AboutUs() {
         {/* Text */}
         <div className="flex flex-col justify-center md:order-1">
           <h3 className="text-2xl font-bold mb-3">Cultural Club</h3>
-          <p className="text-gray-700 text-lg leading-relaxed">
+          <p className="text-gray-300 text-lg leading-relaxed">
             The Cultural Club celebrates creativity through dance, music, theatre, 
             and visual arts. It creates a space for students to express themselves and 
             discover their artistic talents while organising university-wide cultural 
@@ -124,7 +124,7 @@ export default function AboutUs() {
         {/* Right Text */}
         <div className="flex flex-col justify-center">
           <h3 className="text-2xl font-bold mb-3">Sports Club</h3>
-          <p className="text-gray-700 text-lg leading-relaxed">
+          <p className="text-gray-300 text-lg leading-relaxed">
             The Sports Club promotes fitness, teamwork, discipline, and competitive spirit. 
             Through tournaments, training sessions, and various indoor/outdoor games, 
             students learn to maintain a healthy lifestyle while representing the university.
