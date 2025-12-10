@@ -37,13 +37,13 @@ export default function Navbar() {
               group-hover:opacity-100 scale-95 group-hover:scale-100
               transition-all duration-300 z-50"
             >
-              <a href="#techno" className="block px-4 py-2 hover:bg-indigo-200">Techno</a>
-              <a href="#sports" className="block px-4 py-2 hover:bg-indigo-200">Sports</a>
-              <a href="#cultural" className="block px-4 py-2 hover:bg-indigo-200">Cultural</a>
+              <a href="/club?id=1" className="block px-4 py-2 hover:bg-indigo-200">Techno</a>
+              <a href="/club?id=2" className="block px-4 py-2 hover:bg-indigo-200">Sports</a>
+              <a href="/club?id=3" className="block px-4 py-2 hover:bg-indigo-200">Cultural</a>
             </div>
           </div>
 
-          <a href="#" className="hover:text-indigo-600">About</a>
+          <a href="/aboutus" className="hover:text-indigo-600">About</a>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -74,13 +74,13 @@ export default function Navbar() {
 
           {isEventOpen && (
             <div className="pl-4 animate-fadeIn">
-              <a href="#techno" className="block py-2 hover:bg-indigo-100">Techno</a>
-              <a href="#sports" className="block py-2 hover:bg-indigo-100">Sports</a>
-              <a href="#cultural" className="block py-2 hover:bg-indigo-100">Cultural</a>
+              <a href="/club?id=1" className="block py-2 hover:bg-indigo-100">Techno</a>
+              <a href="/club?id=2" className="block py-2 hover:bg-indigo-100">Sports</a>
+              <a href="/club?id=3" className="block py-2 hover:bg-indigo-100">Cultural</a>
             </div>
           )}
 
-          <a href="#" className="block py-3 hover:bg-indigo-50">About</a>
+          <a href="/aboutus" className="block py-3 hover:bg-indigo-50">About</a>
         </div>
       )}
     </>

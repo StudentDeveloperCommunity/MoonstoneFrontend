@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-import img1 from "../assets/club/techno.png";
-import img2 from "../assets/club/sports.png";
-import img3 from "../assets/club/cultural.jpeg";
+import img1 from "../assets/club/techno-club-banner.png";
+import img2 from "../assets/club/sports-club-banner.png";
+import img3 from "../assets/club/cultural-club-banner.png";
 
 export default function Clubs() {
   const clubs = [
@@ -12,21 +12,24 @@ export default function Clubs() {
       desc: "Explore tech events, coding competitions, robotics & innovation.",
       img: img1,
       color: "from-[#1a1f2e] to-[#0d1219] border-blue-500/40",
-      id:"techno"
+      id:"techno",
+      nav:"/club?id=1"
     },
     {
       name: "Sports Club",
       desc: "Enhance physical skills through tournaments and athletic activities.",
       img: img2,
       color: "from-[#1e2a1f] to-[#10160f] border-green-500/40",
-      id:"sports"
+      id:"sports",
+      nav:"/club?id=2"
     },
     {
       name: "Cultural Club",
       desc: "Celebrate music, dance, drama, and India’s cultural heritage.",
       img: img3,
       color: "from-[#2a1f2d] to-[#160f18] border-pink-500/40",
-      id:"cultural"
+      id:"cultural",
+      nav:"/club?id=3"
     },
   ];
 
@@ -70,6 +73,8 @@ export default function Clubs() {
                 flex justify-center items-center
                 opacity-0 group-hover:opacity-100
                 transition-all duration-300"
+              onClick={() => window.location.href = club.nav}
+
             >
               View More →
             </motion.button>
