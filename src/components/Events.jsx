@@ -54,6 +54,7 @@ export default function Events() {
 
             {/* Hover Overlay */}
             <motion.div
+            onClick={()=>window.location.href="/allevents"}
               initial={{ opacity: 0 }}
               whileHover={{ opacity: 1 }}
               className="absolute inset-0 bg-black/60 flex items-center justify-center
