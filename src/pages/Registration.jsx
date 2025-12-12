@@ -1,4 +1,4 @@
-import React, { useState } from "react";  
+import React, { useState } from "react";
 import eventImg from "../assets/events/event-2.avif";
 
 export default function EventRegistration() {
@@ -13,12 +13,14 @@ export default function EventRegistration() {
     m3Enroll: "",
     m4Name: "",
     m4Enroll: "",
+    utrNumber: "",
   });
 
+  const [paymentFile, setPaymentFile] = useState(null);
   const [errors, setErrors] = useState({});
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-  const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile: starts with 6-9, 10 digits total
+  const phoneRegex = /^[6-9]\d{9}$/;
 
   const setField = (key, val) => {
     setForm((prev) => ({ ...prev, [key]: val }));
@@ -26,46 +28,66 @@ export default function EventRegistration() {
 
   const onChange = (key) => (e) => {
     let val = e.target.value;
+
     if (key === "leadPhone") {
-      // keep digits only and cap to 10
       val = val.replace(/\D/g, "").slice(0, 10);
     }
     if (key.endsWith("Name")) {
-      // enforce max 20 characters for any name field
       val = val.slice(0, 20);
     }
+
     setField(key, val);
   };
 
+  /** --------------- FILE VALIDATION (1 MB LIMIT) ----------------- */
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    if (file.size > 1 * 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        paymentFile: "File must be less than 1 MB",
+      }));
+      setPaymentFile(null);
+      return;
+    }
+
+    setErrors((prev) => ({ ...prev, paymentFile: null }));
+    setPaymentFile(file);
+  };
+
+  /** ------------------------ VALIDATIONS ------------------------- */
   const validate = () => {
     const e = {};
 
-    // Lead name: required and <= 20
     if (!form.leadName.trim()) e.leadName = "Name is required";
     else if (form.leadName.trim().length > 20) e.leadName = "Max 20 characters";
 
-    // Optional member names: if provided, must be <= 20
     ["m2Name", "m3Name", "m4Name"].forEach((k) => {
       if (form[k] && form[k].trim().length > 20) e[k] = "Max 20 characters";
     });
 
-    // Email required + format
     if (!form.leadEmail.trim()) e.leadEmail = "Email is required";
     else if (!emailRegex.test(form.leadEmail)) e.leadEmail = "Invalid email address";
 
-    // Phone required + 10 digits
     if (!form.leadPhone.trim()) e.leadPhone = "Phone is required";
-    else if (!phoneRegex.test(form.leadPhone)) e.leadPhone = "Enter valid Indian mobile (starts with 6-9)";
+    else if (!phoneRegex.test(form.leadPhone)) e.leadPhone = "Enter valid Indian mobile";
+
+    if (!paymentFile) e.paymentFile = "Payment screenshot required";
+
+    if (!form.utrNumber.trim()) e.utrNumber = "UTR number required";
 
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
   const onSubmit = (e) => {
-    if (e && e.preventDefault) e.preventDefault();
+    e.preventDefault();
     if (!validate()) return;
-    // Success path: you can integrate API here
-    alert("Registration validated successfully");
+
+    alert("Registration validated successfully with payment details");
   };
 
   return (
@@ -95,7 +117,7 @@ export default function EventRegistration() {
       </div>
 
       {/* Form Sections */}
-      <div className="w-full max-w-3xl mt-10 flex flex-col gap-8">
+      <form className="w-full max-w-3xl mt-10 flex flex-col gap-8">
 
         {/* Team Lead */}
         <FormSection title="Team Lead">
@@ -131,18 +153,61 @@ export default function EventRegistration() {
           </div>
         </FormSection>
 
-        {/* Submit Button */}
+        {/* -------------- PAYMENT SECTION ---------------- */}
+        <FormSection title="Payment Details">
+
+          <p className="text-sm font-medium mb-2">Upload Payment Screenshot</p>
+
+          <label className="w-full bg-[#0A1128] text-white py-3 rounded-lg flex justify-center items-center gap-3 cursor-pointer hover:opacity-90 transition">
+            <span>⬆ Upload File</span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileUpload}
+            />
+          </label>
+
+          {errors.paymentFile && (
+            <p className="text-red-600 text-xs mt-1">{errors.paymentFile}</p>
+          )}
+
+          {paymentFile && (
+            <p className="text-xs mt-2 text-green-600">
+              File selected: {paymentFile.name}
+            </p>
+          )}
+
+          <div className="mt-4">
+            <Input
+              label="UTR Number"
+              name="utrNumber"
+              placeholder="Enter valid UTR number"
+              value={form.utrNumber}
+              onChange={onChange("utrNumber")}
+              error={errors.utrNumber}
+            />
+          </div>
+        </FormSection>
+
+        {/* Submit */}
         <div className="w-full flex justify-center">
-          <button type="button" onClick={onSubmit} className="px-8 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition">
-            Submit Registration
+          <button
+            type="submit"
+            onClick={onSubmit}
+            className="px-10 py-3 rounded-lg text-white font-medium 
+            bg-gradient-to-r from-blue-900 via-purple-600 to-red-600 
+            hover:opacity-90 transition"
+          >
+            Complete Registration
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
 
-/* ---------------------- Reusable Components ---------------------- */
+/* ------------------------------------------------------ */
 
 function Detail({ label, value }) {
   return (
@@ -164,7 +229,7 @@ function FormSection({ title, children }) {
 
 function Input({ label, placeholder, required, type = "text", name, value, onChange, maxLength, error }) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 mb-2">
       <label className="text-sm text-gray-700">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
@@ -175,8 +240,8 @@ function Input({ label, placeholder, required, type = "text", name, value, onCha
         type={type}
         placeholder={placeholder}
         maxLength={maxLength}
-        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg 
-                  text-sm focus:ring-2 focus:ring-black focus:outline-none"
+        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm
+        focus:ring-2 focus:ring-black focus:outline-none"
       />
       {error && <span className="text-xs text-red-600">{error}</span>}
     </div>
