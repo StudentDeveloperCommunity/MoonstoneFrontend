@@ -44,6 +44,7 @@ export default function Navbar() {
           </div>
 
           <a href="/aboutus" className="hover:text-indigo-600">About</a>
+          <a href="/registration" className="hover:text-indigo-600">Register</a>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -81,6 +82,7 @@ export default function Navbar() {
           )}
 
           <a href="/aboutus" className="block py-3 hover:bg-indigo-50">About</a>
+          <a href="/registration" className="block py-3 hover:bg-indigo-50">Register</a>
         </div>
       )}
     </>
