@@ -5,6 +5,7 @@ import Footer from "./components/Footer.jsx";
 import AllEvents from "./pages/AllEvents.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import ClubDetails from "./pages/ClubDetails.jsx";
+import Registration from "./pages/Registration.jsx";
 
 const AppContent = () => {
   return (
@@ -15,6 +16,7 @@ const AppContent = () => {
         <Route path="/allevents" element={<AllEvents />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/club" element={<ClubDetails />} />
+        <Route path="/registration" element={<Registration />} />
       </Routes>
 
       <Footer />
