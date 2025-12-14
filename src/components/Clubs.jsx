@@ -1,86 +1,92 @@
-import { motion } from "framer-motion";
 import React from "react";
+import { Link } from "react-router-dom";
 
-import img1 from "../assets/club/techno-club-banner.png";
-import img2 from "../assets/club/sports-club-banner.png";
-import img3 from "../assets/club/cultural-club-banner.png";
-
-export default function Clubs() {
-  const clubs = [
+export default function Index() {
+  const events = [
     {
-      name: "Techno Club",
-      desc: "Explore tech events, coding competitions, robotics & innovation.",
-      img: img1,
-      color: "from-[#1a1f2e] to-[#0d1219] border-blue-500/40",
-      id:"techno",
-      nav:"/club?id=1"
+      id: 1,
+      title: "Techno",
+      image:
+        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
     },
     {
-      name: "Sports Club",
-      desc: "Enhance physical skills through tournaments and athletic activities.",
-      img: img2,
-      color: "from-[#1e2a1f] to-[#10160f] border-green-500/40",
-      id:"sports",
-      nav:"/club?id=2"
+      id: 2,
+      title: "Sports",
+      image:
+        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
     },
     {
-      name: "Cultural Club",
-      desc: "Celebrate music, dance, drama, and India’s cultural heritage.",
-      img: img3,
-      color: "from-[#2a1f2d] to-[#160f18] border-pink-500/40",
-      id:"cultural",
-      nav:"/club?id=3"
+      id: 3,
+      title: "Cultural",
+      image:
+        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
     },
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-black to-gray-900 text-white">
-      <h2 className="text-center text-4xl font-semibold mb-12">Our Clubs</h2>
+    <div className="min-h-screen bg-black flex items-center justify-center px-4 py-16">
+      <div className="w-full max-w-[1440px]">
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 px-10">
-        {clubs.map((club) => (
-          <motion.div
-          id={club.id}
-            key={club.name}
-            whileHover={{ scale: 1.05 }}
-            className={`relative rounded-2xl p-6 bg-gradient-to-br ${club.color}
-              shadow-xl border group overflow-hidden`}
-          >
-            {/* Image */}
-            <div className="w-full h-48 flex justify-center">
-              <img
-                src={club.img}
-                className="h-full object-contain drop-shadow-xl"
-                alt={club.name}
-              />
-            </div>
+       
+        <div className="text-center mb-12">
+          <h2 className="text-xl font-bold uppercase mb-4 tracking-wide text-gray-300">
+            Explore events
+          </h2>
 
-            {/* Name */}
-            <h3 className="text-2xl font-bold mt-6 text-center">{club.name}</h3>
+          <h1 className="text-4xl md:text-5xl font-bold text-white uppercase mb-6">
+            Discover What's Happening Next
+          </h1>
 
-            {/* Description */}
-            <p className="text-center text-lg opacity-90 mt-3 px-2">
-              {club.desc}
-            </p>
+          <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Stay in the loop with exciting moments unfolding around you.
+          </p>
+        </div>
 
-            {/* Center Hover Button */}
-            <motion.button
-            //   initial={{ opacity: 0, scale: 0.8 }}
-            //   whileHover={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="absolute inset-0 m-auto h-12 w-40 
-                bg-white text-black font-semibold rounded-full shadow-xl
-                flex justify-center items-center
-                opacity-0 group-hover:opacity-100
-                transition-all duration-300"
-              onClick={() => window.location.href = club.nav}
-
+       
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+          {events.map((event) => (
+            <Link
+              key={event.id}
+              to={`/club?id=${event.id}`} 
+              className="relative group aspect-square overflow-hidden rounded-xl cursor-pointer"
             >
-              View More →
-            </motion.button>
-          </motion.div>
-        ))}
+             
+              <img
+                src={event.image}
+                alt={event.title}
+                className="absolute inset-0 w-full h-full object-cover z-0"
+              />
+
+              
+              <div className="absolute inset-0 bg-black/40 z-10" />
+
+              
+              <div
+                className="absolute -top-0 -right-0 w-12 h-12 rounded
+                  bg-white/10 backdrop-blur-xl border border-white/20
+                  scale-100 group-hover:scale-[28]
+                  transition-transform duration-500 ease-out
+                  z-10"
+              />
+
+              
+              <button className="absolute top-2 right-4 z-20 text-white text-xl">
+                →
+              </button>
+
+              
+              <div className="absolute bottom-8 left-8 z-20">
+                <h3
+                  className="text-white text-4xl font-bold tracking-wide
+                    transition-colors duration-300"
+                >
+                  {event.title}
+                </h3>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
