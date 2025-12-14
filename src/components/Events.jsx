@@ -17,7 +17,7 @@ export default function Events() {
   const row1Ref = useRef(null);
   const row2Ref = useRef(null);
 
-  const imagesTop = [img1, img2, img3,img4, img5, img6];
+  const imagesTop = [img1, img2, img3, img4, img5, img6];
   const imagesBottom = [img7, img8, img9, img10, img11];
 
   // Auto Scroll Function
@@ -57,18 +57,9 @@ export default function Events() {
           <motion.div
             key={index}
             whileHover={{ scale: 1.05 }}
-            className="relative min-w-[380px] h-64 cursor-pointer rounded-2xl overflow-hidden shadow-xl group"
+            className="relative min-w-[380px] h-64 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
           >
             <img src={img} className="w-full h-full object-cover" />
-
-            <motion.div
-              onClick={() => (window.location.href = "/allevents")}
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 1 }}
-              className="absolute inset-0 bg-black/60 flex items-center justify-center text-xl font-semibold backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300"
-            >
-              View More →
-            </motion.div>
           </motion.div>
         ))}
       </div>
@@ -82,18 +73,9 @@ export default function Events() {
           <motion.div
             key={index}
             whileHover={{ scale: 1.05 }}
-            className="relative min-w-[320px] h-56 cursor-pointer rounded-2xl overflow-hidden shadow-xl group"
+            className="relative min-w-[320px] h-56 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
           >
             <img src={img} className="w-full h-full object-cover" />
-
-            <motion.div
-              onClick={() => (window.location.href = "/allevents")}
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 1 }}
-              className="absolute inset-0 bg-black/60 flex items-center justify-center text-xl font-semibold backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300"
-            >
-              View More →
-            </motion.div>
           </motion.div>
         ))}
       </div>
