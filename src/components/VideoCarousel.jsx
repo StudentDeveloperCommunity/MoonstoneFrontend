@@ -1,18 +1,18 @@
 export default function About() {
   return (
-    <div className="min-h-screen bg-black mt-16 flex items-center justify-center py-16 px-4">
-      <div className="w-full max-w-[1440px] mx-auto rounded-t-[25px] overflow-hidden">
-        <div className="flex flex-col lg:flex-row items-stretch min-h-[583px]">
-          <div className="w-full lg:w-[604px] flex-shrink-0 bg-black rounded-r-[25px] lg:rounded-r-[25px] lg:rounded-l-none p-8 lg:p-0 flex items-center justify-center overflow-hidden">
-            <video
-              className="w-full h-full object-cover"
-              controls
-              poster="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80"
-            >
-              <source src="" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
+  <div className="min-h-screen bg-black mt-16 flex items-center justify-center py-16 px-4">
+  <div className="w-full max-w-[1440px] mx-auto rounded-t-[25px] overflow-hidden">
+    <div className="flex flex-col lg:flex-row items-stretch min-h-[500px]">
+      <div className="w-full lg:w-[500px] flex-shrink-0 bg-black rounded-r-[25px] lg:rounded-r-[25px] lg:rounded-l-none p-6 lg:p-4 flex items-center justify-center overflow-hidden">
+        <video
+          className="w-full h-full object-cover rounded-lg"
+          controls
+          poster="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80"
+        >
+          <source src="" type="video/mp4" />
+          video
+        </video>
+      </div>
 
           <div className="flex-1 px-6 lg:px-12 py-8 lg:py-16 flex flex-col justify-center">
             <h2 
