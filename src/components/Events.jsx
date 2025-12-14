@@ -20,7 +20,7 @@ export default function Events() {
   const imagesTop = [img1, img2, img3, img4, img5, img6];
   const imagesBottom = [img7, img8, img9, img10, img11];
 
-  // Auto Scroll Function
+  // Auto scroll function
   const autoScroll = (ref, speed) => {
     const container = ref.current;
     if (!container) return;
@@ -28,9 +28,11 @@ export default function Events() {
     const scroll = () => {
       container.scrollLeft += speed;
 
-      if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
+      // Reset scroll to start when half of the duplicated content has scrolled
+      if (container.scrollLeft >= container.scrollWidth / 2) {
         container.scrollLeft = 0;
       }
+
       requestAnimationFrame(scroll);
     };
 
@@ -38,8 +40,8 @@ export default function Events() {
   };
 
   useEffect(() => {
-    autoScroll(row1Ref, 0.6); // top row slightly faster
-    autoScroll(row2Ref, 0.4); // bottom row slower
+    autoScroll(row1Ref, 0.3); 
+    autoScroll(row2Ref, 0.4); 
   }, []);
 
   return (
@@ -48,32 +50,37 @@ export default function Events() {
         Event Highlights
       </h2>
 
-      {/* ---------------- TOP ROW (BIGGER IMAGES) ---------------- */}
+      {/* ---------------- TOP ROW ---------------- */}
+  
       <div
         ref={row1Ref}
-        className="flex gap-6 px-6 overflow-x-scroll overflow-y-hidden no-scrollbar scroll-smooth mb-10"
+        className="flex gap-6 px-6 overflow-x-none whitespace-nowrap mb-10"
       >
-        {imagesTop.map((img, index) => (
+        {[...imagesTop, ...imagesTop].map((img, index) => (
           <motion.div
             key={index}
             whileHover={{ scale: 1.05 }}
-            className="relative min-w-[380px] h-64 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
+            className="inline-block relative min-w-[380px] h-64 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
           >
             <img src={img} className="w-full h-full object-cover" />
           </motion.div>
         ))}
       </div>
 
-      {/* ---------------- BOTTOM ROW (SLIGHTLY SMALLER) ---------------- */}
-      <div
-        ref={row2Ref}
-        className="flex gap-6 px-6 overflow-x-scroll overflow-y-hidden no-scrollbar scroll-smooth"
-      >
-        {imagesBottom.map((img, index) => (
+      {/* ---------------- BOTTOM ROW ---------------- */}
+    <div
+  ref={row2Ref}
+  className="flex gap-6 pl-6 pr-0 overflow-x-hidden whitespace-nowrap mb-0 scrollbar-none"
+  style={{ transform: "scaleX(-1)" }}
+>
+
+      
+        {[...imagesBottom, ...imagesBottom].map((img, index) => (
           <motion.div
             key={index}
             whileHover={{ scale: 1.05 }}
-            className="relative min-w-[320px] h-56 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
+            className="inline-block relative min-w-[320px] h-56 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
+            style={{ transform: "scaleX(-1)" }} // Flip item back to normal
           >
             <img src={img} className="w-full h-full object-cover" />
           </motion.div>
