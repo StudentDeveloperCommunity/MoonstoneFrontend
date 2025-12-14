@@ -5,6 +5,10 @@
 html {
   @apply scroll-smooth;
 }
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
 
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */

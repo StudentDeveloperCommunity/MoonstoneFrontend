@@ -42,38 +42,73 @@ export function Countdown({ startTime, onComplete }) {
   const padZero = (num) => String(num).padStart(2, "0");
 
   return (
-    <div className="flex flex-col items-center gap-8">
-      <div className="flex gap-4 md:gap-6 justify-center items-center">
-        {["Days", "Hours", "Minutes", "Seconds"].map((label, index) => {
-          const value = [
-            timeLeft.days,
-            timeLeft.hours,
-            timeLeft.minutes,
-            timeLeft.seconds,
-          ][index];
+    <div className="w-full flex flex-col items-center">
+      
+      {/* COUNTER GRID */}
+      <div
+        className="
+          w-full max-w-5xl
+          px-3 sm:px-6 md:px-0   /* 👈 left & right margin */
+          grid grid-cols-4
+          gap-2 sm:gap-3 md:gap-6
+        "
+      >
+        {Object.entries(timeLeft).map(([label, value]) => (
+          <div
+            key={label}
+            className="
+              flex flex-col items-center
+              gap-1 sm:gap-2 md:gap-3
 
-          return (
+              bg-[rgb(140_140_140_/_20%)]
+              rounded-md sm:rounded-lg
+
+              px-2 py-3
+              sm:px-4 sm:py-5
+              md:px-10 md:py-10
+            "
+          >
+            {/* NUMBER */}
             <div
-              key={label}
-              className="flex flex-col items-center gap-3 bg-[rgb(140_140_140_/_20%)] rounded-lg px-7 md:px-10 py-7 md:py-10"
+              className="
+                text-lg
+                sm:text-2xl
+                md:text-6xl
+                font-black
+                text-white
+                tracking-wide
+              "
             >
-              <div className="text-4xl md:text-6xl font-black text-white tracking-wider">
-                {padZero(value)}
-              </div>
-              <div className="text-xs md:text-sm font-bold text-gray-300 uppercase tracking-widest">
-                {label}
-              </div>
+              {padZero(value)}
             </div>
-          );
-        })}
+
+            {/* LABEL */}
+            <div
+              className="
+                text-[9px]
+                sm:text-xs
+                md:text-sm
+                font-bold
+                text-gray-300
+                uppercase
+                tracking-widest
+                text-center
+              "
+            >
+              {label}
+            </div>
+          </div>
+        ))}
       </div>
 
-      <div className="text-gray-500 text-xs md:text-sm font-bold uppercase tracking-widest">
-        STARTING SOON
+      {/* STATUS TEXT */}
+      <div className="mt-4 text-gray-500 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-widest">
+        Starting Soon
       </div>
     </div>
   );
 }
+
 
 Countdown.propTypes = {
   startTime: PropTypes.instanceOf(Date).isRequired,

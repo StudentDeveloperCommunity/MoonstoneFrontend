@@ -133,16 +133,17 @@ export default function Index() {
 
               {/* 🔥 Hover expanding gradient (replacement for ::before) */}
              <div
-  className="absolute -top-4 -right-4 w-8 h-8 rounded-full
+  className="absolute -top-0 -right-0 w-12 h-12 rounded
   bg-white/10 backdrop-blur-xl border border-white/20
   scale-100 group-hover:scale-[28]
   transition-transform duration-500 ease-out
   z-10"
+  
 />
 
 
               {/* Arrow */}
-              <button className="absolute top-4 right-4 z-20 text-white text-xl">
+              <button className="absolute top-2 right-4 z-20 text-white text-xl">
                 →
               </button>
 

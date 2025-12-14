@@ -94,145 +94,154 @@ export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isEventOpen, setIsEventOpen] = useState(false);
 
-  return (
-    <>
-      {/* NAVBAR */}
-      <nav className="fixed top-4 left-0 right-0 z-50 flex justify-center text-white">
-        <div className="relative w-full max-w-6xl mx-6">
-          
-          {/* Glass boundary */}
-          <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-md
-            border border-white/30 rounded-2xl
-            shadow-[0_0_25px_rgba(255,255,255,0.08)]"
-          />
-
-          {/* Stars background */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute rounded-full bg-white/30 animate-pulse"
-                style={{
-                  width: Math.random() * 2 + 1 + "px",
-                  height: Math.random() * 2 + 1 + "px",
-                  left: Math.random() * 100 + "%",
-                  top: Math.random() * 100 + "%",
-                  animationDelay: Math.random() * 3 + "s",
-                  animationDuration: Math.random() * 3 + 2 + "s",
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Content */}
-          <div className="relative px-6 py-4 flex items-center justify-between">
-            
-            {/* Logo */}
-            <Link to="/" className="font-bold tracking-tight group">
-              <div className="flex flex-col leading-tight">
-                <span className="text-emerald-400 group-hover:text-emerald-300 transition">
-                  moon
-                </span>
-                <span className="text-emerald-400 group-hover:text-emerald-300 text-sm transition">
-                  stone
-                </span>
-              </div>
-            </Link>
-
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-8">
-              <Link className="nav-link" to="/">Home</Link>
-
-              {/* Events Dropdown */}
-              <div className="relative group">
-                <button
-                  type="button"
-                  className="nav-link flex items-center gap-1 bg-transparent border-none outline-none"
-                >
-                  Events <span className="text-xs">▼</span>
-                </button>
-
-                <div
-                  className="absolute left-1/2 top-9 -translate-x-1/2
-                  bg-black/80 backdrop-blur-xl border border-white/20
-                  rounded-xl w-44 py-2 opacity-0 scale-95
-                  group-hover:opacity-100 group-hover:scale-100
-                  transition-all duration-300"
-                >
-                  <Link to="/club?id=1" className="dropdown-item">Techno</Link>
-                  <Link to="/club?id=2" className="dropdown-item">Sports</Link>
-                  <Link to="/club?id=3" className="dropdown-item">Cultural</Link>
-                </div>
-              </div>
-
-              <Link className="nav-link" to="/about">About</Link>
-            </div>
-
-            {/* Mobile Toggle */}
-            <button
-              onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className="md:hidden text-white text-2xl bg-transparent border-none"
-            >
-              ☰
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* MOBILE MENU */}
-      {isMobileOpen && (
+ return (
+  <>
+    {/* NAVBAR */}
+    <nav className="fixed top-3 inset-x-0 z-50 flex justify-center text-white">
+      <div className="relative w-full max-w-6xl px-3 sm:px-4">
+        
+        {/* Glass boundary */}
         <div
-          className="md:hidden fixed top-24 left-1/2 -translate-x-1/2
-          w-[90%] bg-black/85 backdrop-blur-xl
-          border border-white/20 rounded-2xl
-          shadow-2xl p-6 z-40 space-y-2 text-white"
-        >
-          <Link className="mobile-item" to="/">Home</Link>
+          className="
+            absolute inset-0
+            rounded-xl
+            bg-black/40 backdrop-blur-md
+            border border-white/20
+            shadow-lg
+            overflow-hidden
+          "
+        />
 
-          <button
-            onClick={() => setIsEventOpen(!isEventOpen)}
-            className="mobile-item flex justify-between w-full bg-transparent border-none"
-          >
-            Events <span>▼</span>
-          </button>
-
-          {isEventOpen && (
-            <div className="pl-4 space-y-2">
-              <Link className="mobile-sub" to="/club?id=1">Techno</Link>
-              <Link className="mobile-sub" to="/club?id=2">Sports</Link>
-              <Link className="mobile-sub" to="/club?id=3">Cultural</Link>
-            </div>
-          )}
-
-          <Link className="mobile-item" to="/about">About</Link>
+        {/* Stars background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <span
+              key={i}
+              className="absolute rounded-full bg-white/30 animate-pulse"
+              style={{
+                width: "2px",
+                height: "2px",
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+              }}
+            />
+          ))}
         </div>
-      )}
 
-      {/* Utility styles */}
-      <style>
-        {`
-          .nav-link {
-            @apply text-sm font-medium text-white relative transition;
-          }
-          .nav-link::after {
-            content: '';
-            @apply absolute left-0 -bottom-1 w-0 h-0.5 bg-emerald-400 transition-all;
-          }
-          .nav-link:hover::after {
-            width: 100%;
-          }
-          .dropdown-item {
-            @apply block px-4 py-2 text-sm text-white hover:bg-white/10;
-          }
-          .mobile-item {
-            @apply block py-3 px-2 text-white hover:bg-white/10 rounded-lg;
-          }
-          .mobile-sub {
-            @apply block py-2 text-sm text-white/90 hover:text-white;
-          }
-        `}
-      </style>
-    </>
-  );
-}
+        {/* Content */}
+        <div className="relative flex items-center justify-between px-3 sm:px-4 py-3">
+          
+          {/* Logo */}
+          <Link to="/" className="font-bold tracking-tight shrink-0">
+            <div className="flex flex-col leading-tight text-sm sm:text-base">
+              <span className="text-emerald-400">moon</span>
+              <span className="text-emerald-400 text-xs sm:text-sm">
+                stone
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center gap-6">
+            <Link className="nav-link" to="/">Home</Link>
+
+            <div className="relative group">
+              <button className="nav-link flex items-center gap-1">
+                Events <span className="text-xs">▼</span>
+              </button>
+
+              <div
+                className="
+                  absolute left-1/2 top-8 -translate-x-1/2
+                  w-40
+                  bg-black/90 backdrop-blur-xl
+                  border border-white/20
+                  rounded-xl
+                  opacity-0 scale-95
+                  group-hover:opacity-100 group-hover:scale-100
+                  transition
+                "
+              >
+                <Link className="dropdown-item" to="/club?id=1">Techno</Link>
+                <Link className="dropdown-item" to="/club?id=2">Sports</Link>
+                <Link className="dropdown-item" to="/club?id=3">Cultural</Link>
+              </div>
+            </div>
+
+            <Link className="nav-link" to="/about">About</Link>
+          </div>
+
+          {/* Mobile Toggle */}
+          <button
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            className="md:hidden text-xl px-2"
+          >
+            ☰
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    {/* MOBILE MENU */}
+    {isMobileOpen && (
+      <div
+        className="
+          fixed top-[4.5rem] inset-x-0
+          mx-auto w-[92%] max-w-sm
+          bg-black/90 backdrop-blur-xl
+          border border-white/20
+          rounded-xl
+          p-4
+          z-40
+          space-y-2
+          text-white
+        "
+      >
+        <Link className="mobile-item" to="/">Home</Link>
+
+        <button
+          onClick={() => setIsEventOpen(!isEventOpen)}
+          className="mobile-item flex justify-between w-full"
+        >
+          Events <span>▼</span>
+        </button>
+
+        {isEventOpen && (
+          <div className="pl-4 space-y-1">
+            <Link className="mobile-sub" to="/club?id=1">Techno</Link>
+            <Link className="mobile-sub" to="/club?id=2">Sports</Link>
+            <Link className="mobile-sub" to="/club?id=3">Cultural</Link>
+          </div>
+        )}
+
+        <Link className="mobile-item" to="/about">About</Link>
+      </div>
+    )}
+
+    {/* Utility styles */}
+    <style>
+      {`
+        .nav-link {
+          @apply text-sm font-medium relative;
+        }
+        .nav-link::after {
+          content: '';
+          @apply absolute left-0 -bottom-1 w-0 h-0.5 bg-emerald-400 transition-all;
+        }
+        .nav-link:hover::after {
+          width: 100%;
+        }
+        .dropdown-item {
+          @apply block px-4 py-2 text-sm hover:bg-white/10;
+        }
+        .mobile-item {
+          @apply block py-3 px-2 rounded-lg hover:bg-white/10;
+        }
+        .mobile-sub {
+          @apply block py-2 text-sm text-white/80;
+        }
+      `}
+    </style>
+  </>
+)};
