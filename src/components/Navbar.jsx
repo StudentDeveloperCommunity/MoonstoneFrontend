@@ -148,26 +148,27 @@ export default function Navbar() {
 
             <div className="relative group">
               <button className="nav-link flex items-center gap-1">
-                Events <span className="text-xs">▼</span>
+                Events <span className="text-xs"></span>
               </button>
 
-              <div
-                className="
-                  absolute left-1/2 top-8 -translate-x-1/2
-                  w-40
-                  bg-black/90 backdrop-blur-xl
-                  border border-white/20
-                  rounded-xl
-                  opacity-0 scale-95
-                  group-hover:opacity-100 group-hover:scale-100
-                  transition
-                "
-              >
-                <Link className="dropdown-item" to="/club?id=1">Techno</Link>
-                <Link className="dropdown-item" to="/club?id=2">Sports</Link>
-                <Link className="dropdown-item" to="/club?id=3">Cultural</Link>
-              </div>
-            </div>
+            <div
+  className="
+    absolute left-2 top-8 -translate-x-1/4
+    w-20
+    flex flex-col items-center justify-center
+    backdrop-blur-md
+    rounded-xl
+    opacity-0 scale-95
+    group-hover:opacity-100 group-hover:scale-100
+    transition
+    p-2
+  "
+>
+  <Link className="dropdown-item" to="/club?id=1">Techno</Link>
+  <Link className="dropdown-item" to="/club?id=2">Sports</Link>
+  <Link className="dropdown-item" to="/club?id=3">Cultural</Link>
+</div>
+</div>
 
             <Link className="nav-link" to="/about">About</Link>
           </div>
