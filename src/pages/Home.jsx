@@ -137,6 +137,8 @@ import Clubs from "../components/Clubs";
 import VideoCarousel from "../components/VideoCarousel";
 import moonVideo from "../assets/herosection/moon.mp4";
 import background from "../assets/herosection/hero1.jpg";
+import Faq from "../components/Faq";
+import Sponsors from "../components/Sponsors";
 
 
 export default function Index() {
@@ -147,10 +149,10 @@ export default function Index() {
   return (
     <div className="w-full">
 
-      {/* HERO SECTION */}
+      
       <div className="relative min-h-screen w-full overflow-hidden">
 
-        {/* Background Image */}
+        
       <div
   className="absolute inset-0 bg-cover bg-center"
   style={{
@@ -160,7 +162,7 @@ export default function Index() {
   }}
 />
 
-        {/* Stars Overlay */}
+        
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
   {Array.from({ length: 180 }).map((_, i) => (
     <div
@@ -184,7 +186,7 @@ export default function Index() {
 </div>
 
 
-        {/* HERO CONTENT */}
+        {/* HERO CONTENT  */}
         <div className="relative z-10 flex flex-col items-center text-center px-4" style={{ paddingTop: "25vh" }}>
           
           <div className="flex flex-col items-center justify-center space-y-4">
@@ -271,6 +273,9 @@ export default function Index() {
       <VideoCarousel />
       <Events />
       <Clubs />
+      <Sponsors/>
+      <Faq/>
+      
 
     </div>
   );

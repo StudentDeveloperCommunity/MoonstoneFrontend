@@ -20,7 +20,7 @@ export default function Events() {
   const imagesTop = [img1, img2, img3, img4, img5, img6];
   const imagesBottom = [img7, img8, img9, img10, img11];
 
-  // Auto scroll function
+  
   const autoScroll = (ref, speed) => {
     const container = ref.current;
     if (!container) return;
@@ -28,7 +28,7 @@ export default function Events() {
     const scroll = () => {
       container.scrollLeft += speed;
 
-      // Reset scroll to start when half of the duplicated content has scrolled
+      
       if (container.scrollLeft >= container.scrollWidth / 2) {
         container.scrollLeft = 0;
       }
@@ -80,7 +80,7 @@ export default function Events() {
             key={index}
             whileHover={{ scale: 1.05 }}
             className="inline-block relative min-w-[320px] h-56 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
-            style={{ transform: "scaleX(-1)" }} // Flip item back to normal
+            style={{ transform: "scaleX(-1)" }} 
           >
             <img src={img} className="w-full h-full object-cover" />
           </motion.div>
