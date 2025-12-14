@@ -91,7 +91,7 @@ export default function EventRegistration() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white px-6 py-10 flex flex-col items-center">
+    <div className="w-full border-2 min-h-screen bg-white px-6 py-10 flex flex-col items-center">
       {/* Header */}
       <div className="flex flex-col items-center">
         <h1 className="text-2xl font-semibold text-black">Event Registration</h1>
