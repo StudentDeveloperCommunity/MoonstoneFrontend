@@ -1,6 +1,6 @@
 export default function About() {
   return (
-  <div className="min-h-screen bg-black mt-16 flex items-center justify-center py-16 px-4">
+  <div className="min-h-screen bg-black flex items-center justify-center py-16 px-4">
   <div className="w-full max-w-[1440px] mx-auto rounded-t-[25px] overflow-hidden">
     <div className="flex flex-col lg:flex-row items-stretch min-h-[500px]">
       <div className="w-full lg:w-[500px] flex-shrink-0 bg-black rounded-r-[25px] lg:rounded-r-[25px] lg:rounded-l-none p-6 lg:p-4 flex items-center justify-center overflow-hidden">
