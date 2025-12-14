@@ -1,93 +1,199 @@
-import React from "react";
+// import {
+//   FaLinkedinIn,
+//   FaInstagram,
+//   FaYoutube,
+//   FaXTwitter,
+//   FaFacebookF,
+// } from "react-icons/fa6";
+
+// export default function Footer() {
+//   return (
+
+// <footer className="w-full bg-black text-white pt-8 sm:pt-16 pb-6 sm:pb-12">
+//   <div
+//     className="
+//       max-w-[1500px] mx-auto
+//       border border-white/25 rounded-2xl
+//       px-4 sm:px-8 lg:px-10
+//       py-6 sm:py-10 lg:py-12
+//       overflow-hidden
+//     "
+//     style={{ background: "rgba(0,0,0,0.2)" }}
+//   >
+//     <div
+//       className="
+//         grid grid-cols-1
+//         gap-8 sm:gap-10
+//         sm:grid-cols-2
+//         md:grid-cols-12
+//       "
+//     >
+//       {/* LOGO */}
+//       <div className="md:col-span-3 flex justify-center md:justify-start">
+//         <img
+//           src="/moonstone-logo.png"
+//           alt="Moonstone"
+//           className="w-36 sm:w-48 lg:w-[220px]"
+//         />
+//       </div>
+
+//       {/* SPACER (desktop only) */}
+//       <div className="hidden md:block md:col-span-4"></div>
+
+//       {/* INFORMATION */}
+//      <div className="md:col-start-10 md:col-span-3 flex flex-col items-center md:items-start">
+//   <p className="text-xs tracking-widest opacity-70">
+//     INFORMATION
+//   </p>
+//   <ul className="mt-3 flex flex-col gap-2 text-sm sm:text-base">
+//     <li className="hover:text-gray-300 cursor-pointer">Home</li>
+//     <li className="hover:text-gray-300 cursor-pointer">About</li>
+//     <li className="hover:text-gray-300 cursor-pointer">Events</li>
+//   </ul>
+// </div>
+
+
+//       {/* SOCIAL ICONS */}
+//       <div className="md:col-span-3 flex justify-center md:justify-start gap-4 mt-4 md:mt-14 flex-wrap">
+//         {[FaLinkedinIn, FaInstagram, FaYoutube, FaXTwitter, FaFacebookF].map(
+//           (Icon, index) => (
+//             <div
+//               key={index}
+//               className="
+//                 w-10 h-10 sm:w-11 sm:h-11
+//                 flex items-center justify-center
+//                 bg-white text-black
+//                 rounded-full text-lg sm:text-xl
+//                 cursor-pointer
+//                 hover:bg-gray-200 transition
+//               "
+//             >
+//               <Icon />
+//             </div>
+//           )
+//         )}
+//       </div>
+
+//       {/* PHONE NUMBERS */}
+//       <div className="md:col-span-3 mt-4 md:mt-14 text-sm leading-relaxed flex flex-col items-center md:items-start">
+//         <p>+91 7313111500</p>
+//         <p>+91 7313111501</p>
+//       </div>
+
+//       {/* ADDRESS */}
+//       <div className="md:col-span-2 mt-4 md:mt-14 text-sm leading-relaxed flex flex-col items-center md:items-start text-center md:text-left">
+//         <p>A.B. Road Pigdamber, Rau,</p>
+//         <p>Indore, Madhya Pradesh 453331</p>
+//       </div>
+
+//       {/* EMAIL */}
+//       <div className="md:col-span-3 mt-4 md:mt-14 text-sm flex flex-col items-center md:items-start break-all">
+//         <p className="opacity-70">Gmail</p>
+//         <p>director.admissions@medicaps.ac.in</p>
+//       </div>
+//     </div>
+//   </div>
+// </footer>
+
+
+//   );
+// }
+
+
 import {
-  FaMapMarkerAlt,
-  FaPhoneAlt,
-  FaEnvelope,
+  FaLinkedinIn,
   FaInstagram,
-  FaLinkedin,
-  FaFacebook,
   FaYoutube,
-} from "react-icons/fa";
-import { PiXLogoFill } from "react-icons/pi";
+  FaXTwitter,
+  FaFacebookF,
+} from "react-icons/fa6";
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <div className="w-full bg-zinc-950 text-white font-['Poppins'] border-t border-t-white">
-      <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:flex-wrap divide-y md:divide-y-0 md:divide-x divide-white/90">
-        {/* Left Section */}
-        <div className="w-full md:w-[32%] py-8 md:py-10 flex flex-col gap-8 md:gap-10">
-          <div className="flex flex-col items-center justify-center md:justify-start">
-            {/* <img src={logo} alt="Logo" className="w-24 sm:w-28 h-auto" /> */}
-            <h1 className="text-3xl font-extrabold tracking-wide text-indigo-700 cursor-pointer hover:scale-105 transition-transform duration-300">
-              MoonStone - Medicaps University
-            </h1>
+    <footer className="w-full bg-black text-white pt-8 sm:pt-16 pb-6 sm:pb-12">
+      <div
+        className="
+          max-w-[1500px] mx-auto
+          border border-white/25 rounded-2xl
+          px-4 sm:px-8 lg:px-10
+          py-6 sm:py-10 lg:py-12
+          overflow-hidden
+        "
+        style={{ background: "rgba(0,0,0,0.2)" }}
+      >
+        <div
+          className="
+            grid grid-cols-1
+            gap-8 sm:gap-10
+            sm:grid-cols-2
+            md:grid-cols-12
+          "
+        >
+          {/* LOGO */}
+          <div className="md:col-span-3 flex justify-center md:justify-start">
+            <img
+              src="/moonstone-logo.png"
+              alt="Moonstone"
+              className="w-36 sm:w-48 lg:w-[220px]"
+            />
           </div>
-          <div className="w-full h-[1px] bg-white/90" />
-          <div className="flex flex-col items-center md:items-start gap-4 pl-4 sm:pl-6 md:px-8 pt-6 text-sm sm:text-base">
-            <div className="flex items-start gap-2">
-              <FaMapMarkerAlt className="mt-1" />
-              <span>AB Road Pigdamber, Rau, Indore, M.P. -453331</span>
-            </div>
-            <div className="flex items-center flex-wrap gap-2">
-              <FaPhoneAlt />
-              <span>+91-0731-3111481</span>
-              <span className="px-1">|</span>
-              <span>+91-7723019451</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FaEnvelope />
-              <span>info@moonstone.com</span>
-            </div>
+
+          {/* SPACER (desktop only) */}
+          <div className="hidden md:block md:col-span-4"></div>
+
+          {/* INFORMATION */}
+          <div className="md:col-start-10 md:col-span-3 flex flex-col items-center md:items-start">
+            <p className="text-xs tracking-widest opacity-70">INFORMATION</p>
+            <ul className="mt-3 flex flex-col gap-2 text-sm sm:text-base">
+              <li className="hover:text-gray-300 cursor-pointer">Home</li>
+              <li className="hover:text-gray-300 cursor-pointer">About</li>
+              <li className="hover:text-gray-300 cursor-pointer">Events</li>
+            </ul>
           </div>
-        </div>
 
-        {/* Center Section */}
-        <div className="w-full md:w-[36%] py-8 md:py-10 flex flex-col justify-between items-center text-sm sm:text-base">
-          <div className="grid grid-cols-2 pl-4 sm:pl-10 sm:grid-cols-2 gap-y-3 gap-x-10 pb-15">
-            <a href="/" className="cursor-pointer hover:underline hover:text-blue-500">Home</a>
-            <a href="/aboutus" className="cursor-pointer hover:underline hover:text-blue-500">About</a>
-            <a href="/club?id=1" className="cursor-pointer hover:underline hover:text-blue-500">Events Techno</a>
-            <a href="/club?id=2" className="cursor-pointer hover:underline hover:text-blue-500">Events Sports</a>
-            <a href="/club?id=3" className="cursor-pointer hover:underline hover:text-blue-500">Events Cultural</a>
-            
+          {/* SOCIAL ICONS */}
+          <div className="md:col-span-3 flex justify-center md:justify-start gap-4 mt-4 md:mt-14 md:flex-nowrap">
+            {[FaLinkedinIn, FaInstagram, FaYoutube, FaXTwitter, FaFacebookF].map(
+              (Icon, index) => (
+                <div
+                  key={index}
+                  className="
+                    w-10 h-10 sm:w-11 sm:h-11
+                    flex items-center justify-center
+                    bg-white text-black
+                    rounded-full text-lg sm:text-xl
+                    cursor-pointer
+                    hover:bg-gray-200 transition
+                  "
+                >
+                  <Icon />
+                </div>
+              )
+            )}
           </div>
-          <div className="w-full h-[1px] bg-white/90" />
-          <div className="mt-3 px-2 text-center text-white/80 text-[10px] sm:text-[11px] md:text-[12px] leading-snug">
-            Copyright: © 2025 Medicaps University. <br />
-            {/* <span className="underline text-white">by@createshaan</span> */}
-          </div>
-        </div>
 
-        {/* Right Section */}
-        <div className="w-full md:w-[32%] px-1 sm:px-3 md:px-1 py-8 md:py-10 flex flex-col gap-4 items-center">
-          <div className="text-xl sm:text-2xl font-normal">Have a Query?</div>
-          <div className="text-lg sm:text-xl font-normal">Reach Out To Us!</div>
+          {/* CONTACT COLUMNS */}
+          <div className="md:col-span-9 flex flex-col md:flex-row mb-1 md:justify-between md:gap-10 mt-4 md:mt-14">
+            {/* PHONE NUMBERS */}
+            <div className="text-sm leading-relaxed flex flex-col items-center md:items-start">
+              <p>+91 7313111500</p>
+              <p>+91 7313111501</p>
+            </div>
 
-          <button className="cursor-pointer mt-2 px-6 py-2 bg-gradient-to-r from-[#140555] to-[#5e0816] text-white rounded-2xl text-sm sm:text-base font-light border border-white/40 w-fit">
-            Get in Touch &gt;
-          </button>
+            {/* ADDRESS */}
+            <div className="text-sm leading-relaxed flex flex-col items-center mb-1 md:items-start text-center md:text-left">
+              <p>A.B. Road Pigdamber, Rau,</p>
+              <p>Indore, Madhya Pradesh 453331</p>
+            </div>
 
-          <div className="flex gap-3 mt-4 flex-wrap">
-            <div className="w-7 h-7 bg-white text-black rounded-lg flex items-center justify-center">
-              <FaInstagram size={14} />
-            </div>
-            <div className="w-7 h-7 bg-white text-black rounded-lg flex items-center justify-center">
-              <FaLinkedin size={14} />
-            </div>
-            <div className="w-7 h-7 bg-white text-black rounded-lg flex items-center justify-center">
-              <PiXLogoFill size={14} />
-            </div>
-            <div className="w-7 h-7 bg-white text-black rounded-lg flex items-center justify-center">
-              <FaFacebook size={14} />
-            </div>
-            <div className="w-7 h-7 bg-white text-black rounded-lg flex items-center justify-center">
-              <FaYoutube size={14} />
+            {/* EMAIL */}
+            <div className="text-sm flex flex-col items-center md:items-start break-all ">
+              <p className="opacity-70">Gmail</p>
+              <p>director.admissions@medicaps.ac.in</p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
-};
-
-export default Footer;
+}
