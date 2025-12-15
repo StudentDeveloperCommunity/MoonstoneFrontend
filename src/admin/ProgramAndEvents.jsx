@@ -1,0 +1,435 @@
+import { useEffect, useState } from "react";
+import EventAdd from "../api-files/EventAPIs/EventAdd";
+import WebsiteLoader from "../Loader/WebsiteLoader";
+import EventFetcher from "../api-files/EventAPIs/EventFetcher";
+import { API_URL } from "../NwConfig";
+import { form } from "framer-motion/client";
+
+export default function ProgramAndEvents({ userRole }) {
+  const [events, setEvents] = useState([]);
+
+  const updateEvent = (index, field, value) => {
+  const updated = [...events];
+
+  updated[index][field] = value;
+
+  // ⭐ FIX: If eventCategory = "single", auto set participants = 1
+  if (field === "eventCategory" && value === "single") {
+    updated[index].minParticipants = 1;
+    updated[index].maxParticipants = 1;
+  }
+
+  // ⭐ FIX: Ensure eventType never becomes null for non-admin users
+  if (field === "eventType" && userRole !== "admin") {
+    updated[index].eventType = userRole;
+  }
+
+  setEvents(updated);
+};
+
+
+  const handleImageUpload = (index, file) => {
+  if (!file) return;
+
+  const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+
+  if (file.size > maxSize) {
+    alert("File size must be less than 2MB!");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const updated = [...events];
+    updated[index].image = file;
+    updated[index].imagePreview = reader.result;
+    setEvents(updated);
+  };
+  reader.readAsDataURL(file);
+};
+
+
+  const addNewEvent = () => {
+  setEvents([
+    ...events,
+    {
+      image: null,
+      imagePreview: null,
+      title: "",
+      description: "",
+      eventType: userRole === "admin" ? "" : userRole,
+      eventCategory: "single",
+      minParticipants: 1,   // ⭐ default for single
+      maxParticipants: 1,   // ⭐ default for single
+      eventDate: "",
+      eventTime: "",
+      fee:""
+    },
+  ]);
+};
+
+
+  const deleteEvent = (index) => {
+    setEvents(events.filter((_, i) => i !== index));
+  };
+const [loading,setLoading]=useState(false);
+function formatDate(dateString) {
+  if (!dateString) return "";
+  return new Date(dateString).toISOString().split("T")[0];
+}
+
+const urlToFile = async (url, filename) => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+
+  return new File([blob], filename, {
+    type: blob.type,
+    lastModified: Date.now(),
+  });
+};
+
+async function geteventsinfo() {
+  setLoading(true);
+  const data={role:userRole};
+  const res = await EventFetcher(data);
+  // console.log("Fetched Events:", res);  
+  if (res?.success && res?.events?.length > 0) {
+  const mappedEvents = await Promise.all(
+    res.events.map(async (event) => {
+      let imageFile = null;
+      let imagePreview = null;
+
+      if (event.image) {
+        const imageUrl = `${API_URL}/${event.image}`;
+        const filename = event.image.split("/").pop();
+
+        // 🔥 Convert backend image URL → REAL File
+        imageFile = await urlToFile(imageUrl, filename);
+        imagePreview = URL.createObjectURL(imageFile);
+      }
+
+      return {
+        ...event,
+
+        // actual File stored here 👇
+        image: imageFile,
+
+        // preview for UI
+        imagePreview,
+
+        eventDate: formatDate(event.eventDate),
+      };
+    })
+  );
+
+  setEvents(mappedEvents);
+}
+else{
+    setEvents([{
+      image: null,
+      imagePreview: null,
+      title: "",
+      description: "",
+      eventType: userRole === "admin" ? "" : userRole,
+      eventCategory: "single", // ⭐ NEW FIELD
+      minParticipants: 1,
+      maxParticipants: 1,
+      eventDate: "",
+    eventTime: "",
+      fee:""
+    }]);
+  }
+
+  setLoading(false);
+}
+
+useEffect(()=>{
+    geteventsinfo()
+},[])
+  const handleSubmit = async() => {
+    setLoading(true);
+  for (let i = 0; i < events.length; i++) {
+    const e = events[i];
+
+    if (!e.image) {
+      alert(`Event #${i + 1}: Image is required`);
+      return;
+    }
+    if (e.title.trim().length < 10) {
+      alert(`Event #${i + 1}: Title must be at least 10 characters`);
+      return;
+    }
+    if (e.description.trim().length < 30) {
+      alert(`Event #${i + 1}: Description must be at least 30 characters`);
+      return;
+    }
+    if (!e.eventDate) {
+      alert(`Event #${i + 1}: Event date is required`);
+      return;
+    }
+    if (!e.eventTime) {
+      alert(`Event #${i + 1}: Event time is required`);
+      return;
+    }
+    if (userRole === "admin" && !e.eventType) {
+      alert(`Event #${i + 1}: Event type must be selected`);
+      return;
+    }
+    if (e.fee < 50) {
+        alert(`Event #${i + 1}: Minimum Fees must be alteast 50`);
+        return;
+      }
+
+    // Team validation
+    if (e.eventCategory === "team") {
+      if (e.minParticipants < 1) {
+        alert(`Event #${i + 1}: Minimum participants must be at least 1`);
+        return;
+      }
+      if (e.maxParticipants < e.minParticipants) {
+        alert(`Event #${i + 1}: Maximum participants must be >= minimum participants`);
+        return;
+      }
+    }
+  }
+
+  // If all good → submit final data
+  const finalEvents = events.map(event => ({
+    ...event,
+    eventType: event.eventType || userRole,
+  }));
+
+//   console.log("FINAL EVENTS LIST:", finalEvents);
+const formData=new FormData()
+events.forEach((event, index) => {
+    formData.append(`events[${index}][title]`, event.title);
+    formData.append(`events[${index}][description]`, event.description);
+    formData.append(`events[${index}][eventDate]`, event.eventDate);
+    formData.append(`events[${index}][eventTime]`, event.eventTime);
+    formData.append(`events[${index}][eventCategory]`, event.eventCategory);
+    formData.append(`events[${index}][fee]`, event.fee);
+    // auto-set eventType for non-admins
+    formData.append(`events[${index}][eventType]`, event.eventType || userRole);
+
+      formData.append(`events[${index}][minParticipants]`, event.minParticipants);
+      formData.append(`events[${index}][maxParticipants]`, event.maxParticipants);
+
+    // file (multer expects a file)
+    formData.append(`eventimages_${index}`, event.image);
+  });
+  formData.append(`user`, userRole);
+  const res=await EventAdd(formData);
+//   console.log(res);
+if(res?.success){
+    alert("Events added successfully!");
+    setLoading(false);
+}
+else{
+    alert("Error adding events. Please try again.");
+    setLoading(false);
+}
+};
+
+
+  return (
+    <div className="p-6">
+        {
+            loading && <WebsiteLoader/>
+        }
+      <h1 className="text-2xl font-semibold mb-4">Program and Events Management</h1>
+      <p className="mb-6 capitalize">User Role: {userRole}</p>
+
+      {events.map((event, index) => (
+        <div key={index} className="border p-6 mb-6 bg-white rounded-lg shadow-md">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold">Event #{index + 1}</h2>
+
+            {events.length > 1 && (
+              <button
+                onClick={() => deleteEvent(index)}
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+              >
+                Delete
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* LEFT: IMAGE */}
+            <div>
+              <label className="block font-medium mb-2">Upload Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                required
+                onChange={(e) => handleImageUpload(index, e.target.files[0])}
+                className="mb-4"
+              />
+
+              {event.imagePreview && (
+                <img
+                  src={event.imagePreview}
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded border"
+                />
+              )}
+            </div>
+
+            {/* RIGHT SECTION */}
+            <div className="max-h-[360px] overflow-y-auto pr-2">
+              {/* TITLE */}
+              <label className="block font-medium mb-2">Title</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded mb-4"
+                required
+                minLength={10}
+                maxLength={100}
+                value={event.title}
+                onChange={(e) => updateEvent(index, "title", e.target.value)}
+              />
+
+              {/* DESCRIPTION */}
+              <label className="block font-medium mb-2">Description</label>
+              <textarea
+                className="w-full p-2 border rounded mb-4"
+                rows={3}
+                required
+                minLength={30}
+                maxLength={500}
+                value={event.description}
+                onChange={(e) => updateEvent(index, "description", e.target.value)}
+              />
+
+              <label className="block font-medium mb-2">Registration Fees</label>
+              <input
+                type="number"
+                className="w-full p-2 border rounded mb-4"
+                required
+                min={50}
+                max={1000}
+                value={event.fee}
+                onChange={(e) => updateEvent(index, "fee", e.target.value)}
+              />
+
+              {/* EVENT DATE */}
+<label className="block font-medium mb-2">Event Date</label>
+<input
+  type="date"
+  className="w-full p-2 border rounded mb-4"
+  value={event.eventDate}
+  required
+  onChange={(e) => updateEvent(index, "eventDate", e.target.value)}
+/>
+
+{/* EVENT TIME */}
+<label className="block font-medium mb-2">Event Time</label>
+<input
+  type="time"
+  className="w-full p-2 border rounded mb-4"
+  value={event.eventTime}
+  required
+  onChange={(e) => updateEvent(index, "eventTime", e.target.value)}
+/>
+
+
+              {/* EVENT TYPE — ADMIN ONLY */}
+              {userRole === "admin" && (
+                <div className="mb-4">
+                  <label className="block font-medium mb-2">Select Event Type</label>
+                  <div className="space-y-2">
+                    {["techno", "cultural", "sports"].map((type) => (
+                      <label key={type} className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          name={`eventType_${index}`}
+                          value={type}
+                          checked={event.eventType === type}
+                          onChange={() => updateEvent(index, "eventType", type)}
+                        />
+                        <span className="capitalize">{type}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Non-admin auto event type */}
+              {userRole !== "admin" && (
+                <div className="p-2 bg-gray-100 capitalize rounded text-sm text-gray-700">
+                  Event Type: <b>{userRole}</b>
+                </div>
+              )}
+
+              {/* ⭐ NEW SECTION: EVENT CATEGORY (Single / Team) */}
+              <div className="mt-4">
+                <label className="block font-medium mb-2">Event Category</label>
+
+                <div className="space-y-2">
+                  {["single", "team"].map((cat) => (
+                    <label key={cat} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        name={`eventCategory_${index}`}
+                        required
+                        value={cat}
+                        checked={event.eventCategory === cat}
+                        onChange={() => updateEvent(index, "eventCategory", cat)}
+                      />
+                      <span className="capitalize">{cat}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* ⭐ SHOW ONLY IF "team" SELECTED */}
+              {event.eventCategory === "team" && (
+                <div className="mt-4">
+                  <label className="block font-medium">Minimum Participants</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="10"
+                    required
+                    className="w-full p-2 border rounded mb-3"
+                    value={event.minParticipants}
+                    onChange={(e) =>
+                      updateEvent(index, "minParticipants", e.target.value)
+                    }
+                  />
+
+                  <label className="block font-medium">Maximum Participants</label>
+                  <input
+                    type="number"
+                    min={event.minParticipants || 1}
+                    max={20}
+                    required
+                    className="w-full p-2 border rounded"
+                    value={event.maxParticipants}
+                    onChange={(e) =>
+                      updateEvent(index, "maxParticipants", e.target.value)
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <button
+            onClick={addNewEvent}
+            className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-900"
+          >
+            + Add New Event
+          </button>
+        </div>
+      ))}
+
+      <button
+        onClick={handleSubmit}
+        className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Submit Changes
+      </button>
+    </div>
+  );
+}
