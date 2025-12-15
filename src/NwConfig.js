@@ -1,4 +1,5 @@
-export const API_URL="http://localhost:3000"
+// export const API_URL="http://localhost:3000"
+export const API_URL="https://moonstone-backend-fgxi.onrender.com"
 export const Frontend_API_URL="http://localhost:5173"
 // AUTH APIS
 export const login="/api/auth/login"
