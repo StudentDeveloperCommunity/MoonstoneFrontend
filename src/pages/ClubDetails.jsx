@@ -9,30 +9,43 @@ import img3 from "../assets/events/event-3.avif";
 import img4 from "../assets/events/event-4.avif";
 import img5 from "../assets/events/event-5.webp";
 import img6 from "../assets/events/event-6.avif";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import EventFetcher from "../api-files/EventAPIs/EventFetcher";
+import { API_URL } from "../NwConfig";
+import WebsiteLoader from "../Loader/WebsiteLoader";
 export default function ClubDetails() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+  const Navigate=useNavigate()
   const clubId = queryParams.get("id");
   const [clubid, setClubid] = useState(clubId || 1);
+  const [loading,setLoading]=useState(false);
+  const getclubevents=async()=>{
+    setLoading(true);
+    const form={"role":clubid==1?"techno":clubid==2?"sports":"cultural"};
+    // console.log(form);
+    const res=await EventFetcher(form)
+    // console.log(res);
+    if(res?.success){
+      setEvent(res?.events);
+      setLoading(false);
+    }
+    setLoading(false);
+  }
   
   // Sample Event Data (Replace with API data later)
-  const ev=[
-      { id: 1, title: "Robo Race", desc: "Experience high-speed robotics in this intense techno challenge ", img: img1, category: "techno" },
-      { id: 2, title: "Football Championship", desc: "Compete and show your athletic excellence in our sports league.", img: img2, category: "sports" },
-      { id: 3, title: "Cultural Fest", desc: "Celebrate music, dance, art, and cultural diversity.", img: img3, category: "cultural" },
-      { id: 1, title: "Hackathon", desc: "Showcase coding skills and build real-world solutions overnight.", img: img4, category: "techno" },
-      { id: 3, title: "Drama Night", desc: "A celebration of performance arts & cultural expression.", img: img5, category: "cultural" },
-      { id: 1, title: "Tech Circuit", desc: "Compete in intense hardware building & debugging challenges.", img: img6, category: "techno" },
-    ]
+  // const ev=[
+  //     { id: 1, title: "Robo Race", desc: "Experience high-speed robotics in this intense techno challenge ", img: img1, category: "techno" },
+  //     { id: 2, title: "Football Championship", desc: "Compete and show your athletic excellence in our sports league.", img: img2, category: "sports" },
+  //     { id: 3, title: "Cultural Fest", desc: "Celebrate music, dance, art, and cultural diversity.", img: img3, category: "cultural" },
+  //     { id: 1, title: "Hackathon", desc: "Showcase coding skills and build real-world solutions overnight.", img: img4, category: "techno" },
+  //     { id: 3, title: "Drama Night", desc: "A celebration of performance arts & cultural expression.", img: img5, category: "cultural" },
+  //     { id: 1, title: "Tech Circuit", desc: "Compete in intense hardware building & debugging challenges.", img: img6, category: "techno" },
+  //   ]
   const [events,setEvent] = useState([]);
     const [top,settop]=useState({img:bannerimg1,title:"Techno Club",desc:"The Techno Club focuses on coding, AI, robotics and software innovations. Students collaborate to create solutions, participate in hackathons, and build real-world development & research skills."});
     useEffect(()=>{
-    setEvent(ev.filter(event=> {
-      if(clubid==1) return event.category==="techno";
-      else if(clubid==2) return event.category==="sports";
-      else if(clubid==3) return event.category==="cultural";
-    }))
+    
     if(clubid==1){
       settop({img:bannerimg1,title:"Techno Club",desc:"The Techno Club focuses on coding, AI, robotics and software innovations. Students collaborate to create solutions, participate in hackathons, and build real-world development & research skills."});
     }
@@ -42,12 +55,21 @@ export default function ClubDetails() {
     else if(clubid==3){
       settop({img:bannerimg3,title:"Cultural Club",desc:"The Cultural Club celebrates artistic expression and diversity through music, dance, drama, and cultural festivals."});
     }
+    getclubevents()
   },[clubid])
-console.log(events);
-console.log(clubid);
+
+  const redirecttoregister=(event)=>{
+    Navigate("/register",{state:{event:event}})
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+// console.log(events);
+// console.log(clubid);
   return (
     <div className="w-full bg-black text-white flex flex-col items-center justify-center ">
-
+      {
+        loading && <WebsiteLoader/>
+      }
       {/* ---------- TOP SECTION (FULL WIDTH IMAGE) ---------- */}
       <section className="w-full mb-12">
         <img
@@ -72,7 +94,7 @@ console.log(clubid);
 
           {events.map((event, index) => (
             <div
-              key={event.id}
+              key={event._id}
               className={`grid md:grid-cols-2 mb-5 gap-10 items-center ${
                 index % 2 !== 0 ? "md:flex-row-reverse" : ""
               }`}
@@ -80,7 +102,7 @@ console.log(clubid);
               {/* Event Image */}
               <div className={index % 2 !== 0 ? "md:order-2" : ""}>
                 <img
-                  src={event.img}
+                  src={`${API_URL}/${event.image}`}
                   alt={event.title}
                   className="rounded-2xl shadow-lg w-full h-[280px] object-cover"
                 />
@@ -92,7 +114,7 @@ console.log(clubid);
               }`}>
                 <h4 className="text-2xl font-bold mb-3">{event.title}</h4>
                 <p className="text-gray-300 text-lg leading-relaxed">
-                  {event.desc}
+                  {event.description}
                 </p>
 
                 {/* Gradient Button */}
@@ -100,6 +122,7 @@ console.log(clubid);
                   className="h-12 w-48 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
                   text-white font-semibold rounded-full shadow-xl mt-5 transition-all duration-300
                   hover:scale-105 hover:shadow-2xl"
+                onClick={()=>redirecttoregister(event)}
                 >
                   Register Now →
                 </button>

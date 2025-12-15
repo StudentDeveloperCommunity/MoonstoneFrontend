@@ -1,0 +1,279 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { API_URL } from "../NwConfig";
+import FetchRegisterEvent from "../api-files/RegisertAPIs/FetchRegisteredEvent";
+import RegistrationUpdate from "../api-files/RegisertAPIs/RegistrationUpdate";
+
+export default function RegistrationDetail({ userRole }) {
+  const [registrations, setRegistrations] = useState([
+  {
+    _id: "1",
+    LeadName: "Taha",
+    LeadEnroll: "MC123",
+    LeadEmail: "taha@gmail.com",
+    LeadMobileNumber: "9876543210",
+    event_type: "techno",
+    event_title: "Hackathon 2025",
+    fee: 200,
+    approved: "approved",
+    paymentFile: "uploads/pay1.png",
+    members: [
+      { name: "Aman", enroll: "EN123" },
+      { name: "Riya", enroll: "EN456" },
+    ],
+  },
+  {
+    _id: "2",
+    LeadName: "Rahul",
+    LeadEnroll: "MC456",
+    LeadEmail: "rahul@gmail.com",
+    LeadMobileNumber: "9876543211",
+    event_type: "sports",
+    event_title: "Cricket League",
+    fee: 150,
+    approved: "pending",
+    paymentFile: "uploads/pay2.png",
+    members: [],
+  },
+]);
+
+
+  const [eventFilter, setEventFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [previewImage, setPreviewImage] = useState(null);
+  const [utrNumber, setutrNumber] = useState(null);
+
+  /* ---------------- FILTERED DATA ---------------- */
+  const filteredRegistrations = useMemo(() => {
+  return registrations.filter((r) => {
+    if (eventFilter !== "all" && r?.event_type !== eventFilter) return false;
+
+    if (statusFilter !== "all" && r?.approved !== statusFilter) return false;
+
+    return true;
+  });
+}, [registrations, eventFilter, statusFilter]);
+
+
+  /* ---------------- STATS ---------------- */
+  const stats = useMemo(() => {
+  const approvedRegs = registrations.filter(
+    (r) => r?.approved === "approved"
+  );
+
+  return {
+    totalAmount: approvedRegs.reduce((sum, r) => sum + r?.fee, 0),
+    total: registrations.length,
+    approved: approvedRegs.length,
+    pending: registrations.filter((r) => r?.approved === "pending").length,
+    rejected: registrations.filter((r) => r?.approved === "rejected").length,
+  };
+}, [registrations]);
+
+
+  /* ---------------- ACTIONS ---------------- */
+  const updateStatus = async(id, status) => {
+    setLoading(true);
+    // console.log(id, status);
+    const data={ registrationId:id, status:status }
+    const res=await RegistrationUpdate(data)
+    console.log(res)
+    if(res?.success){
+      setRegistrations((prev) =>
+    prev.map((r) =>
+      r?._id === id ? { ...r, approved: status } : r
+    )
+  );
+      setLoading(false);
+    }
+    else{
+      alert("Failed to update status");
+    }
+    setLoading(false);
+  
+};
+
+const [loading, setLoading] = useState(false);
+async function fetchRegistrations() {
+  setLoading(true)
+  const data={ userRole:userRole}
+  const res=await FetchRegisterEvent(data)
+  // console.log(res)
+  if(res?.success){
+    setRegistrations(res?.data)
+    setLoading(false)
+  }
+  setLoading(false)
+}
+
+useEffect(()=>{
+fetchRegistrations()
+},[])
+  return (
+    <div className="p-6 space-y-6">
+
+     
+
+      {/* -------- STATS -------- */}
+      <div className="grid grid-cols-5 gap-4">
+        <StatCard label="Total Amount" value={`₹${stats.totalAmount}`} />
+        <StatCard label="Total" value={stats.total} />
+        <StatCard label="Approved" value={stats.approved} />
+        <StatCard label="Pending" value={stats.pending} />
+        <StatCard label="Rejected" value={stats.rejected} />
+      </div>
+
+      {/* -------- FILTERS -------- */}
+      <div className="flex gap-4 bg-gray-100 p-4 rounded-lg">
+        { userRole === 'admin' &&
+        <select
+          className="p-2 rounded"
+          onChange={(e) => setEventFilter(e.target.value)}
+        >
+          <option value="all">All Events</option>
+          <option value="techno">Techno</option>
+          <option value="cultural">Cultural</option>
+          <option value="sports">Sports</option>
+        </select>
+}
+
+        <select
+          className="p-2 rounded"
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="all">All Status</option>
+          <option value="approved">Approved</option>
+          <option value="pending">Pending</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+
+      {/* -------- TABLE -------- */}
+      <div className="overflow-x-auto bg-white shadow rounded-lg">
+        <table className="w-full">
+          <thead className="bg-gray-200">
+            <tr>
+              <Th>Lead</Th>
+              <Th>Event</Th>
+              <Th>Members</Th>
+              <Th>Fee</Th>
+              <Th>Status</Th>
+              <Th>Payment</Th>
+               <Th>Action</Th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filteredRegistrations?.map((r) => (
+              <tr key={r?._id} className="border-t hover:bg-gray-50">
+                <Td>
+                  <p className="font-semibold">{r?.LeadName}</p>
+                  <p className="text-sm text-gray-500">{r?.LeadEmail}</p>
+                </Td>
+
+                <Td>
+                  <p className="font-medium">{r?.eventID?.title}</p>
+                  <span className="text-xs capitalize text-gray-500">
+                    {r?.event_type}
+                  </span>
+                </Td>
+
+                <Td>
+                  {r?.members.length
+                    ? r?.members.map((m, i) => (
+                        <div key={i}>{m.name} ({m.enroll})</div>
+                      ))
+                    : "Single Person Event"}
+                </Td>
+
+                <Td>₹{r?.fee}</Td>
+
+                <Td>
+                  <StatusBadge status={r?.approved} />
+                </Td>
+
+                <Td>
+                  <button
+                    onClick={() => {setPreviewImage(`${API_URL}/${r?.paymentFile}`); setutrNumber(r?.utrNumber)}}
+                    className="text-blue-600 underline"
+                  >
+                    View
+                  </button>
+                </Td>
+
+                  <Td className="space-x-2">
+                    {r?.approved === "pending" && (
+  <div className="flex gap-2">
+    <button
+      onClick={() => updateStatus(r?._id, "approved")}
+      className="bg-green-500 text-white px-3 py-1 rounded-md"
+    >
+      Approve
+    </button>
+    <button
+      onClick={() => updateStatus(r?._id, "rejected")}
+      className="bg-red-500 text-white px-3 py-1 rounded-md"
+    >
+      Reject
+    </button>
+  </div>
+)}
+
+                  </Td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* -------- IMAGE MODAL -------- */}
+      {previewImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white p-4 rounded-lg relative">
+            <h1 className="mb-4 font-semibold">UTR Number: {utrNumber}</h1>
+            <button
+              className="absolute top-2 right-2 text-red-500"
+              onClick={() => setPreviewImage(null)}
+            >
+              ✕
+            </button>
+            <img src={previewImage} alt="Payment" className="max-h-[80vh]" />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------------- UI HELPERS ---------------- */
+
+const StatusBadge = ({ status }) => {
+  const styles = {
+    approved: "bg-green-100 text-green-700",
+    pending: "bg-yellow-100 text-yellow-700",
+    rejected: "bg-red-100 text-red-700",
+  };
+
+  return (
+    <span
+      className={`px-3 py-1 rounded-full text-sm font-medium ${styles[status]}`}
+    >
+      {status.toUpperCase()}
+    </span>
+  );
+};
+
+
+const StatCard = ({ label, value }) => (
+  <div className="bg-white shadow rounded p-4 text-center">
+    <p className="text-sm text-gray-500">{label}</p>
+    <p className="text-xl font-bold">{value}</p>
+  </div>
+);
+
+const Th = ({ children }) => (
+  <th className="p-3 text-left">{children}</th>
+);
+
+const Td = ({ children }) => (
+  <td className="p-3">{children}</td>
+);
