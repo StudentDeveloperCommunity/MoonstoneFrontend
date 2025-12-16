@@ -17,12 +17,12 @@ import Logout from '../api-files/AdminAPIs/Logout';
 import ManageUser from './ManageUser';
 import ProgramAndEvents from './ProgramAndEvents';
 import RegistrationDetail from './RegistrationDetail';
-import RegisterStats from '../api-files/RegisertAPIs/RegisterStats';
+import Sponsors from './Sponsors';
 const navigationItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'users', label: 'Manage User', icon: Users },
   { id: 'about', label: 'About Page Editor', icon: FileText },
-  // { id: 'finance', label: 'Finance', icon: DollarSign },
+  { id: 'sponsor', label: 'Sponsors', icon: DollarSign },
   { id: 'events', label: 'Programs & Events', icon: Calendar },
   { id: 'registration', label: 'Registrations', icon: Trophy },
 ];
@@ -89,6 +89,9 @@ export function AdminDashboard({   }) {
 
     case "users":
       return isAdmin==="admin" ? <ManageUser userRole={userRole} /> : <DashboardOverview />;
+    
+    case "sponsor":
+      return isAdmin==="admin" ? <Sponsors userRole={userRole} /> : <DashboardOverview />;
 
     case "events":
       return <ProgramAndEvents userRole={userRole} />;
@@ -107,7 +110,7 @@ export function AdminDashboard({   }) {
 }, [activeSection]);
 
 const filteredNavigation = navigationItems.filter(item => {
-  if ((item.id === "users" || item.id==="about") && userRole !== "admin") return false;
+  if ((item.id === "users" || item.id==="about" || item.id=="sponsor") && userRole !== "admin") return false;
   return true;
 });
 
