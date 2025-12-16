@@ -1,13 +1,15 @@
 import { useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-
+import SponsorFetcher from "../api-files/SponsorAPIs/SponsorFetcher";
+import { API_URL } from "../NwConfig";
+import WebsiteLoader from "../Loader/WebsiteLoader";
 export default function Sponsors() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState([]);
-
+  const [loading,setloading]=useState(false)
   const sponsorsPerSlide = 6;
-
+  const [sponsor,setSponsors]=useState([])
   const allSponsors = [
     { id: 1, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDbDA3aeEKMSmQVBzewP0X7VaO5rPY3GV2w&s?width=256", altText: "Moonstone Logo" },
     { id: 2, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s?width=256", altText: "Moonstone Logo" },
@@ -20,8 +22,8 @@ export default function Sponsors() {
   ];
 
   const sponsorSlides = [];
-  for (let i = 0; i < allSponsors.length; i += sponsorsPerSlide) {
-    sponsorSlides.push(allSponsors.slice(i, i + sponsorsPerSlide));
+  for (let i = 0; i < sponsor.length; i += sponsorsPerSlide) {
+    sponsorSlides.push(sponsor.slice(i, i + sponsorsPerSlide));
   }
 
   const scrollPrev = useCallback(() => {
@@ -36,6 +38,17 @@ export default function Sponsors() {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
+  async function getsponsors() {
+    setloading(true)
+    const res=await SponsorFetcher()
+    // console.log(res)
+    if(res?.success){
+      setSponsors(res?.sponsors)
+      setloading(false)
+    }
+    setloading(false)
+    
+  }
 useEffect(() => {
   if (!emblaApi) return;
 
@@ -51,7 +64,7 @@ useEffect(() => {
 
   emblaApi.on("select", handleSelect);
   emblaApi.on("reInit", handleSelect);
-
+  getsponsors()
   return () => {
     clearInterval(interval);
     emblaApi.off("select", handleSelect);
@@ -62,6 +75,9 @@ useEffect(() => {
 return (
   <div className="min-h-screen bg-[#E8E8E8] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div className="w-full max-w-[1440px]">
+      {
+        loading && <WebsiteLoader/>
+      }
       
       <div className="text-center mb-12">
         <div className="text-[24px] font-bold uppercase mb-2" style={{ fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif", WebkitTextStroke: "1px #707070", color: "transparent" }}>
@@ -83,16 +99,16 @@ return (
               <div key={slideIndex} className="flex-[0_0_100%] min-w-0">
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 px-2">
 
-                  {slideSponsors.map((sponsor) => (
+                  {slideSponsors.map((sponsor,index) => (
                     <div
-                      key={sponsor.id}
+                      key={index}
                       className="w-full aspect-[213/100] rounded-lg overflow-hidden m-1 "
                       // p-2 flex items-center justify-center"
                       style={{ backgroundColor: "rgba(0, 0, 0, 0.82)", backdropFilter: "blur(3px)" }}
                     >
                       <img
-                        src={sponsor.logoUrl}
-                        alt={sponsor.altText}
+                        src={`${API_URL}/${sponsor.image}`}
+                        alt="Sponsor"
                         className="w-full h-full object-cover"
                       />
                     </div>
