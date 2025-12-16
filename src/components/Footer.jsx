@@ -6,6 +6,7 @@ import {
   FaXTwitter,
   FaFacebookF,
 } from "react-icons/fa6";
+import logo from "../assets/herosection/logo.png"
 
 export default function Footer() {
   return (
@@ -31,7 +32,7 @@ export default function Footer() {
           {/* LOGO */}
           <div className="md:col-span-3 flex justify-center md:justify-start">
             <img
-              src="/moonstone-logo.png"
+              src={logo}
               alt="Moonstone"
               className="w-36 sm:w-48 lg:w-[220px]"
             />

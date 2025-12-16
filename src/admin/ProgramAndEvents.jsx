@@ -31,10 +31,10 @@ export default function ProgramAndEvents({ userRole }) {
   const handleImageUpload = (index, file) => {
   if (!file) return;
 
-  const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+  const maxSize = 4 * 1024 * 1024; // 2MB in bytes
 
   if (file.size > maxSize) {
-    alert("File size must be less than 2MB!");
+    alert("File size must be less than 4MB!");
     return;
   }
 
