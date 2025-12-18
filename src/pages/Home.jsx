@@ -16,7 +16,7 @@ export default function Index() {
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
  <div className="relative min-h-screen w-full bg-black overflow-hidden">
 <div className="absolute inset-0 overflow-hidden pointer-events-none">
   {Array.from({ length: 50 }).map((_, i) => (
