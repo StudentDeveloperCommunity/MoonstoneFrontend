@@ -167,7 +167,7 @@ export default function Index() {
 //   return (
 //     <div className="w-full relative">
 //       {/* HERO SECTION */}
-//       <div className="relative inset-0 w-full h-full z-10 bg-black overflow-hidden">
+//       <div className="fixed inset-0 w-full h-full z-10 bg-black overflow-hidden">
 //         <div className="relative z-10 flex flex-col items-center text-center px-4" style={{ paddingTop: "20vh" }}>
 //           <div className="flex flex-col items-center justify-center space-y-0">
 
@@ -267,6 +267,7 @@ export default function Index() {
 //       <Faq/>
       
 //     </div>
+    
 //      </div>
 //   );
 // }
