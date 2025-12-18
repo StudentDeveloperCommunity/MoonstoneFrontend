@@ -19,20 +19,22 @@ export default function Index() {
     <div className="w-full">
  <div className="relative min-h-screen w-full bg-black overflow-hidden">
 <div className="absolute inset-0 overflow-hidden pointer-events-none">
- {Array.from({ length: 50 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white opacity-50"
-            style={{
-              width: Math.random() > 0.5 ? "1px" : "2px",
-              height: Math.random() > 0.5 ? "1px" : "2px",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `twinkle ${2 + Math.random() * 3}s infinite`
-            }}
-          />
-        ))}
-      </div>
+  {Array.from({ length: 50 }).map((_, i) => (
+    <div
+      key={i}
+      className="absolute rounded-full bg-white opacity-50"
+      style={{
+        width: Math.random() > 0.5 ? "1px" : "2px",
+        height: Math.random() > 0.5 ? "1px" : "2px",
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        animation: `twinkle ${2 + Math.random() * 3}s infinite alternate,
+                    moveStar ${5 + Math.random() * 5}s linear infinite alternate`
+      }}
+    />
+  ))}
+</div>
+
         {/* HERO CONTENT  */}
         <div className="relative z-10 flex flex-col items-center text-center px-4" style={{ paddingTop: "20vh" }}>
           
@@ -113,6 +115,22 @@ export default function Index() {
         </div>
 
         <style>{`
+
+        @keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+@keyframes moveStar {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(100px, 100px); /* stars will move diagonally */
+  }
+}
+
+
           @keyframes twinkle {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 0.8; }
