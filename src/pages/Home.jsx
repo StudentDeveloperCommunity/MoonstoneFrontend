@@ -148,7 +148,7 @@ export default function Index() {
       {/* ADDITIONAL SECTIONS */}
       <VideoCarousel />
       <Events />
-      <Eventsindetails/>
+      {/* <Eventsindetails/> */}
       <Clubs />
       <Sponsors/>
       <Faq/>
