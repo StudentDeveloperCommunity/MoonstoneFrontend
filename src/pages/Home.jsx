@@ -132,6 +132,7 @@
 
 import React, { useState } from "react";
 import { Countdown } from "../components/Countdown";
+import Eventsindetails from "./Eventsindetails.jsx";
 import Events from "../components/Events";
 import Clubs from "../components/Clubs";
 import VideoCarousel from "../components/VideoCarousel";
@@ -272,6 +273,7 @@ export default function Index() {
       {/* ADDITIONAL SECTIONS */}
       <VideoCarousel />
       <Events />
+      <Eventsindetails/>
       <Clubs />
       <Sponsors/>
       <Faq/>
