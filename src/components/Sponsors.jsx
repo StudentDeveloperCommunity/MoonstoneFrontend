@@ -1,132 +1,75 @@
-import { useState, useCallback, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-
 export default function Sponsors() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState([]);
-
-  const sponsorsPerSlide = 6;
-
   const allSponsors = [
-    { id: 1, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDbDA3aeEKMSmQVBzewP0X7VaO5rPY3GV2w&s?width=256", altText: "Moonstone Logo" },
-    { id: 2, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s?width=256", altText: "Moonstone Logo" },
-    { id: 3, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s?width=256", altText: "Moonstone Logo" },
-    { id: 4, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s?width=256", altText: "Moonstone Logo" },
-    { id: 5, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s?width=256", altText: "Moonstone Logo" },
-    { id: 6, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Moonstone Logo" },
-    { id: 7, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Moonstone Logo" },
-    
+    { id: 1, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDbDA3aeEKMSmQVBzewP0X7VaO5rPY3GV2w&s", altText: "Sponsor" },
+    { id: 2, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+    { id: 3, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+    { id: 4, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+    { id: 5, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+    { id: 6, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
   ];
 
-  const sponsorSlides = [];
-  for (let i = 0; i < allSponsors.length; i += sponsorsPerSlide) {
-    sponsorSlides.push(allSponsors.slice(i, i + sponsorsPerSlide));
-  }
+  const marqueeSponsors = [...allSponsors, ...allSponsors];
 
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
+  return (
+    <section className="w-full py-16 bg-white overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+        <div className="text-center mb-10">
+          <h3
+            className="text-xl md:text-2xl font-bold uppercase mb-2 tracking-wide"
+            style={{
+              WebkitTextStroke: "0.2px #707070",
+              color: "transparent",
+              fontFamily: "Istok Web, sans-serif",
+            }}
+          >
+            Event Sponsors
+          </h3>
 
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
+          <h2
+            className="text-2xl md:text-4xl lg:text-[36px] font-bold uppercase mb-4 text-black whitespace-nowrap"
+            style={{ fontFamily: "Istok Web, sans-serif" }}
+          >
+            Supporting Every Step
+          </h2>
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
-useEffect(() => {
-  if (!emblaApi) return;
-
-  
-  const interval = setInterval(() => {
-    emblaApi.scrollNext();
-  }, 3000);
-
-  const handleSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
-
-  handleSelect(); // initial setup
-  setScrollSnaps(emblaApi.scrollSnapList());
-
-  emblaApi.on("select", handleSelect);
-  emblaApi.on("reInit", handleSelect);
-
-  return () => {
-    clearInterval(interval);
-    emblaApi.off("select", handleSelect);
-    emblaApi.off("reInit", handleSelect);
-  };
-}, [emblaApi]);
-
-return (
-  <div className="min-h-screen bg-[#E8E8E8] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div className="w-full max-w-[1440px]">
-      
-      <div className="text-center mb-12">
-        <div className="text-[24px] font-bold uppercase mb-2" style={{ fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif", WebkitTextStroke: "1px #707070", color: "transparent" }}>
-          Event Sponsors
+          <p
+            className="text-[#3A3A3A] text-sm md:text-base max-w-[851px] mx-auto text-gray-600"
+            style={{ fontFamily: "Istok Web, sans-serif" }}
+          >
+            This year's fest is shaped and strengthened by the support of our sponsors.
+          </p>
         </div>
-        <h1 className="text-[36px] font-bold uppercase text-black mb-4" style={{ fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif" }}>
-          Supporting Every Step
-        </h1>
-        <p className="text-[16px] text-[#3A3A3A] max-w-[851px] mx-auto" style={{ fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif" }}>
-          This year's fest is shaped and strengthened by the support of our sponsors.
-        </p>
       </div>
 
-      
-      <div className="relative max-w-[900px] mx-auto ">
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex">
-            {sponsorSlides.map((slideSponsors, slideIndex) => (
-              <div key={slideIndex} className="flex-[0_0_100%] min-w-0">
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 px-2">
+      <div className="relative w-full overflow-hidden">
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
 
-                  {slideSponsors.map((sponsor) => (
-                    <div
-                      key={sponsor.id}
-                      className="w-full aspect-[213/100] rounded-lg overflow-hidden m-1 "
-                      // p-2 flex items-center justify-center"
-                      style={{ backgroundColor: "rgba(0, 0, 0, 0.82)", backdropFilter: "blur(3px)" }}
-                    >
-                      <img
-                        src={sponsor.logoUrl}
-                        alt={sponsor.altText}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
+        <div className="flex w-fit animate-marquee">
+          {marqueeSponsors.map((sponsor, index) => (
+            <div
+              key={`${sponsor.id}-${index}`}
+              className="flex-shrink-0 px-4 w-[180px] sm:w-[220px] md:w-[240px]"
+            >
+              <div
+                className="w-full h-[100px] flex items-center justify-center rounded-md"
+                style={{
+                  backgroundColor: "rgba(0,0,0,0.82)",
+                  backdropFilter: "blur(3px)",
+                }}
+              >
+                <img
+                  src={sponsor.logoUrl}
+                  alt={sponsor.altText}
+                   className="w-full h-full object-cover"
+                />
               </div>
-            ))}
-          </div>
-        </div>
-
-       
-        <button onClick={scrollPrev} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-12 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/80 backdrop-blur-sm flex items-center justify-center hover:bg-black transition-colors" aria-label="Previous slide">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-        <button onClick={scrollNext} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-12 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/80 backdrop-blur-sm flex items-center justify-center hover:bg-black transition-colors" aria-label="Next slide">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-
-        
-        <div className="flex justify-center gap-2 mt-8">
-          {scrollSnaps.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => emblaApi?.scrollTo(index)}
-              className={`w-2 h-2 rounded-full transition-all ${index === selectedIndex ? "bg-black w-8" : "bg-black/30 hover:bg-black/50"}`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
+            </div>
           ))}
         </div>
       </div>
-    </div>
-  </div>
-)};
+    </section>
+  );
+}
