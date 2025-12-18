@@ -13,20 +13,17 @@ export default function Footer() {
     <footer className="w-full bg-black text-white py-10 px-4 md:px-10 overflow-hidden relative font-inter">
      
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-  {Array.from({ length: 100 }).map((_, i) => (  // reduced from 180 to 100
+  {Array.from({ length: 50 }).map((_, i) => (
     <div
       key={i}
-      className="absolute rounded-full"
+      className="absolute rounded-full bg-white opacity-50"
       style={{
-        width: Math.random() > 0.5 ? "2px" : "3px",
-        height: Math.random() > 0.5 ? "2px" : "3px",
+        width: Math.random() > 0.5 ? "1px" : "2px",
+        height: Math.random() > 0.5 ? "1px" : "2px",
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
-        opacity: Math.random() * 0.5 + 0.3, // slightly dimmer
-        backgroundColor: "rgba(200,200,200,0.8)", // grey instead of white
-        boxShadow: "0 0 6px rgba(200,200,200,0.6)", // softer glow
-        animation: `twinkleContinuous ${0.4 + Math.random() * 0.6}s linear infinite`,
-        animationDelay: `-${Math.random() * 1}s`,
+        animation: `twinkle ${2 + Math.random() * 3}s infinite alternate,
+                    moveStar ${5 + Math.random() * 5}s linear infinite alternate`
       }}
     />
   ))}
@@ -146,3 +143,21 @@ export default function Footer() {
     </footer>
   );
 }
+
+ <style>{`
+
+        @keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+@keyframes moveStar {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(100px, 100px); /* stars will move diagonally */
+  }
+}
+
+`}</style>
