@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo/moonstone-logo.png";
 
 export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -7,10 +8,11 @@ export default function Navbar() {
 
  return (
   <>
-    
+    {/* NAVBAR */}
     <nav className="fixed top-3 inset-x-0 z-50 flex justify-center text-white">
       <div className="relative w-full max-w-6xl px-3 sm:px-4">
         
+        {/* Glass boundary */}
         <div
           className="
             absolute inset-0
@@ -22,7 +24,7 @@ export default function Navbar() {
           "
         />
 
-        
+        {/* Stars background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {Array.from({ length: 12 }).map((_, i) => (
             <span
@@ -39,20 +41,17 @@ export default function Navbar() {
           ))}
         </div>
 
-        
+        {/* Content */}
         <div className="relative flex items-center justify-between px-3 sm:px-4 py-3">
           
-          
+          {/* Logo */}
           <Link to="/" className="font-bold tracking-tight shrink-0">
             <div className="flex flex-col leading-tight text-sm sm:text-base">
-              <span className="text-emerald-400">moon</span>
-              <span className="text-emerald-400 text-xs sm:text-sm">
-                stone
-              </span>
+             <img src={logo} alt="Moonstone Logo" className="w-28 sm:w-32 h-auto" />
             </div>
           </Link>
 
-          
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-6">
             <Link className="nav-link" to="/">Home</Link>
 
@@ -61,40 +60,16 @@ export default function Navbar() {
                 Events <span className="text-xs"></span>
               </button>
 
-            <div
-  className="
-    absolute left-2 top-8 -translate-x-1/4
-    w-20
-    flex flex-col items-center justify-center
-    backdrop-blur-md
-    rounded-xl
-    opacity-0 scale-95
-    group-hover:opacity-100 group-hover:scale-100
-    transition
-    p-2
-  "
->
-  <Link className="dropdown-item" to="/club?id=1">Techno</Link>
-  <Link className="dropdown-item" to="/club?id=2">Sports</Link>
-  <Link className="dropdown-item" to="/club?id=3">Cultural</Link>
-</div>
 </div>
 
             <Link className="nav-link" to="/about">About</Link>
           </div>
 
           
-          <button
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="md:hidden text-xl px-2"
-          >
-            ☰
-          </button>
         </div>
       </div>
     </nav>
 
-   
     {isMobileOpen && (
       <div
         className="
@@ -115,22 +90,16 @@ export default function Navbar() {
           onClick={() => setIsEventOpen(!isEventOpen)}
           className="mobile-item flex pb-1 justify-between w-full"
         >
-          Events
+          Events 
         </button>
 
-        {isEventOpen && (
-           <div className="pl-4 flex flex-col space-y-1">
-            <Link className="mobile-sub" to="/club?id=1">Techno</Link>
-            <Link className="mobile-sub" to="/club?id=2">Sports</Link>
-            <Link className="mobile-sub" to="/club?id=3">Cultural</Link>
-          </div>
-        )}
+       
 
         <Link className="mobile-item" to="/about">About</Link>
       </div>
     )}
 
-    
+   
     <style>
       {`
         .nav-link {
