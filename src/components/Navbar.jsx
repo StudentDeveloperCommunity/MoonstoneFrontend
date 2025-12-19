@@ -74,9 +74,9 @@ export default function Navbar() {
     p-2
   "
 >
-  <Link className="dropdown-item" to="/club?id=1">Techno</Link>
-  <Link className="dropdown-item" to="/club?id=2">Sports</Link>
-  <Link className="dropdown-item" to="/club?id=3">Cultural</Link>
+  <Link className="dropdown-item" to="/allevents?id=1">Techno</Link>
+  <Link className="dropdown-item" to="/allevents?id=2">Sports</Link>
+  <Link className="dropdown-item" to="/allevents?id=3">Cultural</Link>
 </div>
 </div>
 

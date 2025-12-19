@@ -97,6 +97,7 @@ setLoading(true);
               <option value="techno">Techno</option>
               <option value="sports">Sport</option>
               <option value="cultural">Cultural</option>
+              <option value="event_convener">Event Conevener</option>
             </select>
           </div>
         </div>

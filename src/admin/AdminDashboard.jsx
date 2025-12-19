@@ -97,7 +97,7 @@ export function AdminDashboard({   }) {
       return <ProgramAndEvents userRole={userRole} />;
 
     case "registration":
-      return <RegistrationDetail userRole={userRole} />;
+      return isAdmin==="event_convener"? <DashboardOverview />: <RegistrationDetail userRole={userRole} />;
 
     default:
       return <DashboardOverview />;

@@ -56,12 +56,12 @@ const [loading, setloading] = useState(false);
       action: "registration",
       link: "registration",
     },
-    {
-      title: "Manage Finance",
-      description: "View financial reports",
-      action: "finance",
-      link: "finance",
-    },
+    // {
+    //   title: "Manage Finance",
+    //   description: "View financial reports",
+    //   action: "finance",
+    //   link: "finance",
+    // },
   ];
 
   const filteredQuickActions = quickActions.filter(action => {
