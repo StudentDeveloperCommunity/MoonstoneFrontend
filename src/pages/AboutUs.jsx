@@ -65,7 +65,7 @@ export default function AboutUs() {
             className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
             text-white font-semibold rounded-full shadow-xl mt-5 transition-all duration-300
             hover:scale-105 hover:shadow-2xl"
-            onClick={()=>window.location.href="/club?id=1"}
+            onClick={()=>window.location.href="/allevents?id=1"}
           >
             View Events →
           </button>
@@ -100,7 +100,7 @@ export default function AboutUs() {
             className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
             text-white font-semibold rounded-full shadow-xl mt-5 transition-all duration-300
             hover:scale-105 hover:shadow-2xl"
-            onClick={()=>window.location.href="/club?id=3"}
+            onClick={()=>window.location.href="/allevents?id=3"}
 
           >
             View Events →
@@ -135,7 +135,7 @@ export default function AboutUs() {
             className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
             text-white font-semibold rounded-full shadow-xl mt-5 transition-all duration-300
             hover:scale-105 hover:shadow-2xl"
-            onClick={()=>window.location.href="/club?id=2"}
+            onClick={()=>window.location.href="/allevents?id=2"}
 
           >
             View Events →

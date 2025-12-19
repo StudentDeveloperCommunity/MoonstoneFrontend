@@ -7,6 +7,7 @@ export default function Eventsindetails() {
   const location=useLocation()
   const Navigate=useNavigate()
   const event=location.state?.event || {}
+  // console.log(event)
   const redirecttoregister=(event)=>{
     Navigate("/register",{state:{event:event}})
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -72,7 +73,7 @@ function formatTime(timeString) {
             </h1>
 
             <p className="text-sm md:text-base text-gray-300 font-semibold mb-4">
-              {formatDate(event?.eventDate)} &nbsp; | &nbsp; V-BLOCK 126 <br />
+              {formatDate(event?.eventDate)} &nbsp; | &nbsp; {event?.event_at} <br />
               {formatTime(event?.eventTime)}
             </p>
 
@@ -88,10 +89,10 @@ function formatTime(timeString) {
 
             {/* Info */}
             <div className="text-sm text-gray-400 space-y-1 mb-5 md:text-[14px] font-arial">
-              <p>Convener: <span className="text-white">Dr. Sanket Gupta, +91 1234567890</span></p>
-              <p>Student Coordinator: <span className="text-white">Eshaan Sharma, +91 1234567890</span></p>
-              <p>Organized by: <span className="text-white">Developers Community</span></p>
-              <p>Last date to Register: <span className="text-white">8 February, 2025</span></p>
+              <p>Convener: <span className="text-white">{event?.convener}, +91 {event?.convener_number}</span></p>
+              <p>Student Coordinator: <span className="text-white">{event?.student_cordinator}, +91 {event?.student_number}</span></p>
+              <p>Organized by: <span className="text-white">{event?.organised_by}</span></p>
+              <p>Last date to Register: <span className="text-white">{formatDate(event?.eventDate)}</span></p>
             </div>
 
             {/* Description */}

@@ -57,13 +57,19 @@ export default function ProgramAndEvents({ userRole }) {
       imagePreview: null,
       title: "",
       description: "",
-      eventType: userRole === "admin" ? "" : userRole,
+      eventType: (userRole === "admin" || userRole ==="event_convener") ? "" : userRole,
       eventCategory: "single",
       minParticipants: 1,   // ⭐ default for single
       maxParticipants: 1,   // ⭐ default for single
       eventDate: "",
       eventTime: "",
-      fee:""
+      fee:"",
+      event_at:"",
+      convener:"",
+      convener_number:"",
+      organised_by:"",
+      student_cordinator:"",
+      student_number:""
     },
   ]);
 };
@@ -130,13 +136,19 @@ else{
       imagePreview: null,
       title: "",
       description: "",
-      eventType: userRole === "admin" ? "" : userRole,
+      eventType: (userRole === "admin" || userRole==="event_convener") ? "" : userRole,
       eventCategory: "single", // ⭐ NEW FIELD
       minParticipants: 1,
       maxParticipants: 1,
       eventDate: "",
     eventTime: "",
-      fee:""
+      fee:"",
+      event_at:"",
+      convener:"",
+      convener_number:"",
+      organised_by:"",
+      student_cordinator:"",
+      student_number:""
     }]);
   }
 
@@ -155,12 +167,12 @@ useEffect(()=>{
       alert(`Event #${i + 1}: Image is required`);
       return;
     }
-    if (e.title.trim().length < 10) {
-      alert(`Event #${i + 1}: Title must be at least 10 characters`);
+    if (e.title.trim().length < 10 || e.title.trim().length > 50) {
+      alert(`Event #${i + 1}: Title must be at least 10 and atmost 50 characters`);
       return;
     }
-    if (e.description.trim().length < 30) {
-      alert(`Event #${i + 1}: Description must be at least 30 characters`);
+    if (e.description.trim().length < 30 || e.description.trim().length > 500) {
+      alert(`Event #${i + 1}: Description must be at least 30 and atmost 500 characters`);
       return;
     }
     if (!e.eventDate) {
@@ -171,14 +183,39 @@ useEffect(()=>{
       alert(`Event #${i + 1}: Event time is required`);
       return;
     }
-    if (userRole === "admin" && !e.eventType) {
+    if ((userRole === "admin" || userRole==="event_convener") && !e.eventType) {
       alert(`Event #${i + 1}: Event type must be selected`);
       return;
     }
-    if (e.fee < 50) {
-        alert(`Event #${i + 1}: Minimum Fees must be alteast 50`);
+    if (e.fee < 50 || e.fee > 50000) {
+        alert(`Event #${i + 1}: Minimum Fees must be alteast 50 and atmost 50000`);
         return;
       }
+    if (e.event_at.trim().length < 5 || e.event_at.trim().length > 50) {
+        alert(`Event #${i + 1}: Minimum event At must be alteast 5 and atmost 50 charcters long`);
+        return;
+      }
+      if (e.convener.trim().length < 5 || e.convener.trim().length > 50) {
+        alert(`Event #${i + 1}: Minimum Convener  must be alteast 5 and Atmost 50 charcters long`);
+        return;
+      }
+      if (e.convener_number.trim().length < 10 || e.convener_number.trim().length > 10) {
+        alert(`Event #${i + 1}: Minimum Convener Number must be alteast and Atmost 10 charcters long`);
+        return;
+      }
+      if (e.organised_by.trim().length < 5 || e.organised_by.trim().length > 50 ) {
+        alert(`Event #${i + 1}: Minimum Organised By must be alteast 5 and Atmost 50 charcters long`);
+        return;
+      }
+      if (e.student_cordinator.trim().length < 4 || e.student_cordinator.trim().length > 50) {
+        alert(`Event #${i + 1}: Minimum Student Cordinator must be alteast 4 and Atmost 50 charcters long`);
+        return;
+      }
+      if (e.student_number.trim().length < 10 || e.student_number.trim().length > 10) {
+        alert(`Event #${i + 1}: Minimum Student Number must be alteast and Atmost 10 charcters long`);
+        return;
+      }
+      
 
     // Team validation
     if (e.eventCategory === "team") {
@@ -213,9 +250,15 @@ events.forEach((event, index) => {
 
       formData.append(`events[${index}][minParticipants]`, event.minParticipants);
       formData.append(`events[${index}][maxParticipants]`, event.maxParticipants);
+      formData.append(`events[${index}][event_at]`, event.event_at);
+      formData.append(`events[${index}][convener]`, event.convener);
+      formData.append(`events[${index}][convener_number]`, event.convener_number);
+      formData.append(`events[${index}][organised_by]`, event.organised_by);
+      formData.append(`events[${index}][student_cordinator]`, event.student_cordinator);
+      formData.append(`events[${index}][student_number]`, event.student_number);
 
     // file (multer expects a file)
-    formData.append(`eventimages_${index}`, event.image);
+    formData.append(`eventimages[${index}][${event.eventType}]`, event.image);
   });
   formData.append(`user`, userRole);
   const res=await EventAdd(formData);
@@ -244,7 +287,7 @@ else{
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Event #{index + 1}</h2>
 
-            {events.length > 1 && (
+            {(events.length > 1 && (userRole==="admin" || userRole==="event_convener")) && (
               <button
                 onClick={() => deleteEvent(index)}
                 className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
@@ -257,6 +300,10 @@ else{
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* LEFT: IMAGE */}
             <div>
+              {
+                (userRole==="admin" || userRole==="event_convener") && 
+              
+              <div>
               <label className="block font-medium mb-2">Upload Image</label>
               <input
                 type="file"
@@ -265,6 +312,8 @@ else{
                 onChange={(e) => handleImageUpload(index, e.target.files[0])}
                 className="mb-4"
               />
+              </div>
+}
 
               {event.imagePreview && (
                 <img
@@ -283,6 +332,7 @@ else{
                 type="text"
                 className="w-full p-2 border rounded mb-4"
                 required
+                readOnly={!(userRole==="admin" || userRole==="event_convener")}
                 minLength={10}
                 maxLength={100}
                 value={event.title}
@@ -295,6 +345,7 @@ else{
                 className="w-full p-2 border rounded mb-4"
                 rows={3}
                 required
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
                 minLength={30}
                 maxLength={500}
                 value={event.description}
@@ -307,9 +358,82 @@ else{
                 className="w-full p-2 border rounded mb-4"
                 required
                 min={50}
-                max={1000}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                max={50000}
                 value={event.fee}
                 onChange={(e) => updateEvent(index, "fee", e.target.value)}
+              />
+
+              <label className="block font-medium mb-2">Event Conducted At</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded mb-4"
+                required
+                minLength={5}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                maxLength={50}
+                value={event.event_at}
+                onChange={(e) => updateEvent(index, "event_at", e.target.value)}
+              />
+
+              <label className="block font-medium mb-2">Event Convener</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded mb-4"
+                required
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                minLength={5}
+                maxLength={50}
+                value={event.convener}
+                onChange={(e) => updateEvent(index, "convener", e.target.value)}
+              />
+
+              <label className="block font-medium mb-2">Event Convener Mobile Number</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded mb-4"
+                required
+                minLength={10}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                maxLength={10}
+                value={event.convener_number}
+                onChange={(e) => updateEvent(index, "convener_number", e.target.value)}
+              />
+
+              <label className="block font-medium mb-2">Event Organised By</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded mb-4"
+                required
+                minLength={5}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                maxLength={50}
+                value={event.organised_by}
+                onChange={(e) => updateEvent(index, "organised_by", e.target.value)}
+              />
+
+              <label className="block font-medium mb-2">Event Student Cordinator</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded mb-4"
+                required
+                minLength={4}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                maxLength={50}
+                value={event.student_cordinator}
+                onChange={(e) => updateEvent(index, "student_cordinator", e.target.value)}
+              />
+
+              <label className="block font-medium mb-2">Event Student Cordinator Number</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded mb-4" 
+                required
+                minLength={10}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                maxLength={10}
+                value={event.student_number}
+                onChange={(e) => updateEvent(index, "student_number", e.target.value)}
               />
 
               {/* EVENT DATE */}
@@ -318,6 +442,7 @@ else{
   type="date"
   className="w-full p-2 border rounded mb-4"
   value={event.eventDate}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
   required
   onChange={(e) => updateEvent(index, "eventDate", e.target.value)}
 />
@@ -328,13 +453,14 @@ else{
   type="time"
   className="w-full p-2 border rounded mb-4"
   value={event.eventTime}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
   required
   onChange={(e) => updateEvent(index, "eventTime", e.target.value)}
 />
 
 
               {/* EVENT TYPE — ADMIN ONLY */}
-              {userRole === "admin" && (
+              {(userRole === "admin" || userRole==="event_convener") && (
                 <div className="mb-4">
                   <label className="block font-medium mb-2">Select Event Type</label>
                   <div className="space-y-2">
@@ -355,7 +481,7 @@ else{
               )}
 
               {/* Non-admin auto event type */}
-              {userRole !== "admin" && (
+              {(userRole !== "admin" || userRole==="event_convener") && (
                 <div className="p-2 bg-gray-100 capitalize rounded text-sm text-gray-700">
                   Event Type: <b>{userRole}</b>
                 </div>
@@ -372,6 +498,7 @@ else{
                         type="radio"
                         name={`eventCategory_${index}`}
                         required
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
                         value={cat}
                         checked={event.eventCategory === cat}
                         onChange={() => updateEvent(index, "eventCategory", cat)}
@@ -391,6 +518,7 @@ else{
                     min="1"
                     max="10"
                     required
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
                     className="w-full p-2 border rounded mb-3"
                     value={event.minParticipants}
                     onChange={(e) =>
@@ -406,6 +534,7 @@ else{
                     required
                     className="w-full p-2 border rounded"
                     value={event.maxParticipants}
+                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
                     onChange={(e) =>
                       updateEvent(index, "maxParticipants", e.target.value)
                     }
@@ -415,21 +544,26 @@ else{
             </div>
           </div>
 
-          <button
+         
+        </div>
+      ))}
+      {
+        (userRole==="admin" || userRole==="event_convener") && <div className="w-full  flex justify-between">
+ <button
             onClick={addNewEvent}
             className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-900"
           >
             + Add New Event
           </button>
-        </div>
-      ))}
-
       <button
         onClick={handleSubmit}
         className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
       >
         Submit Changes
       </button>
+      </div>
+      }
+      
     </div>
   );
 }
