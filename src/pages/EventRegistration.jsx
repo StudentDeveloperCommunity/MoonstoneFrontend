@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { API_URL } from "../NwConfig";
 import RegisterToEvent from "../api-files/RegisertAPIs/RegiseterToEvent";
 import WebsiteLoader from "../Loader/WebsiteLoader";
+import { ArrowBigDown, ArrowBigRight } from "lucide-react";
 
 export default function EventRegistration() {
   const location = useLocation();
@@ -262,6 +263,20 @@ members.forEach((m, i) => {
     </button>
   </div>
 )}
+
+{/* --------------------------Go To Payemnt Button------------------------------ */}
+
+<div  className="bg-black text-white text-center rounded-lg p-3">
+
+          <p className="text-sm font-medium mb-2">Pay The Registration fees Here</p>
+
+          <a href="https://mineportal.netlify.app" target="_black" className="w-full bg-green-600  text-white py-3 rounded-lg flex justify-center items-center gap-3 cursor-pointer hover:opacity-90 transition">
+            Go To Payment Page <ArrowBigRight />
+          </a>
+
+
+          
+        </div>
 
         {/* -------------- PAYMENT SECTION ---------------- */}
         <FormSection title="Payment Details">
