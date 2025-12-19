@@ -9,6 +9,7 @@ import Login from "./admin/Login.jsx";
 import AdminDashboard from "./admin/AdminDashboard.jsx";
 import EventRegistration from "./pages/EventRegistration.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import Eventsindetails from "./pages/Eventsindetails.jsx";
 const AppContent = () => {
   const location = useLocation();
   const excludedPaths = ['/admin','/admin_dashboard'];
@@ -23,7 +24,7 @@ const AppContent = () => {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/club" element={<ClubDetails />} />
         <Route path="/register" element={<EventRegistration />} />
-
+        <Route path="/eventsindetails" element={<Eventsindetails />} />
 
         <Route path="/admin" element={<Login />} />
         <Route path="/admin_dashboard" element={<AdminDashboard />} />
