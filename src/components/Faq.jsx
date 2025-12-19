@@ -26,31 +26,31 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E8E8E8] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white flex items-center justify-center pt-3 py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-[1440px]">
         <div className="text-center mb-12">
           <div
             className="text-[24px] font-bold uppercase mb-2"
-            style={{
-              fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif",
-              WebkitTextStroke: "1px #707070",
+           style={{
+              WebkitTextStroke: "0.2px #707070",
               color: "transparent",
+              fontFamily: "Istok Web, sans-serif",
             }}
           >
             FAQ's
           </div>
           <h1
-            className="text-[36px] font-bold uppercase text-black mb-4"
+           className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[36px] font-bold uppercase mb-4 text-black truncate"
             style={{
-              fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif",
+              fontFamily: "'Istok Web',sans-serif",
             }}
           >
             Frequently asked questions
           </h1>
           <p
-            className="text-[16px] text-[#3A3A3A] max-w-[851px] mx-auto"
+            className="text-[16px] text-[#3A3A3A] max-w-[851px] mx-auto text-gray-600"
             style={{
-              fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif",
+              fontFamily: "'Istok Web',sans-serif",
             }}
           >
             Find quick answers to the questions you're most likely to have. From
@@ -67,9 +67,9 @@ export default function Index() {
                 onClick={() => toggleFaq(index)}
               >
                 <div
-                  className="flex-1 text-[16px] text-black font-bold"
+                  className="flex-1 text-[16px] text-gray-600 font-bold"
                   style={{
-                    fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif",
+                    fontFamily: "'Istok Web', sans-serif",
                   }}
                 >
                   {faq.question}
@@ -112,9 +112,9 @@ export default function Index() {
               </div>
               {openIndex === index && (
                 <div
-                  className="text-[16px] text-[#3A3A3A] pb-4 max-w-[711px]"
+                  className="text-[16px] text-[#3A3A3A] pb-4 max-w-[711px] text-gray-600"
                   style={{
-                    fontFamily: "'Istok Web', -apple-system, Roboto, Helvetica, sans-serif",
+                    fontFamily: "'Istok Web', sans-serif",
                   }}
                 >
                   {faq.answer}

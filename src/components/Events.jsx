@@ -17,19 +17,20 @@ export default function Events() {
   const row1Ref = useRef(null);
   const row2Ref = useRef(null);
 
-  const imagesTop = [img1, img2, img3,img4, img5, img6];
+  const imagesTop = [img1, img2, img3, img4, img5, img6];
   const imagesBottom = [img7, img8, img9, img10, img11];
 
-  // Auto Scroll Function
-  const autoScroll = (ref, speed) => {
+  const autoScroll = (ref, speed, direction = "left") => {
     const container = ref.current;
     if (!container) return;
 
     const scroll = () => {
-      container.scrollLeft += speed;
-
-      if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
-        container.scrollLeft = 0;
+      if (direction === "left") {
+        container.scrollLeft += speed;
+        if (container.scrollLeft >= container.scrollWidth / 2) container.scrollLeft = 0;
+      } else {
+        container.scrollLeft -= speed;
+        if (container.scrollLeft <= 0) container.scrollLeft = container.scrollWidth / 2;
       }
       requestAnimationFrame(scroll);
     };
@@ -38,62 +39,69 @@ export default function Events() {
   };
 
   useEffect(() => {
-    autoScroll(row1Ref, 0.6); // top row slightly faster
-    autoScroll(row2Ref, 0.4); // bottom row slower
+    autoScroll(row1Ref, 0.3, "right"); 
+    autoScroll(row2Ref, 0.3, "left");  
   }, []);
 
   return (
-    <section id="events" className="py-20 bg-black text-white">
-      <h2 className="text-center text-4xl font-semibold mb-10 tracking-wide">
-        Event Highlights
-      </h2>
+    <section id="events" className="py-20 pt-4 bg-black text-white">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+        <div className="text-center mb-10">
+          <h3
+            className="text-xl md:text-2xl font-bold uppercase tracking-wide"
+            style={{
+              WebkitTextStroke: "0.2px #606060ff",
+              color: "transparent",
+              fontFamily: "Istok Web, sans-serif",
+            }}
+          >
+            Glimpses Of Events
+          </h3>
 
-      {/* ---------------- TOP ROW (BIGGER IMAGES) ---------------- */}
+          <h2
+            className="text-2xl md:text-4xl lg:text-[36px] font-bold uppercase text-white whitespace-nowrap"
+            style={{ fontFamily: "Istok Web, sans-serif" }}
+          >
+            Flashback Frames
+          </h2>
+
+          <p
+            className="text-[#3A3A3A] text-sm md:text-base max-w-[851px] mx-auto text-gray-500"
+            style={{ fontFamily: "Istok Web, sans-serif" }}
+          >
+           Revisiting the highlights as we gear up for another great year.
+          </p>
+        </div>
+      </div>
+
+      {/* ---------------- TOP ROW ---------------- */}
       <div
         ref={row1Ref}
-        className="flex gap-6 px-6 overflow-x-scroll overflow-y-hidden no-scrollbar scroll-smooth mb-10"
+        className="flex gap-4 pl-6 pr-0 overflow-x-hidden whitespace-nowrap mb-5"
       >
-        {imagesTop.map((img, index) => (
+        {[...imagesTop, ...imagesTop].map((img, index) => (
           <motion.div
             key={index}
-            whileHover={{ scale: 1.05 }}
-            className="relative min-w-[380px] h-64 cursor-pointer rounded-2xl overflow-hidden shadow-xl group"
+            className="inline-block relative min-w-[260px] h-48 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
           >
             <img src={img} className="w-full h-full object-cover" />
-
-            <motion.div
-              onClick={() => (window.location.href = "/allevents")}
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 1 }}
-              className="absolute inset-0 bg-black/60 flex items-center justify-center text-xl font-semibold backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300"
-            >
-              View More →
-            </motion.div>
           </motion.div>
         ))}
       </div>
 
-      {/* ---------------- BOTTOM ROW (SLIGHTLY SMALLER) ---------------- */}
+      {/* ---------------- BOTTOM ROW ---------------- */}
       <div
         ref={row2Ref}
-        className="flex gap-6 px-6 overflow-x-scroll overflow-y-hidden no-scrollbar scroll-smooth"
+        className="flex gap-4 pl-6 pr-0 overflow-x-hidden whitespace-nowrap mb-0 scrollbar-none"
+        style={{ transform: "scaleX(-1)" }}
       >
-        {imagesBottom.map((img, index) => (
+        {[...imagesBottom, ...imagesBottom].map((img, index) => (
           <motion.div
             key={index}
-            whileHover={{ scale: 1.05 }}
-            className="relative min-w-[320px] h-56 cursor-pointer rounded-2xl overflow-hidden shadow-xl group"
+            className="inline-block relative min-w-[260px] h-48 cursor-pointer rounded-2xl overflow-hidden shadow-xl"
+            style={{ transform: "scaleX(-1)" }}
           >
             <img src={img} className="w-full h-full object-cover" />
-
-            <motion.div
-              onClick={() => (window.location.href = "/allevents")}
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 1 }}
-              className="absolute inset-0 bg-black/60 flex items-center justify-center text-xl font-semibold backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300"
-            >
-              View More →
-            </motion.div>
           </motion.div>
         ))}
       </div>
