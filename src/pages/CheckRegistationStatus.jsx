@@ -5,7 +5,8 @@ import WebsiteLoader from "../Loader/WebsiteLoader";
 export default function CheckRegistationStatus({ isOpen, onClose }) {
   const [Search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [notfound, setnotfound] = useState(false);
+  const [data, setData] = useState({});
 
   if (!isOpen) return null;
 
@@ -16,8 +17,10 @@ export default function CheckRegistationStatus({ isOpen, onClose }) {
     // console.log(res)
     if (res?.success) {
       setData(res?.data?.[0]);
+      setnotfound(false)
     } else {
-      setData(null);
+      setData({});
+      setnotfound(true)
     }
     setLoading(false);
   }
@@ -35,6 +38,11 @@ export default function CheckRegistationStatus({ isOpen, onClose }) {
         return "bg-gray-100 text-gray-700 border-gray-300";
     }
   };
+
+  const closemodal=()=>{
+    setData([])
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
@@ -66,7 +74,7 @@ export default function CheckRegistationStatus({ isOpen, onClose }) {
         </section>
 
         {/* 🔹 Registration Details */}
-        {data && (
+        {Object.keys(data).length>=1 && (
           <div className="mt-6 rounded-lg border p-4 space-y-3">
             <div className="flex space-x-2 items-center">
               <span className="font-medium text-gray-600">Status</span>
@@ -88,10 +96,12 @@ export default function CheckRegistationStatus({ isOpen, onClose }) {
           </div>
         )}
 
+        {notfound && <h1 className="text-red-500 font-bold text-xl text-center mt-3">Invalid Resistration ID!</h1>}
+
 
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={closemodal}
           className="mt-6 w-full rounded-md border border-gray-300 py-2 text-gray-700 hover:bg-gray-100"
         >
           Close
