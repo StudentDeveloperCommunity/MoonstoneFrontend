@@ -33,7 +33,7 @@ export default function Index() {
             className="text-[24px] font-bold uppercase mb-2"
            style={{
               WebkitTextStroke: "0.2px #707070",
-              color: "transparent",
+              color: "black",
               fontFamily: "Istok Web, sans-serif",
             }}
           >

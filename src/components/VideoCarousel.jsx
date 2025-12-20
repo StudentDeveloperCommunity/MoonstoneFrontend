@@ -23,12 +23,12 @@ export default function About() {
       </div>
 
           <div className="flex-1 px-6 lg:px-12 py-8 lg:py-16 flex flex-col justify-center">
-           <div className="flex flex-col items-center text-center">
+           <div className="flex flex-col  items-center text-center">
   <h2 
     className="text-lg md:text-xl lg:text-2xl font-bold uppercase mb-2 tracking-wide"
     style={{
        WebkitTextStroke: "0.07px #707070",
-      color: 'transparent',
+      color: 'white',
       fontFamily: "Istok Web, sans-serif",
     }}
   >

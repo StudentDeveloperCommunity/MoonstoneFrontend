@@ -17,6 +17,7 @@ export const registerevent="/api/register/registerevent"
 export const registereventfetcher="/api/register/registereventfetcher"
 export const registerupdate="/api/register/registerupdate"
 export const registereventstatfetcher="/api/register/registereventstatfetcher"
+export const registrationstatus="/api/register/registrationstatus"
 
 // Sponsor APIS
 
