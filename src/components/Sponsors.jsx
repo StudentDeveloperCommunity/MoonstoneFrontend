@@ -41,7 +41,7 @@ getsponsors()
             className="text-xl md:text-2xl font-bold uppercase mb-2 tracking-wide"
             style={{
               WebkitTextStroke: "0.2px #707070",
-              color: "transparent",
+              color: "black",
               fontFamily: "Istok Web, sans-serif",
             }}
           >

@@ -1,7 +1,7 @@
 /* =====================================================
    Aadi | Events Filters (Pill Buttons)
    ===================================================== */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
    const filters = [
     { key: "all", label: "All" },

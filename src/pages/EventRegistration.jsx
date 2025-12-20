@@ -5,6 +5,7 @@ import { API_URL } from "../NwConfig";
 import RegisterToEvent from "../api-files/RegisertAPIs/RegiseterToEvent";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 import { ArrowBigDown, ArrowBigRight } from "lucide-react";
+import ConfirmationModal from "./ConfirmationModal";
 
 export default function EventRegistration() {
   const location = useLocation();
@@ -65,6 +66,8 @@ const deleteMember = (index) => {
   const [paymentFile, setPaymentFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false)
+  const [registration_id, setregistration_id] = useState("");
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   const phoneRegex = /^[6-9]\d{9}$/;
@@ -156,10 +159,12 @@ members.forEach((m, i) => {
   formData.append("members", JSON.stringify(members));
   formData.append("paymentFile", paymentFile);
     const res=await RegisterToEvent(formData);
-    console.log(res);
+    // console.log(res);
     if(res?.success){
       setLoading(false);
-      alert("Registration successful!");
+      setShowModal(true)
+      setregistration_id(res?.data?._id)
+      // alert("Registration successful!");
     }
     else{
       setLoading(false);
@@ -181,6 +186,11 @@ members.forEach((m, i) => {
       {
         loading && <WebsiteLoader/>
       }
+      <ConfirmationModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        registrationId={registration_id}
+      />
       <div className="flex flex-col items-center">
         <h1 className="text-2xl font-semibold text-black">Event Registration</h1>
         <p className="text-gray-500 text-sm mt-1">

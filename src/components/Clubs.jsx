@@ -35,7 +35,7 @@ export default function Index() {
 
   return (
     
-    <div className=" min-h-screen bg-black flex items-center justify-center px-4 py-16">
+    <div id="events-section" className=" min-h-screen bg-black flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-[1440px]">
 
         {/* Header */}
@@ -44,7 +44,7 @@ export default function Index() {
             className="text-xl font-bold uppercase mb-4 tracking-wide text-gray-300"
             style={{
               WebkitTextStroke: "0.2px #707070",
-              color: "transparent",
+              color: "white",
               fontFamily: "Istok Web, sans-serif",
             }}
           >
