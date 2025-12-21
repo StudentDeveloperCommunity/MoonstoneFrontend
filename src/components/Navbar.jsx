@@ -57,7 +57,7 @@ export default function Navbar() {
             <Link className="nav-link" to="/">Home</Link>
 
             <div className="relative group">
-              <button className="nav-link flex items-center gap-1">
+              <button onClick={()=>window.location.href="/allevents?id:all"} className="nav-link flex items-center gap-1">
                 Events <span className="text-xs"></span>
               </button>
 
@@ -74,9 +74,9 @@ export default function Navbar() {
     p-2
   "
 >
-  <Link className="dropdown-item" to="/allevents?id=1">Techno</Link>
+  {/* <Link className="dropdown-item" to="/allevents?id=1">Techno</Link>
   <Link className="dropdown-item" to="/allevents?id=2">Sports</Link>
-  <Link className="dropdown-item" to="/allevents?id=3">Cultural</Link>
+  <Link className="dropdown-item" to="/allevents?id=3">Cultural</Link> */}
 </div>
 </div>
 
@@ -112,19 +112,19 @@ export default function Navbar() {
         <Link className="mobile-item" to="/">Home</Link>
 
         <button
-          onClick={() => setIsEventOpen(!isEventOpen)}
+          onClick={()=>window.location.href="/allevents?id:all"}
           className="mobile-item flex pb-1 justify-between w-full"
         >
           Events
         </button>
 
-        {isEventOpen && (
+        {/* {isEventOpen && (
            <div className="pl-4 flex flex-col space-y-1">
             <Link className="mobile-sub" to="/club?id=1">Techno</Link>
             <Link className="mobile-sub" to="/club?id=2">Sports</Link>
             <Link className="mobile-sub" to="/club?id=3">Cultural</Link>
           </div>
-        )}
+        )} */}
 
         <Link className="mobile-item" to="/about">About</Link>
       </div>

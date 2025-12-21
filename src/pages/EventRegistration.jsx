@@ -199,13 +199,13 @@ members.forEach((m, i) => {
       </div>
 
       {/* Event Details */}
-      <div className="w-full max-w-3xl mt-8 bg-gray-50 rounded-xl p-6 shadow-sm flex gap-6">
+      <div className="w-full max-w-3xl mt-8 bg-gray-50 rounded-xl p-6 shadow-sm flex  md:flex-row flex-col gap-6">
         <img
           src={`${API_URL}/${event?.image || eventImg}`}
           className="rounded-lg w-48 h-48 object-cover"
           alt="event"
         />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col  gap-2">
           <Detail label="Event name:" value={event?.title} />
           <Detail label="Event details:" value={event?.description} />
           <Detail label="Event Date And Time:" value={`${formatDate(event?.eventDate)} - ${event?.eventTime}`} />
@@ -347,8 +347,8 @@ members.forEach((m, i) => {
 function Detail({ label, value }) {
   return (
     <p className="text-sm text-gray-600">
-      <span className="font-semibold text-gray-700">{label}</span>{" "}
-      <span className="text-black">{value}</span>
+      <span className="font-bold text-gray-700">{label}</span>{" "}
+      <span className="text-black ">{value}</span>
     </p>
   );
 }
