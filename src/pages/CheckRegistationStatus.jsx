@@ -96,7 +96,7 @@ export default function CheckRegistationStatus({ isOpen, onClose }) {
           </div>
         )}
 
-        {notfound && <h1 className="text-red-500 font-bold text-xl text-center mt-3">Invalid Resistration ID!</h1>}
+        {notfound && <h1 className="text-red-500 font-bold text-xl text-center mt-3">Invalid Registration ID!</h1>}
 
 
         {/* Close Button */}
