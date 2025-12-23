@@ -44,7 +44,7 @@ export default function Index() {
             className="text-xl font-bold uppercase mb-4 tracking-wide text-gray-300"
             style={{
               WebkitTextStroke: "0.2px #707070",
-              color: "white",
+              color: "transparent",
               fontFamily: "Istok Web, sans-serif",
             }}
           >

@@ -28,7 +28,7 @@ export default function About() {
     className="text-lg md:text-xl lg:text-2xl font-bold uppercase mb-2 tracking-wide"
     style={{
        WebkitTextStroke: "0.07px #707070",
-      color: 'white',
+      color: 'transparent',
       fontFamily: "Istok Web, sans-serif",
     }}
   >
