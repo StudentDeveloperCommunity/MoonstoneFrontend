@@ -51,7 +51,7 @@ export default function Events() {
             className="text-xl md:text-2xl font-bold uppercase tracking-wide"
             style={{
               WebkitTextStroke: "0.2px #606060ff",
-              color: "white",
+              color: "transparent",
               fontFamily: "Istok Web, sans-serif",
             }}
           >
