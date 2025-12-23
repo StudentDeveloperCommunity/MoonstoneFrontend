@@ -20,7 +20,7 @@ export default function About() {
 </video>
 
 
-      </div>
+      </div >
 
           <div className="flex-1 px-6 lg:px-12 py-8 lg:py-16 flex flex-col justify-center">
            <div className="flex flex-col  items-center text-center">
@@ -40,7 +40,7 @@ export default function About() {
     fontFamily: "Istok Web, sans-serif",
     }}
   >
-    It's Back
+    It's Back 
   </h3>
 </div>
 
@@ -57,7 +57,7 @@ export default function About() {
               href="#" 
               className="text-gray-400 text-base md:text-lg lg:text-xl underline hover:text-gray-300 transition-colors inline-flex items-center gap-1 self-end"
             >
-              Read more →
+              Read More →
             </a>
           </div>
         </div>
