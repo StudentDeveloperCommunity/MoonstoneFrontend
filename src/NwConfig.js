@@ -1,6 +1,7 @@
 // export const API_URL="http://localhost:3000"
 export const API_URL="https://moonstone-backend-fgxi.onrender.com"
-export const Frontend_API_URL="http://localhost:5173"
+// export const Frontend_API_URL="http://localhost:5173"
+export const Frontend_API_URL="https://moonstone-frontend-sigma.vercel.app"
 // AUTH APIS
 export const login="/api/auth/login"
 export const verify="/api/auth/verify"
