@@ -12,6 +12,7 @@ export const getusers="/api/auth/users"
 // Event APIS
 export const addnewevent="/api/event/addevent"
 export const getevents="/api/event/getevents"
+export const deleteevent="/api/event/deleteevent"
 
 // Register APIS
 export const registerevent="/api/register/registerevent"
