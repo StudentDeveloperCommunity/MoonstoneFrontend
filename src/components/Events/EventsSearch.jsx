@@ -3,10 +3,8 @@
    ===================================================== */
 
 import { useState } from "react";
-import CheckRegistationStatus from "../../pages/CheckRegistationStatus";
 
    export default function EventsSearch({ search, setSearch }) {
-        const [open,setIsOpen]=useState(false)
     
     return (
       <section className="w-full flex justify-center px-4 mt-8">
@@ -49,25 +47,7 @@ import CheckRegistationStatus from "../../pages/CheckRegistationStatus";
             Search
           </button>
 
-          <button
-            className="
-              h-[44px]
-              px-6
-              rounded-lg
-              bg-white text-black
-              font-medium
-              hover:bg-gray-200
-              transition
-              whitespace-nowrap
-            "
-            onClick={()=>setIsOpen(true)}
-          >
-            Check Registration Status
-          </button>
-        <CheckRegistationStatus 
-        isOpen={open}
-        onClose={()=>setIsOpen(false)}
-        />
+          
         </div>
       </section>
     );

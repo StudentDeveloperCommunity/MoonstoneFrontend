@@ -69,7 +69,8 @@ export default function ProgramAndEvents({ userRole }) {
       convener_number:"",
       organised_by:"",
       student_cordinator:"",
-      student_number:""
+      student_number:"",
+      id:null,
     },
   ]);
 };
@@ -148,7 +149,8 @@ else{
       convener_number:"",
       organised_by:"",
       student_cordinator:"",
-      student_number:""
+      student_number:"",
+      id:null,
     }]);
   }
 
@@ -239,6 +241,9 @@ useEffect(()=>{
 //   console.log("FINAL EVENTS LIST:", finalEvents);
 const formData=new FormData()
 events.forEach((event, index) => {
+    if (event.id) {
+  formData.append(`events[${index}][_id]`, event.id);
+}
     formData.append(`events[${index}][title]`, event.title);
     formData.append(`events[${index}][description]`, event.description);
     formData.append(`events[${index}][eventDate]`, event.eventDate);
