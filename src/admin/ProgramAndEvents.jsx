@@ -4,6 +4,7 @@ import WebsiteLoader from "../Loader/WebsiteLoader";
 import EventFetcher from "../api-files/EventAPIs/EventFetcher";
 import { API_URL } from "../NwConfig";
 import { form } from "framer-motion/client";
+import EventDelete from "../api-files/EventAPIs/EventDelete";
 
 export default function ProgramAndEvents({ userRole }) {
   const [events, setEvents] = useState([]);
@@ -76,8 +77,22 @@ export default function ProgramAndEvents({ userRole }) {
 };
 
 
-  const deleteEvent = (index) => {
-    setEvents(events.filter((_, i) => i !== index));
+  const deleteEvent = async(index,event) => {
+    if(window.confirm("Are You Sure You Want To Delete This Event?")){
+      setLoading(true)
+      const newevent={id:event.id,eventType:event.eventType,image:event.image.name}
+      // console.log(newevent)
+      const res=await EventDelete(newevent)
+      // console.log(res)
+      if(res?.success){
+        setEvents(events.filter((_, i) => i !== index));
+        setLoading(false)
+      }
+      else{
+        alert("Error Deleting Event!!")
+        setLoading(false)
+      }
+    }
   };
 const [loading,setLoading]=useState(false);
 function formatDate(dateString) {
@@ -294,7 +309,7 @@ else{
 
             {(events.length > 1 && (userRole==="admin" || userRole==="event_convener")) && (
               <button
-                onClick={() => deleteEvent(index)}
+                onClick={() => deleteEvent(index,event)}
                 className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
               >
                 Delete
