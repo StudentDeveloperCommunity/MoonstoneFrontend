@@ -14,7 +14,7 @@ import EventFetcher from "../api-files/EventAPIs/EventFetcher";
 const DEMO_EVENTS = [
   {
     _id: "1",
-    title: "Kampus Combat",
+    title: "Kampus Combat 2.0",
     eventDate: "2026-02-12",
     image: "uploads/demo1.jpg",
     eventType: "sports",
