@@ -74,7 +74,6 @@ export function Countdown({ startTime, onComplete }) {
       text-lg sm:text-2xl md:text-6xl 
       font-black text-white tracking-wide
     "
-    style={{ fontFamily: "Squada One, sans-serif" }}
   >
     {padZero(value)}
   </div>
@@ -95,13 +94,7 @@ export function Countdown({ startTime, onComplete }) {
       </div>
 
       {/* STATUS TEXT */}
-      <div className="mt-4 text-gray-500 text-[12px] sm:text-xs md:text-sm font-bold uppercase tracking-widest"
-        style={{
-              WebkitTextStroke: "0.2px #707070",
-              color: "transparent",
-              fontFamily: "Istok Web, sans-serif",
-            }}
-      >
+      <div className="mt-4 text-gray-500 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-widest">
         Starting Soon
       </div>
     </div>

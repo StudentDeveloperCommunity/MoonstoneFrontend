@@ -56,15 +56,52 @@ export default function Navbar() {
             <Link className="nav-link" to="/">Home</Link>
 
             <div className="relative group">
-              <button className="nav-link flex items-center gap-1">
+              <button 
+          onClick={()=>window.location.href="/allevents?id:all"}
+               className="nav-link flex items-center gap-1">
                 Events <span className="text-xs"></span>
               </button>
 
 </div>
 
-            <Link className="nav-link" to="/about">About</Link>
-          </div>
+            <Link className="nav-link" to="/about">About</Link> 
 
+            <Link
+                className="px-4 py-2 bg-[#00BC71] hover:bg-emerald-500 rounded-lg font-medium transition-all duration-300 text-sm"
+                to="/check-registration"
+              >
+                Check Registration
+              </Link>
+            
+          </div>
+{/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileOpen(!isMobileOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-white/10 transition"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {isMobileOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
           
         </div>
       </div>
@@ -87,7 +124,7 @@ export default function Navbar() {
         <Link className="mobile-item" to="/">Home</Link>
 
         <button
-          onClick={() => setIsEventOpen(!isEventOpen)}
+          onClick={()=>window.location.href="/allevents?id:all"}
           className="mobile-item flex pb-1 justify-between w-full"
         >
           Events 
@@ -95,7 +132,14 @@ export default function Navbar() {
 
        
 
-        <Link className="mobile-item" to="/about">About</Link>
+        <Link className="mobile-item" to="/about">About</Link> <br /><br />
+
+        <Link
+            className="px-1 py-1 mobile-item  bg-emerald-600 hover:bg-emerald-700 text-center rounded-lg font-medium transition-all"
+            to="/check-registration"
+          >
+            Check Registration
+          </Link>
       </div>
     )}
 

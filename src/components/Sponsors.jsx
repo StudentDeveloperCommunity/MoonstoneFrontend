@@ -1,19 +1,40 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import SponsorFetcher from "../api-files/SponsorAPIs/SponsorFetcher";
+import { API_URL } from "../NwConfig";
+import WebsiteLoader from "../Loader/WebsiteLoader";
 export default function Sponsors() {
-  const allSponsors = [
-    { id: 1, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDbDA3aeEKMSmQVBzewP0X7VaO5rPY3GV2w&s", altText: "Sponsor" },
-    { id: 2, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
-    { id: 3, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
-    { id: 4, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
-    { id: 5, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
-    { id: 6, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
-  ];
+  const [allSponsors,setallSponsors]=useState([])
+  const [loading,setloading]=useState(false)
+  async function getsponsors() {
+    setloading(true)
+    const res=await SponsorFetcher()
+    // console.log(res)
+    if(res?.success){
+      setallSponsors(res?.sponsors)
+      setloading(false)
+    }
+    setloading(false)
+  }
+  useEffect(()=>{
+getsponsors()
+  },[])
+  // const allSponsors = [
+  //   { id: 1, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBDbDA3aeEKMSmQVBzewP0X7VaO5rPY3GV2w&s", altText: "Sponsor" },
+  //   { id: 2, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+  //   { id: 3, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+  //   { id: 4, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+  //   { id: 5, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+  //   { id: 6, logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXzNwY1e7GZYkoP5YgxJzA6lH-4XbosIugQ&s", altText: "Sponsor" },
+  // ];
 
   const marqueeSponsors = [...allSponsors, ...allSponsors];
 
   return (
     <section className="w-full py-16 bg-white overflow-hidden">
+      {
+        loading && <WebsiteLoader/>
+      }
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
         <div className="text-center mb-10">
           <h3
@@ -50,7 +71,7 @@ export default function Sponsors() {
         <div className="flex w-fit animate-marquee">
           {marqueeSponsors.map((sponsor, index) => (
             <div
-              key={`${sponsor.id}-${index}`}
+              key={`-${index}`}
               className="flex-shrink-0 px-4 w-[180px] sm:w-[220px] md:w-[240px]"
             >
               <div
@@ -61,8 +82,8 @@ export default function Sponsors() {
                 }}
               >
                 <img
-                  src={sponsor.logoUrl}
-                  alt={sponsor.altText}
+                  src={`${API_URL}/${sponsor.image}`}
+                  alt={sponsor.title}
                    className="w-full h-full object-cover"
                 />
               </div>

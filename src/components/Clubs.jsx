@@ -3,7 +3,6 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-
 export default function Index() {
   const events = [
     {
@@ -11,27 +10,32 @@ export default function Index() {
       title: "Techno",
       image:
         "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
-      description: "Techno evenPIJIE0UIERJ]09RU]0t",
+      description: "Feel the drop, own the night 🎧🔥Techno @ Moonstone is our annual college EDM fest with booming beats, lights, and nonstop energy.",
+      linkto:"/allevents?id=1"
     },
     {
       id: 2,
       title: "Sports",
       image:
         "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
-      description: " sports evIHG08ERGJ[ents ",
+      description: "From friendly matches to epic moments ⚽✨ Sports @ Moonstone is where fun meets fitness every year.. ",
+      linkto:"/allevents?id=2"
+
     },
     {
       id: 3,
       title: "Cultural",
       image:
         "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
-      description: "CulturJBIU0Hal festival.",
+      description: "Sing it, dance it, feel it 🎤💃 Cultural @ Moonstone is where campus shines with creativity every year..",
+      linkto:"/allevents?id=3"
+
     },
   ];
 
   return (
     
-    <div className=" min-h-screen bg-black flex items-center justify-center px-4 py-16">
+    <div id="events-section" className=" min-h-screen bg-black flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-[1440px]">
 
         {/* Header */}
@@ -63,7 +67,7 @@ export default function Index() {
           {events.map((event) => (
             <Link
               key={event.id}
-              to={`/club?id=${event.id}`} 
+              to={event.linkto} 
               className="relative group aspect-square overflow-hidden rounded-xl cursor-pointer"
             >
               {/* Event Image: blur and scale on hover */}
@@ -97,7 +101,7 @@ export default function Index() {
               {/* New content appears on hover */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 px-4">
                 
-                <p className="text-gray-200 text-sm">{event.description}</p>
+                <p className="text-black font-semibold text-xl">{event.description}</p>
                 
               </div>
             </Link>

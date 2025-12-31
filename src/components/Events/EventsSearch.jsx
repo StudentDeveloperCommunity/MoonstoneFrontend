@@ -2,7 +2,10 @@
    Aadi | Events Search Bar
    ===================================================== */
 
+import { useState } from "react";
+
    export default function EventsSearch({ search, setSearch }) {
+    
     return (
       <section className="w-full flex justify-center px-4 mt-8">
         <div
@@ -43,6 +46,8 @@
           >
             Search
           </button>
+
+          
         </div>
       </section>
     );

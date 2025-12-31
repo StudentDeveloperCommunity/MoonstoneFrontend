@@ -1,52 +1,81 @@
-export default function EventCard({ event, onClick }) {
+import { API_URL } from "../../NwConfig";
+import { useNavigate } from "react-router-dom";
+import fallbackImg from "../../assets/eventsindetails/Frame.svg";
+
+export default function EventCard({ event }) {
+  const navigate = useNavigate();
+
+  const redirecttoregister = () => {
+    navigate("/eventsindetails", { state: { event } });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  function formatDate(dateString) {
+    if (!dateString) return "--";
+    return new Date(dateString).getDate();
+  }
+
+  function formatMonth(dateString) {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleString("default", {
+      month: "short",
+    });
+  }
+
   return (
     <div
-      onClick={onClick}
+      onClick={redirecttoregister}
       className="
-        relative w-[368px] h-[500px]
-        rounded-[25px] overflow-hidden
-        border-2 border-white/60
+        relative w-[300px] h-[360px]
+        rounded-[20px] overflow-hidden
+        border border-white/25
         cursor-pointer
-        transition-transform duration-300
-        hover:-translate-y-1
+        bg-[#1a1a1a]
+        transition-all duration-300
+        hover:-translate-y-1 hover:shadow-xl
       "
     >
-      {/* Image */}
+      {/* ✅ IMAGE WITH FALLBACK */}
       <img
-        src="src/assets/events/event-12.png"
-        alt={event.title}
-        className="w-full h-full object-cover"
+        src={
+          event?.image
+            ? `${API_URL}/${event.image}`
+            : fallbackImg
+        }
+        onError={(e) => {
+          e.currentTarget.src = fallbackImg;
+        }}
+        alt={event?.title || "Event"}
+        className="w-full h-full object-cover block"
       />
 
-      {/* Date */}
-      <div className="absolute top-4 right-4 bg-white text-black rounded-md px-2 py-1 text-[11px] text-center z-10">
-        <div>12</div>
-        <div className="text-[9px] tracking-wider">FEB</div>
+      {/* DATE BADGE */}
+      <div className="absolute top-3 right-3 z-20">
+        <div className="w-[54px] h-[54px] bg-white rounded-[10px] flex flex-col items-center justify-center shadow">
+          <span className="text-[20px] font-bold leading-none text-black">
+            {formatDate(event?.eventDate)}
+          </span>
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-black">
+            {formatMonth(event?.eventDate)}
+          </span>
+        </div>
       </div>
 
-      {/* Bottom GLASS BLUR (soft & smooth) */}
-      <div
-        className="absolute bottom-0 left-0 w-full h-[170px]"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.25) 65%, rgba(0,0,0,0.1) 80%, rgba(0,0,0,0) 100%)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-        }}
-      />
+      {/* BOTTOM GRADIENT */}
+      <div className="absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-t from-black/90 via-black/60 to-transparent z-10" />
 
-      {/* Content */}
-      <div className="absolute bottom-4 left-4 right-4 z-10">
-        <h2 className="text-white font-bold text-[28px] leading-[32px] uppercase mb-4">
-          {event.title.split(" ").map((word, i) => (
-            <span key={i} className="block">
-              {word}
-            </span>
-          ))}
+      {/* CONTENT */}
+      <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-col gap-2">
+        <h2 className="text-white font-bold text-[18px] leading-[22px] uppercase">
+          {event?.title || "Event Title"}
         </h2>
 
         <button
-          className="w-full h-[40px] rounded-[8px] text-sm text-white"
+          onClick={(e) => {
+            e.stopPropagation();
+            redirecttoregister();
+          }}
+          className="w-full h-[40px] rounded-[7px] text-[13px] font-medium text-white"
           style={{
             background: "linear-gradient(90deg, #042790 0%, #A2162E 100%)",
           }}
