@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo/moonstone-logo.png";
 
-export default function Navbar() {
+const Navbar = memo(function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isEventOpen, setIsEventOpen] = useState(false);
 
@@ -26,16 +26,16 @@ export default function Navbar() {
 
         {/* Stars background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {Array.from({ length: 12 }).map((_, i) => (
+          {Array.from({ length: 6 }).map((_, i) => (
             <span
               key={i}
-              className="absolute rounded-full bg-white/30 animate-pulse"
+              className="absolute rounded-full bg-white/30 animate-pulse will-change-opacity"
               style={{
                 width: "2px",
                 height: "2px",
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
+                left: `${(i * 16.67) % 100}%`,
+                top: `${(i * 16.67) % 100}%`,
+                animationDelay: `${(i % 3) * 1}s`,
               }}
             />
           ))}
@@ -168,4 +168,7 @@ export default function Navbar() {
       `}
     </style>
   </>
-)};
+);
+});
+
+export default Navbar;

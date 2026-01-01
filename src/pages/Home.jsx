@@ -19,17 +19,17 @@ export default function Index() {
     <div className="w-full ">
  <div className="relative min-h-screen w-full bg-black overflow-hidden">
 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-  {Array.from({ length: 50 }).map((_, i) => (
+  {Array.from({ length: 15 }).map((_, i) => (
     <div
       key={i}
-      className="absolute rounded-full bg-white opacity-50"
+      className="absolute rounded-full bg-white opacity-50 will-change-transform"
       style={{
-        width: Math.random() > 0.5 ? "1px" : "2px",
-        height: Math.random() > 0.5 ? "1px" : "2px",
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        animation: `twinkle ${2 + Math.random() * 3}s infinite alternate,
-                    moveStar ${5 + Math.random() * 5}s linear infinite alternate`
+        width: i % 2 === 0 ? "1px" : "2px",
+        height: i % 2 === 0 ? "1px" : "2px",
+        left: `${(i * 6.67) % 100}%`,
+        top: `${(i * 6.67) % 100}%`,
+        animation: `twinkle ${2 + (i % 3) * 1}s infinite alternate,
+                    moveStar ${5 + (i % 4) * 1}s linear infinite alternate`
       }}
     />
   ))}

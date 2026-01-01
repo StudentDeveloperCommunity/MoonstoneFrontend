@@ -3,21 +3,23 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
+import eventImg1 from "../assets/events/TAN03734.webp";
+import eventImg2 from "../assets/events/TAN03286.webp";
+import eventImg3 from "../assets/events/199A2046.webp";
+
 export default function Index() {
   const events = [
     {
       id: 1,
       title: "Techno",
-      image:
-        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
+      image: eventImg1,
       description: "Feel the drop, own the night 🎧🔥Techno @ Moonstone is our annual college EDM fest with booming beats, lights, and nonstop energy.",
       linkto:"/allevents?id=1"
     },
     {
       id: 2,
       title: "Sports",
-      image:
-        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
+      image: eventImg2,
       description: "From friendly matches to epic moments ⚽✨ Sports @ Moonstone is where fun meets fitness every year.. ",
       linkto:"/allevents?id=2"
 
@@ -25,8 +27,7 @@ export default function Index() {
     {
       id: 3,
       title: "Cultural",
-      image:
-        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
+      image: eventImg3,
       description: "Sing it, dance it, feel it 🎤💃 Cultural @ Moonstone is where campus shines with creativity every year..",
       linkto:"/allevents?id=3"
 

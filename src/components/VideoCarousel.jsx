@@ -1,23 +1,76 @@
+import { useState, useEffect, useRef } from "react";
 import video1 from "../assets/herosection/vid-1.mp4";
 
-
 export default function About() {
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const videoRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleVideoLoadStart = () => {
+    // Video is starting to load
+  };
+
+  const handleVideoCanPlay = () => {
+    setVideoLoaded(true);
+  };
+
   return (
   <div className="min-h-screen bg-black flex items-center justify-center py-16 px-4">
   <div className="w-full max-w-[1440px] mx-auto rounded-t-[25px] overflow-hidden">
     <div className="flex flex-col lg:flex-row items-stretch min-h-[500px]">
-      <div className="w-full lg:w-[500px] flex-shrink-0 bg-black rounded-r-[25px] lg:rounded-r-[25px] lg:rounded-l-none p-6 lg:p-4 flex items-center justify-center overflow-hidden">
-     <video
-  className="w-full h-full object-cover rounded-lg"
-  autoPlay
-  loop
-  muted
-  playsInline
-  controls={false}
->
-  <source src={video1} type="video/mp4" />
-
-</video>
+      <div ref={containerRef} className="w-full lg:w-[500px] flex-shrink-0 bg-black rounded-r-[25px] lg:rounded-r-[25px] lg:rounded-l-none p-6 lg:p-4 flex items-center justify-center overflow-hidden relative">
+        {/* Loading placeholder */}
+        {!videoLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-400 text-sm">Loading video...</p>
+            </div>
+          </div>
+        )}
+        
+        {/* Video element with lazy loading */}
+        {isInView && (
+          <video
+            ref={videoRef}
+            className={`w-full h-full object-cover rounded-lg transition-opacity duration-500 ${
+              videoLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            autoPlay
+            loop
+            muted
+            playsInline
+            controls={false}
+            preload="metadata"
+            onLoadStart={handleVideoLoadStart}
+            onCanPlay={handleVideoCanPlay}
+          >
+            <source src={video1} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )}
 
 
       </div >
