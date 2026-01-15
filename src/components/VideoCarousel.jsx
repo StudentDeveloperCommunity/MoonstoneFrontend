@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import video1 from "../assets/herosection/vid-1.mp4";
+import video1 from "../assets/herosection/moonstonediary.mp4";
 
 export default function About() {
   const [videoLoaded, setVideoLoaded] = useState(false);
