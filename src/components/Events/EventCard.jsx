@@ -44,6 +44,7 @@ export default function EventCard({ event }) {
         }
         onError={(e) => {
           e.currentTarget.src = fallbackImg;
+          e.currentTarget.style.opacity = "0.7";
         }}
         alt={event?.title || "Event"}
         className="w-full h-full object-cover block"

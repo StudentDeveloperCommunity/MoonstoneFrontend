@@ -80,16 +80,19 @@ export default function ProgramAndEvents({ userRole }) {
   const deleteEvent = async(index,event) => {
     if(window.confirm("Are You Sure You Want To Delete This Event?")){
       setLoading(true)
-      const newevent={id:event.id,eventType:event.eventType,image:event.image.name}
-      // console.log(newevent)
+      const newevent={
+        id:event.id,
+        eventType:event.eventType,
+        image:event.image ? (event.image.name || event.image) : event.imagePreview
+      }
       const res=await EventDelete(newevent)
-      // console.log(res)
       if(res?.success){
         setEvents(events.filter((_, i) => i !== index));
         setLoading(false)
       }
       else{
-        alert("Error Deleting Event!!")
+        const msg=res?.message || "Error Deleting Event!!"
+        alert(msg)
         setLoading(false)
       }
     }
@@ -101,75 +104,102 @@ function formatDate(dateString) {
 }
 
 const urlToFile = async (url, filename) => {
-  const response = await fetch(url);
-  const blob = await response.blob();
-
-  return new File([blob], filename, {
-    type: blob.type,
-    lastModified: Date.now(),
-  });
+  try {
+    const response = await fetch(url, { credentials: "include" });
+    if (!response.ok) throw new Error(`fetch failed ${response.status}`);
+    const blob = await response.blob();
+    return new File([blob], filename, {
+      type: blob.type,
+      lastModified: Date.now(),
+    });
+  } catch (err) {
+    return null;
+  }
 };
 
 async function geteventsinfo() {
   setLoading(true);
   const data={role:userRole};
-  const res = await EventFetcher(data);
-  // console.log("Fetched Events:", res);  
-  if (res?.success && res?.events?.length > 0) {
-  const mappedEvents = await Promise.all(
-    res.events.map(async (event) => {
-      let imageFile = null;
-      let imagePreview = null;
+  try {
+    const res = await EventFetcher(data);
+    if (res?.success && res?.events?.length > 0) {
+      const mappedEvents = res.events.map((event) => {
+        let imageFile = null;
+        let imagePreview = null;
 
-      if (event.image) {
-        const imageUrl = `${API_URL}/${event.image}`;
-        const filename = event.image.split("/").pop();
+        if (event.image) {
+          const imageUrl = `${API_URL}/${event.image}`;
+          
+          // For existing events, use backend URL directly (now that static serving is fixed)
+          if (event.id) {
+            imagePreview = imageUrl;
+          } else {
+            // For new uploads, use blob URL temporarily
+            imagePreview = imageUrl;
+          }
+        }
 
-        // 🔥 Convert backend image URL → REAL File
-        imageFile = await urlToFile(imageUrl, filename);
-        imagePreview = URL.createObjectURL(imageFile);
-      }
+        return {
+          ...event,
+          image: imageFile,
+          imagePreview,
+          eventDate: formatDate(event.eventDate),
+        };
+      });
 
-      return {
-        ...event,
+      setEvents(mappedEvents);
+      return;
+    }
 
-        // actual File stored here 👇
-        image: imageFile,
-
-        // preview for UI
-        imagePreview,
-
-        eventDate: formatDate(event.eventDate),
-      };
-    })
-  );
-
-  setEvents(mappedEvents);
-}
-else{
-    setEvents([{
-      image: null,
-      imagePreview: null,
-      title: "",
-      description: "",
-      eventType: (userRole === "admin" || userRole==="event_convener") ? "" : userRole,
-      eventCategory: "single", // ⭐ NEW FIELD
-      minParticipants: 1,
-      maxParticipants: 1,
-      eventDate: "",
-    eventTime: "",
-      fee:"",
-      event_at:"",
-      convener:"",
-      convener_number:"",
-      organised_by:"",
-      student_cordinator:"",
-      student_number:"",
-      id:null,
-    }]);
+    setEvents([
+      {
+        image: null,
+        imagePreview: null,
+        title: "",
+        description: "",
+        eventType: (userRole === "admin" || userRole==="event_convener") ? "" : userRole,
+        eventCategory: "single",
+        minParticipants: 1,
+        maxParticipants: 1,
+        eventDate: "",
+        eventTime: "",
+        fee:"",
+        event_at:"",
+        convener:"",
+        convener_number:"",
+        organised_by:"",
+        student_cordinator:"",
+        student_number:"",
+        id:null,
+      },
+    ]);
+  } catch (err) {
+    console.error("geteventsinfo failed", err);
+    setEvents([
+      {
+        image: null,
+        imagePreview: null,
+        title: "",
+        description: "",
+        eventType: (userRole === "admin" || userRole==="event_convener") ? "" : userRole,
+        eventCategory: "single",
+        minParticipants: 1,
+        maxParticipants: 1,
+        eventDate: "",
+        eventTime: "",
+        fee:"",
+        event_at:"",
+        convener:"",
+        convener_number:"",
+        organised_by:"",
+        student_cordinator:"",
+        student_number:"",
+        id:null,
+      },
+    ]);
+  } finally {
+    setLoading(false);
   }
-
-  setLoading(false);
 }
 
 useEffect(()=>{
@@ -177,72 +207,35 @@ useEffect(()=>{
 },[])
   const handleSubmit = async() => {
     setLoading(true);
+    const fail = (msg) => {
+      alert(msg);
+      setLoading(false);
+    };
   for (let i = 0; i < events.length; i++) {
     const e = events[i];
 
-    if (!e.image) {
-      alert(`Event #${i + 1}: Image is required`);
-      return;
-    }
-    if (e.title.trim().length < 10 || e.title.trim().length > 50) {
-      alert(`Event #${i + 1}: Title must be at least 10 and atmost 50 characters`);
-      return;
-    }
-    if (e.description.trim().length < 30 || e.description.trim().length > 500) {
-      alert(`Event #${i + 1}: Description must be at least 30 and atmost 500 characters`);
-      return;
-    }
-    if (!e.eventDate) {
-      alert(`Event #${i + 1}: Event date is required`);
-      return;
-    }
-    if (!e.eventTime) {
-      alert(`Event #${i + 1}: Event time is required`);
-      return;
-    }
-    if ((userRole === "admin" || userRole==="event_convener") && !e.eventType) {
-      alert(`Event #${i + 1}: Event type must be selected`);
-      return;
-    }
-    if (e.fee < 50 || e.fee > 50000) {
-        alert(`Event #${i + 1}: Minimum Fees must be alteast 50 and atmost 50000`);
-        return;
-      }
-    if (e.event_at.trim().length < 5 || e.event_at.trim().length > 50) {
-        alert(`Event #${i + 1}: Minimum event At must be alteast 5 and atmost 50 charcters long`);
-        return;
-      }
-      if (e.convener.trim().length < 5 || e.convener.trim().length > 50) {
-        alert(`Event #${i + 1}: Minimum Convener  must be alteast 5 and Atmost 50 charcters long`);
-        return;
-      }
-      if (e.convener_number.trim().length < 10 || e.convener_number.trim().length > 10) {
-        alert(`Event #${i + 1}: Minimum Convener Number must be alteast and Atmost 10 charcters long`);
-        return;
-      }
-      if (e.organised_by.trim().length < 5 || e.organised_by.trim().length > 50 ) {
-        alert(`Event #${i + 1}: Minimum Organised By must be alteast 5 and Atmost 50 charcters long`);
-        return;
-      }
-      if (e.student_cordinator.trim().length < 4 || e.student_cordinator.trim().length > 50) {
-        alert(`Event #${i + 1}: Minimum Student Cordinator must be alteast 4 and Atmost 50 charcters long`);
-        return;
-      }
-      if (e.student_number.trim().length < 10 || e.student_number.trim().length > 10) {
-        alert(`Event #${i + 1}: Minimum Student Number must be alteast and Atmost 10 charcters long`);
-        return;
-      }
+    if (!e.image) return fail(`Event #${i + 1}: Image is required`);
+    if (e.title.trim().length < 10 || e.title.trim().length > 50) return fail(`Event #${i + 1}: Title must be at least 10 and atmost 50 characters`);
+    if (e.description.trim().length < 30 || e.description.trim().length > 500) return fail(`Event #${i + 1}: Description must be at least 30 and atmost 500 characters`);
+    if (!e.eventDate) return fail(`Event #${i + 1}: Event date is required`);
+    if (!e.eventTime) return fail(`Event #${i + 1}: Event time is required`);
+    if ((userRole === "admin" || userRole==="event_convener") && !e.eventType) return fail(`Event #${i + 1}: Event type must be selected`);
+    if (e.fee < 50 || e.fee > 50000) return fail(`Event #${i + 1}: Minimum Fees must be alteast 50 and atmost 50000`);
+    if (e.event_at.trim().length < 5 || e.event_at.trim().length > 50) return fail(`Event #${i + 1}: Minimum event At must be alteast 5 and atmost 50 charcters long`);
+      if (e.convener.trim().length < 5 || e.convener.trim().length > 50) return fail(`Event #${i + 1}: Minimum Convener  must be alteast 5 and Atmost 50 charcters long`);
+      if (e.convener_number.trim().length < 10 || e.convener_number.trim().length > 10) return fail(`Event #${i + 1}: Minimum Convener Number must be alteast and Atmost 10 charcters long`);
+      if (e.organised_by.trim().length < 5 || e.organised_by.trim().length > 50 ) return fail(`Event #${i + 1}: Minimum Organised By must be alteast 5 and Atmost 50 charcters long`);
+      if (e.student_cordinator.trim().length < 4 || e.student_cordinator.trim().length > 50) return fail(`Event #${i + 1}: Minimum Student Cordinator must be alteast 4 and Atmost 50 charcters long`);
+      if (e.student_number.trim().length < 10 || e.student_number.trim().length > 10) return fail(`Event #${i + 1}: Minimum Student Number must be alteast and Atmost 10 charcters long`);
       
 
     // Team validation
     if (e.eventCategory === "team") {
       if (e.minParticipants < 1) {
-        alert(`Event #${i + 1}: Minimum participants must be at least 1`);
-        return;
+        return fail(`Event #${i + 1}: Minimum participants must be at least 1`);
       }
       if (e.maxParticipants < e.minParticipants) {
-        alert(`Event #${i + 1}: Maximum participants must be >= minimum participants`);
-        return;
+        return fail(`Event #${i + 1}: Maximum participants must be >= minimum participants`);
       }
     }
   }
@@ -288,7 +281,12 @@ if(res?.success){
     setLoading(false);
 }
 else{
-    alert("Error adding events. Please try again.");
+    const msg=res?.message || "Error adding events. Please try again.";
+    alert(msg);
+    if(res?.status===403){
+      window.localStorage.removeItem("35gntgij@3e#ed");
+      window.location.href="/admin";
+    }
     setLoading(false);
 }
 };
@@ -307,7 +305,7 @@ else{
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Event #{index + 1}</h2>
 
-            {(events.length > 1 && (userRole==="admin" || userRole==="event_convener")) && (
+            {(userRole==="admin" || userRole==="event_convener") && (
               <button
                 onClick={() => deleteEvent(index,event)}
                 className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
@@ -336,11 +334,16 @@ else{
 }
 
               {event.imagePreview && (
-                <img
-                  src={event.imagePreview}
-                  alt="Preview"
-                  className="w-full h-48 object-cover rounded border"
-                />
+                <>
+                  <img
+                    src={event.imagePreview}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded border"
+                  />
+                </>
+              )}
+              {!event.imagePreview && event.id && (
+                <p className="text-sm text-red-500">No image preview available</p>
               )}
             </div>
 

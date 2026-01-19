@@ -9,7 +9,11 @@ export default async function EventDelete(data) {
 
     }catch(error){
         console.log(error.message)
-        return error.message
+        return {
+            success:false,
+            status:error?.response?.status,
+            message:error?.response?.data?.message || error?.response?.data?.error || error?.message,
+        }
     }
     
 }

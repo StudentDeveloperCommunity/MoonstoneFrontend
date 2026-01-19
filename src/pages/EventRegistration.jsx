@@ -204,6 +204,9 @@ members.forEach((m, i) => {
           src={`${API_URL}/${event?.image || eventImg}`}
           className="rounded-lg w-48 h-48 object-cover"
           alt="event"
+          onError={(e) => {
+            e.currentTarget.src = eventImg;
+          }}
         />
         <div className="flex flex-col  gap-2">
           <Detail label="Event name:" value={event?.title} />

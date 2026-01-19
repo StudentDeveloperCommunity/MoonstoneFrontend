@@ -9,6 +9,10 @@ export default async function EventAdd(form) {
     }
     catch(error){
         console.log(error)
-        return error
+        return {
+            success:false,
+            status:error?.response?.status,
+            message:error?.response?.data?.message || error?.response?.data?.error || error?.message,
+        }
     }
 }
