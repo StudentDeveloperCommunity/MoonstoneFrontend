@@ -171,7 +171,7 @@ export default function AboutUs() {
           <div className="flex flex-col justify-center">
             <h3 className="text-2xl font-bold mb-3">Sports Club</h3>
             <p className="text-gray-300 text-lg leading-relaxed">
-              The Sports Club promotes fitness, teamwork, discipline, and
+              The Sports Club promotes fitnesss, teamwork, discipline, and
               competitive spirit. Through tournaments, training sessions, and
               various indoor/outdoor games, students learn to maintain a healthy
               lifestyle while representing the university.
