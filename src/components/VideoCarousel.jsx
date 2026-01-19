@@ -43,6 +43,7 @@ export default function About() {
           <div
             ref={containerRef}
             className="w-full lg:w-[500px] flex-shrink-0 bg-black rounded-r-[25px] lg:rounded-r-[25px] lg:rounded-l-none p-6 lg:p-4 flex items-center justify-center overflow-hidden relative"
+            style={{ willChange: 'transform', transform: 'translateZ(0)' }}
           >
             {/* Loading placeholder */}
             {!videoLoaded && (
@@ -56,9 +57,10 @@ export default function About() {
 
             <video
               ref={videoRef}
-              className={`w-full h-full object-cover rounded-lg ml-8 transition-opacity duration-500 ${
+              className={`w-full h-full object-cover rounded-lg ml-8 transition-opacity duration-500 will-change-transform ${
                 videoLoaded ? "opacity-100" : "opacity-0"
               }`}
+              style={{ transform: 'translateZ(0)' }}
               autoPlay
               loop
               muted
@@ -96,7 +98,7 @@ export default function About() {
               </h3>
 
               <p
-                className="text-white text-sm md:text-base lg:text-xl leading-relaxed text-justify max-w-[671px] mb-8"
+                className="text-white text-xl font-mono md:text-base lg:text-2xl leading-relaxed text-justify  mb-8"
                 style={{
                   fontFamily: "Istok Web, sans-serif",
                 }}

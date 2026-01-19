@@ -94,7 +94,7 @@ getsponsors()
     sponsors.map((item,index)=>{
         formdata.append("title",item.title)
         formdata.append("link",item.link)
-        formdata.append("sponsorimage",item.image)
+        formdata.append("logo",item.image)
     })
     // console.log("Sponsor Data:", sponsors);
     const res=await AddNewSponsors(formdata)

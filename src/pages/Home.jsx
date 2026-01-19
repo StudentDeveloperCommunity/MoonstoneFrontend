@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Countdown } from "../components/Countdown";
 import Events from "../components/Events";
 import Clubs from "../components/Clubs";
@@ -9,16 +9,16 @@ import Faq from "../components/Faq";
 import Sponsors from "../components/Sponsors";
 
 export default function Index() {
-  const [countdownStart, setCountdownStart] = useState(
+  const [countdownStart] = useState(
     new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
   );
 
   const stars = useMemo(() => {
-    const STAR_COUNT = 350; 
+    const STAR_COUNT = 150;
 
     return Array.from({ length: STAR_COUNT }).map((_, i) => {
       const size = Math.random() > 0.7 ? 2 : 1;
-      const left = Math.random() * 100;
+      const left = Math.random() * 98;
       const top = Math.random() * 100;
 
       const twinkleDuration = 0.8 + Math.random() * 1.8;
@@ -54,9 +54,11 @@ export default function Index() {
             style={{
               width: `${star.size}px`,
               height: `${star.size}px`,
-              left: `${star.left}%`,
+              left: `${Math.min(star.left, 98)}%`,
               top: `${star.top}%`,
               opacity: star.opacity,
+              willChange: 'transform, opacity',
+              transform: 'translateZ(0)',
               animation: `
                 twinkleStrong ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate,
                 moveStar ${star.moveDuration}s linear ${star.moveDelay}s infinite alternate
@@ -169,14 +171,14 @@ export default function Index() {
 
           <style>{`
             @keyframes twinkleStrong {
-              0%   { opacity: 0.05; transform: scale(0.9); }
-              50%  { opacity: 1;    transform: scale(1.35); }
-              100% { opacity: 0.15; transform: scale(1); }
+              0%   { opacity: 0.05; transform: scale3d(0.9, 0.9, 1) translateZ(0); }
+              50%  { opacity: 1;    transform: scale3d(1.35, 1.35, 1) translateZ(0); }
+              100% { opacity: 0.15; transform: scale3d(1, 1, 1) translateZ(0); }
             }
 
             @keyframes moveStar {
-              0%   { transform: translate(0, 0); }
-              100% { transform: translate(80px, -60px); }
+              0%   { transform: translate3d(0, 0, 0); }
+              100% { transform: translate3d(80px, -60px, 0); }
             }
 
             @keyframes spin3D {
@@ -185,7 +187,6 @@ export default function Index() {
             }
           `}</style>
         </div>
-
 
         <VideoCarousel />
         <Events />

@@ -11,7 +11,7 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import Eventsindetails from "./pages/Eventsindetails.jsx";
 import Payment from "./pages/Payment.jsx";
 import CheckRegistrationStatus from "./pages/CheckRegistrationStatus.jsx";
-
+import Developers from "./pages/Developers.jsx"
 const AppContent = () => {
   const location = useLocation();
   const excludedPaths = ['/admin','/admin_dashboard','/payment'];
@@ -24,6 +24,7 @@ const AppContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/allevents" element={<AllEvents />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/developers" element={<Developers />} />
         <Route path="/register" element={<EventRegistration />} />
         <Route path="/eventsindetails" element={<Eventsindetails />} />
         <Route path="/payment" element={<Payment />} />

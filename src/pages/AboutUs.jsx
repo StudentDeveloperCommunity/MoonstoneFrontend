@@ -11,7 +11,7 @@ export default function AboutUs() {
 
     return Array.from({ length: STAR_COUNT }).map((_, i) => {
       const size = Math.random() > 0.7 ? 2 : 1;
-      const left = Math.random() * 100;
+      const left = Math.random() * 98;
       const top = Math.random() * 100;
 
       const twinkleDuration = 0.8 + Math.random() * 1.8;
@@ -49,7 +49,7 @@ export default function AboutUs() {
             style={{
               width: `${star.size}px`,
               height: `${star.size}px`,
-              left: `${star.left}%`,
+              left: `${Math.min(star.left, 98)}%`,
               top: `${star.top}%`,
               opacity: star.opacity,
               boxShadow: `0 0 ${star.glow}px rgba(255,255,255,0.9)`,
@@ -171,7 +171,7 @@ export default function AboutUs() {
           <div className="flex flex-col justify-center">
             <h3 className="text-2xl font-bold mb-3">Sports Club</h3>
             <p className="text-gray-300 text-lg leading-relaxed">
-              The Sports Club promotes fitness, teamwork, discipline, and
+              The Sports Club promotes fitnesss, teamwork, discipline, and
               competitive spirit. Through tournaments, training sessions, and
               various indoor/outdoor games, students learn to maintain a healthy
               lifestyle while representing the university.

@@ -6,8 +6,21 @@
 html {
   @apply scroll-smooth;
 }
+
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
   overflow-x: hidden;
 }
 
