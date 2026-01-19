@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import EventsHero from "../components/Events/EventsHero";
@@ -54,6 +54,7 @@ const DEMO_EVENTS = [
     image: "uploads/demo6.jpg",
     eventType: "sports",
   },
+  
 ];
 
 export default function AllEvents() {
@@ -116,12 +117,10 @@ export default function AllEvents() {
   const sourceEvents = events.length > 0 ? events : DEMO_EVENTS;
 
   const filteredEvents = sourceEvents.filter((event) => {
-    const matchCategory =
-      filter === "all" || event.eventType === filter;
+    const matchCategory = filter === "all" || event.eventType === filter;
 
     const matchSearch =
-      !search ||
-      event.title.toLowerCase().includes(search.toLowerCase());
+      !search || event.title.toLowerCase().includes(search.toLowerCase());
 
     return matchCategory && matchSearch;
   });
@@ -131,21 +130,58 @@ export default function AllEvents() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  /* ✅ STABLE STAR BACKGROUND (ONLY CHANGE) */
+  const stars = useMemo(() => {
+    const STAR_COUNT = 140; // increase if you want more intensity
+
+    return Array.from({ length: STAR_COUNT }).map((_, i) => {
+      const size = Math.random() > 0.75 ? 2 : 1;
+      const left = Math.random() * 100;
+      const top = Math.random() * 100;
+
+      const twinkleDuration = 0.8 + Math.random() * 1.8;
+      const twinkleDelay = Math.random() * 2;
+
+      const moveDuration = 10 + Math.random() * 18;
+      const moveDelay = Math.random() * 3;
+
+      const opacity = 0.35 + Math.random() * 0.65;
+      const glow = 6 + Math.random() * 10;
+
+      return {
+        id: i,
+        size,
+        left,
+        top,
+        twinkleDuration,
+        twinkleDelay,
+        moveDuration,
+        moveDelay,
+        opacity,
+        glow,
+      };
+    });
+  }, []);
+
   return (
     <>
-      {/* 🌌 FIXED STAR BACKGROUND */}
+      {/* 🌌 FIXED STAR BACKGROUND (UPGRADED, NOTHING ELSE TOUCHED) */}
       <div className="fixed inset-0 -z-10 bg-black overflow-hidden pointer-events-none">
-        {Array.from({ length: 40 }).map((_, i) => (
+        {stars.map((star) => (
           <span
-            key={i}
+            key={star.id}
             className="absolute rounded-full bg-white"
             style={{
-              width: Math.random() > 0.5 ? "1px" : "2px",
-              height: Math.random() > 0.5 ? "1px" : "2px",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              opacity: 0.35,
-              animation: `twinkle ${2 + Math.random() * 3}s infinite alternate`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              opacity: star.opacity,
+              boxShadow: `0 0 ${star.glow}px rgba(255,255,255,0.9)`,
+              animation: `
+                twinkleStrong ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate,
+                moveStar ${star.moveDuration}s linear ${star.moveDelay}s infinite alternate
+              `,
             }}
           />
         ))}
@@ -180,9 +216,15 @@ export default function AllEvents() {
       </section>
 
       <style>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.2; }
-          50% { opacity: 1; }
+        @keyframes twinkleStrong {
+          0%   { opacity: 0.15; transform: scale(0.9); }
+          50%  { opacity: 1; transform: scale(1.5); }
+          100% { opacity: 0.25; transform: scale(1); }
+        }
+
+        @keyframes moveStar {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(80px, -60px); }
         }
       `}</style>
     </>

@@ -26,7 +26,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center pt-3 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white flex items-center justify-center  mt-4 py-2 px-4 sm:px-6 lg:px-6">
       <div className="w-full max-w-[1440px]">
         <div className="text-center mb-12">
           <div

@@ -1,31 +1,30 @@
 import { useState, memo } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo/moonstone-logo.png";
-
+// import logo from "../assets/logo/mnsnt 2.png";
+import logo from "../assets/logo/mnsnt 2.png";
 const Navbar = memo(function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isEventOpen, setIsEventOpen] = useState(false);
 
- return (
-  <>
-    {/* NAVBAR */}
-    <nav className="fixed top-3 inset-x-0 z-50 flex justify-center text-white">
-      <div className="relative w-full max-w-6xl px-3 sm:px-4">
-        
-        {/* Glass boundary */}
-        <div
-          className="
+  return (
+    <>
+      {/* NAVBAR */}
+      <nav className="fixed top-3 inset-x-0 z-50 flex justify-center text-white">
+        <div className="relative w-full max-w-7xl px-8 sm:px-4">
+          {/* Glass boundary */}
+          <div
+            className="
             absolute inset-0
             rounded-xl
             bg-black/40 backdrop-blur-md
-            border border-white/20
+           
             shadow-lg
             overflow-hidden
           "
-        />
+          />
 
-        {/* Stars background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Stars background */}
+          {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {Array.from({ length: 6 }).map((_, i) => (
             <span
               key={i}
@@ -39,42 +38,51 @@ const Navbar = memo(function Navbar() {
               }}
             />
           ))}
-        </div>
+        </div> */}
 
-        {/* Content */}
-        <div className="relative flex items-center justify-between px-3 sm:px-4 py-3">
-          
-          {/* Logo */}
-          <Link to="/" className="font-bold tracking-tight shrink-0">
-            <div className="flex flex-col leading-tight text-sm sm:text-base">
-             <img src={logo} alt="Moonstone Logo" className="w-28 sm:w-32 h-auto" />
-            </div>
-          </Link>
+          {/* Content */}
+          <div className="relative flex items-center justify-between px-3 sm:px-4 py-3">
+            {/* Logo */}
+            <Link to="/" className="font-bold tracking-tight shrink-0">
+              <div className="flex flex-col leading-tight text-sm sm:text-base">
+                <img
+                  src={logo}
+                  alt="Moonstone Logo"
+                  className="w-28 sm:w-32 h-auto"
+                />
+              </div>
+            </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link className="nav-link" to="/">Home</Link>
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center gap-6">
+              <Link
+                to="/"
+                className="text-white/80 text-[15px] font-medium transition-all duration-300 hover:text-white hover:scale-120"
+              >
+                Home
+              </Link>
 
-            <div className="relative group">
-              <button 
-          onClick={()=>window.location.href="/allevents?id:all"}
-               className="nav-link flex items-center gap-1">
-                Events <span className="text-xs"></span>
-              </button>
+              <div className="relative group">
+                <button
+                  onClick={() => (window.location.href = "/allevents?id:all")}
+                  className="nav-link flex items-center gap-1"
+                >
+                  Events <span className="text-xs"></span>
+                </button>
+              </div>
 
-</div>
+              <Link className="nav-link" to="/about">
+                About
+              </Link>
 
-            <Link className="nav-link" to="/about">About</Link> 
-
-            <Link
-                className="px-4 py-2 bg-[#00BC71] hover:bg-emerald-500 rounded-lg font-medium transition-all duration-300 text-sm"
+              <Link
+                className="px-4 py-2 bg-[#bba963] hover:bg-emerald-500 rounded-lg font-medium transition-all duration-300 text-sm"
                 to="/check-registration"
               >
                 Check Registration
               </Link>
-            
-          </div>
-{/* Mobile Menu Button */}
+            </div>
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileOpen(!isMobileOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-white/10 transition"
@@ -102,14 +110,13 @@ const Navbar = memo(function Navbar() {
                 )}
               </svg>
             </button>
-          
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
 
-    {isMobileOpen && (
-      <div
-        className="
+      {isMobileOpen && (
+        <div
+          className="
           fixed top-[4.5rem] inset-x-0
           mx-auto w-[92%] max-w-sm
           backdrop-blur-xl
@@ -120,32 +127,32 @@ const Navbar = memo(function Navbar() {
           space-y-2
           text-white
         "
-      >
-        <Link className="mobile-item" to="/">Home</Link>
-
-        <button
-          onClick={()=>window.location.href="/allevents?id:all"}
-          className="mobile-item flex pb-1 justify-between w-full"
         >
-          Events 
-        </button>
-
-       
-
-        <Link className="mobile-item" to="/about">About</Link> <br /><br />
-
-        <Link
+          <Link className="mobile-item" to="/">
+            Home
+          </Link>
+          <button
+            onClick={() => (window.location.href = "/allevents?id:all")}
+            className="mobile-item flex pb-1 justify-between w-full"
+          >
+            Events
+          </button>
+          <Link className="mobile-item" to="/about">
+            About
+          </Link>{" "}
+          <br />
+          <br />
+          <Link
             className="px-1 py-1 mobile-item  bg-emerald-600 hover:bg-emerald-700 text-center rounded-lg font-medium transition-all"
             to="/check-registration"
           >
             Check Registration
           </Link>
-      </div>
-    )}
+        </div>
+      )}
 
-   
-    <style>
-      {`
+      <style>
+        {`
         .nav-link {
           @apply text-sm font-medium relative;
         }
@@ -166,9 +173,9 @@ const Navbar = memo(function Navbar() {
           @apply block py-2 text-sm text-white/80;
         }
       `}
-    </style>
-  </>
-);
+      </style>
+    </>
+  );
 });
 
 export default Navbar;

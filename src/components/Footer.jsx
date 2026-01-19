@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/logo/moonstone-logo.png";
+import logo from "../assets/logo/mnsnt 2.png";
 import {
   FaLinkedinIn,
   FaInstagram,
@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer className="relative w-full bg-black text-white py-10 px-4 md:px-10 overflow-hidden">
       
-      {/* 🌌 FOOTER STAR BACKGROUND (CONTAINED) */}
+     
       <div className="absolute inset-0 pointer-events-none">
         {Array.from({ length: 35 }).map((_, i) => (
           <span
@@ -45,29 +45,32 @@ export default function Footer() {
             <img
               src={logo}
               alt="Moonstone Logo"
-              className="w-[150px] md:w-[190px]"
+              className="w-[250px] md:w-[250px]"
             />
 
-            <div className="flex flex-col gap-6">
+{/* Not Needed */}
+
+            {/* <div className="flex  gap-2">
               <p className="text-[10px] tracking-wider uppercase opacity-60">
                 Information
               </p>
-              <nav className="flex flex-col gap-1">
+              <nav className="flex  gap-1">
                 <a className="hover:opacity-70">Home</a>
                 <a className="hover:opacity-70">About</a>
                 <a className="hover:opacity-70">Events</a>
               </nav>
-            </div>
+            </div> */}
+            
           </div>
 
-          {/* BOTTOM */}
+         {/* Icon needs to be button with respective links */}
           <div className="flex flex-col lg:flex-row justify-between gap-8">
-            <div className="flex gap-2">
+            <div className="flex gap-4">
               {[FaLinkedinIn, FaInstagram, FaYoutube, FaXTwitter, FaFacebookF].map(
                 (Icon, i) => (
                   <div
                     key={i}
-                    className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center"
+                    className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center"
                   >
                     <Icon />
                   </div>

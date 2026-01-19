@@ -80,7 +80,7 @@ const Events = memo(function Events() {
   }, []);
 
   return (
-    <section id="events" className="py-20 pt-4 bg-black text-white">
+    <section id="events" className="py-20 pt-4  text-white">
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
         <div className="text-center mb-10">
           <h3
@@ -137,7 +137,7 @@ const Events = memo(function Events() {
       </div>
 
       {/* ---------------- BOTTOM ROW ---------------- */}
-      <div
+      {/* <div
         ref={row2Ref}
         className="flex gap-4 pl-6 pr-0 overflow-x-auto scroll-smooth mb-0"
         style={{
@@ -157,7 +157,7 @@ const Events = memo(function Events() {
             <img src={img} alt={`Event ${index}`} className="w-full h-full object-cover" loading="lazy" />
           </motion.div>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 });
