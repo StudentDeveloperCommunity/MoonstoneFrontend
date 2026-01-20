@@ -12,12 +12,17 @@ export default function Sponsors() {
         const res = await SponsorFetcher();
         console.log("Sponsors API response:", res);
         if (res?.success && res?.sponsors?.length > 0) {
-          const mappedSponsors = res.sponsors.map((sponsor) => ({
-            id: sponsor._id || sponsor.id,
-            img: sponsor.image || sponsor.logo ? `${API_URL}/${sponsor.image || sponsor.logo}` : null,
-            alt: sponsor.title || sponsor.name || "Sponsor",
-            link: sponsor.link || sponsor.website || "#"
-          })).filter(sponsor => sponsor.img); // Only show sponsors with images
+          const mappedSponsors = res.sponsors
+            .map((sponsor) => ({
+              id: sponsor._id || sponsor.id,
+              img:
+                sponsor.image || sponsor.logo
+                  ? `${API_URL}/${sponsor.image || sponsor.logo}`
+                  : null,
+              alt: sponsor.title || sponsor.name || "Sponsor",
+              link: sponsor.link || sponsor.website || "#",
+            }))
+            .filter((sponsor) => sponsor.img); // Only show sponsors with images
           setSponsors(mappedSponsors);
         }
       } catch (error) {
@@ -72,23 +77,27 @@ export default function Sponsors() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="text-center">
             <h3
-              className="text-xl md:text-2xl font-bold uppercase mb-2 tracking-wide"
+              className="text-xl md:text-2xl text-white font-bold uppercase mb-2 "
               style={{
-                WebkitTextStroke: "0.3px rgba(255,255,255,0.8)",
-                color: "transparent",
                 fontFamily: "Istok Web, sans-serif",
               }}
             >
               Event Sponsors
             </h3>
             <h2
-              className="text-2xl md:text-4xl lg:text-[36px] font-bold uppercase mb-3 text-white"
+              className="
+    text-2xl md:text-4xl lg:text-[36px] font-bold uppercase mb-3
+    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-400
+    bg-clip-text text-transparent
+  "
               style={{ fontFamily: "Istok Web, sans-serif" }}
             >
               Supporting Every Step
             </h2>
+
             <p className="text-white/70 text-sm md:text-base max-w-[600px] mx-auto">
-              Our sponsors help make this event possible. Check back soon to see our amazing partners!
+              Our sponsors help make this event possible. Check back soon to see
+              our amazing partners!
             </p>
           </div>
         </div>
@@ -163,7 +172,7 @@ export default function Sponsors() {
             >
               {/* Background pattern for better visual appeal */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-              
+
               {/* Content container */}
               <div className="relative z-10 flex items-center justify-center w-full h-full p-2">
                 <img
@@ -178,7 +187,7 @@ export default function Sponsors() {
                   draggable="false"
                   onError={(e) => {
                     console.error("Failed to load sponsor image:", sp.img);
-                    e.target.style.display = 'none';
+                    e.target.style.display = "none";
                     e.target.parentElement.innerHTML = `
                       <div class="flex flex-col items-center justify-center h-full text-gray-400">
                         <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,10 +199,10 @@ export default function Sponsors() {
                   }}
                 />
               </div>
-              
+
               {/* Hover effect overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-              
+
               {/* Border highlight on hover */}
               <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400 rounded-2xl transition-colors duration-300 pointer-events-none"></div>
             </a>

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import logo from "../assets/logo/mnsnt 2.png";
+import logo from "../assets/logo/FinalLogo.png";
 import { Link } from "react-router-dom";
 import {
   FaLinkedinIn,
@@ -41,14 +41,15 @@ export default function Footer() {
   }, []);
 
   const socialLinks = [
-    { icon: FaLinkedinIn, link: "#", label: "LinkedIn" },
-    { icon: FaInstagram, link: "#", label: "Instagram" },
-    { icon: FaYoutube, link: "#", label: "YouTube" },
-    { icon: FaXTwitter, link: "#", label: "Twitter" },
-    { icon: FaFacebookF, link: "#", label: "Facebook" },
+    { icon: FaLinkedinIn, link: "https://www.linkedin.com/school/medicaps-university-indore/posts/?feedView=all", label: "LinkedIn" },
+    { icon: FaInstagram, link: "https://www.instagram.com/medicaps_university/", label: "Instagram" },
+    { icon: FaYoutube, link: "https://www.youtube.com/@medicaps_university", label: "YouTube" },
+    // { icon: FaXTwitter, link: "#", label: "Twitter" },
+    { icon: FaFacebookF, link: "https://www.facebook.com/medicapsuniversityindore/", label: "Facebook" },
   ];
 
-  const gradientHover = "hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-orange-400 hover:via-pink-500 hover:to-cyan-400 transition-all duration-300 hover:scale-105 inline-block origin-left";
+  const gradientHover =
+    "hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-orange-400 hover:via-pink-500 hover:to-cyan-400 transition-all duration-300 hover:scale-105 inline-block origin-left";
 
   return (
     <footer className="relative w-full bg-black text-white py-12 px-4 md:px-10 overflow-hidden font-sans">
@@ -64,8 +65,8 @@ export default function Footer() {
               left: `${Math.min(star.left, 98)}%`,
               top: `${star.top}%`,
               opacity: star.opacity,
-              willChange: 'transform, opacity',
-              transform: 'translateZ(0)',
+              willChange: "transform, opacity",
+              transform: "translateZ(0)",
               animation: `
                 twinkleStrong ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate,
                 moveStar ${star.moveDuration}s linear ${star.moveDelay}s infinite alternate
@@ -83,8 +84,10 @@ export default function Footer() {
             transition-all duration-500
           "
         >
-          <div className="flex flex-col xl:flex-row justify-between items-start gap-12 mb-10">
-            <div className="group cursor-pointer w-full xl:w-auto flex justify-center xl:justify-start">
+          {/* ✅ MAIN ROW (Aligned like image) */}
+          <div className="flex flex-col xl:flex-row items-start justify-between gap-12 mb-10">
+            {/* LEFT: LOGO */}
+            <div className="group cursor-pointer w-full xl:w-[32%] flex justify-center xl:justify-start">
               <img
                 src={logo}
                 alt="Moonstone Logo"
@@ -92,35 +95,84 @@ export default function Footer() {
               />
             </div>
 
-            <div className="flex-1 w-full xl:w-auto xl:min-w-[50%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 sm:gap-8 text-base sm:text-sm font-light text-gray-300 text-center sm:text-left">
-              <div className="space-y-4 flex flex-col items-center sm:items-start">
-                <div className="flex flex-col gap-1">
-                  <a href="tel:+917313111500" className="hover:text-white transition-colors block text-lg sm:text-sm">+91 7313111500</a>
-                  <a href="tel:+917313111501" className="hover:text-white transition-colors block text-lg sm:text-sm">+91 7313111501</a>
+            {/* CENTER: LINKS (two columns) */}
+            <div className="w-full xl:w-[38%] flex justify-center">
+              <div className="grid grid-cols-2 gap-x-16 gap-y-3 text-sm font-semibold text-gray-300">
+                {/* Column 1 */}
+                <div className="flex flex-col gap-2">
+                  <Link to="/about" className={gradientHover}>
+                    About
+                  </Link>
+                  <Link to="/allevents" className={gradientHover}>
+                    Events
+                  </Link>
+                  <Link to="/developers" className={gradientHover}>
+                    Developers
+                  </Link>
+                  <Link to="/sponsors" className={gradientHover}>
+                    Sponsors
+                  </Link>
+                  <Link to="/contact" className={gradientHover}>
+                    Contact
+                  </Link>
                 </div>
-                <div className="flex flex-col gap-1 text-gray-400">
-                  <p className="text-lg sm:text-sm">A.B. Road Pigdamber, Rau</p>
-                  <p className="text-lg sm:text-sm">Indore, MP 453331</p>
+
+                {/* Column 2 */}
+                <div className="flex flex-col gap-2">
+                  <Link to="/clubs" className={gradientHover}>
+                    Subordinate Clubs
+                  </Link>
+                  <Link to="/techno" className={gradientHover}>
+                    Techno
+                  </Link>
+                  <Link to="/cultural" className={gradientHover}>
+                    Cultural
+                  </Link>
+                  <Link to="/sports" className={gradientHover}>
+                    Sports
+                  </Link>
                 </div>
-                <div>
-                  <a href="mailto:director.admissions@medicaps.ac.in" className="hover:text-white transition-colors break-words text-lg sm:text-sm">
-                    director.admissions@medicaps.ac.in
+              </div>
+            </div>
+
+            {/* RIGHT: ADDRESS */}
+            <div className="w-full xl:w-[30%] flex flex-col items-center xl:items-center text-gray-300 text-sm font-semibold">
+              <p className="sm:text-md text-xl text-gray-200 leading-relaxed text-center xl:text-right">
+                A.B. Road Pigdamber, Rau,
+                <br />
+                Indore, Madhya Pradesh
+                <br />
+                453331
+              </p>
+
+              {/* ✅ contact section */}
+              <div className="mt-4 flex flex-col items-center xl:items-end gap-2">
+                {/* ✅ numbers in same row */}
+                <div className="flex flex-row gap-4 items-center justify-center xl:justify-end">
+                  <a
+                    href="tel:+917313111500"
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    +91 7313111500
+                  </a>
+
+                  <span className="text-gray-500">•</span>
+
+                  <a
+                    href="tel:+917313111501"
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    +91 7313111501
                   </a>
                 </div>
-              </div>
 
-              <div className="flex flex-col gap-4 sm:gap-3 md:pl-4 items-center sm:items-start">
-                <Link to="/" className={`${gradientHover} text-lg sm:text-sm`}>Home</Link>
-                <Link to="/about" className={`${gradientHover} text-lg sm:text-sm`}>About</Link>
-                <Link to="/allevents" className={`${gradientHover} text-lg sm:text-sm`}>Events</Link>
-                <Link to="/developers" className={`${gradientHover} text-lg sm:text-sm`}>Developers</Link>
-              </div>
-
-              <div className="flex flex-col gap-4 sm:gap-3 md:pl-4 items-center sm:items-start">
-                <a href="#" className={`${gradientHover} text-lg sm:text-sm`}>Facebook</a>
-                <a href="#" className={`${gradientHover} text-lg sm:text-sm`}>Twitter</a>
-                <a href="#" className={`${gradientHover} text-lg sm:text-sm`}>Linkedin</a>
-                <a href="#" className={`${gradientHover} text-lg sm:text-sm`}>Instagram</a>
+                {/* email */}
+                <a
+                  href="mailto:director.admissions@medicaps.ac.in"
+                  className="text-gray-400 hover:text-white transition-colors underline underline-offset-4"
+                >
+                  director.admissions@medicaps.ac.in
+                </a>
               </div>
             </div>
           </div>
@@ -146,18 +198,19 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col md:flex-row justify-between items-center md:items-end border-t border-white/10 pt-8 gap-6 md:gap-0 text-center md:text-left">
-          <div>
+        <div className="mt-12 flex flex-col md:flex-row justify-between items-center md:items-end border-t border-white/10 pt-8 gap-6 md:gap-0">
+          <div className="text-center md:text-left">
             <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter uppercase leading-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-pink-500 to-cyan-400 animate-pulse">
                 MOONSTONE 2k26
               </span>
             </h2>
             <p className="text-xs text-gray-500 mt-2 tracking-widest uppercase">
-              Designed & Developed by Team Moonstone
+              Designed & Developed by Student Developers' Community
             </p>
           </div>
-          <p className="text-xs text-gray-600">
+
+          <p className="text-xs text-gray-600 text-center md:text-right">
             2026 — All Rights Reserved.
           </p>
         </div>
@@ -175,7 +228,6 @@ export default function Footer() {
           100% { transform: translate3d(80px, -60px, 0); }
         }
       `}</style>
-
     </footer>
   );
 }

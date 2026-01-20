@@ -6,41 +6,37 @@ import { Search, Mail, Phone } from 'lucide-react';
 const developerData = [
     {
         id: 1,
-        name: "Dr. Shilpa Tripathi",
-        role: "Chairperson",
+        name: "Dr. Prashant Panse",
+        role: "Mentor",
         department: "Computer Science Department",
-        email: "shilpa@university.edu",
-        phone: "9893284797",
+        email: "gmail.com",
         category: "Mentors",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa"
+        image: ""
     },
     {
         id: 2,
-        name: "Eeshan Sharma",
+        name: "John Doe",
         role: "UI/UX",
         department: "Computer Science Department",
-        email: "eeshan@gmail.com",
-        phone: "9893284797",
+        email: "@gmail.com",
         category: "UI / UX",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Eeshan"
+        image: ""
     },
     {
         id: 3,
-        name: "Kumar Saurav",
+        name: "John Doe",
         role: "UI/UX",
         department: "Computer Science Department",
-        email: "msshaurya0914@gmail.com",
-        phone: "9893284797",
+        email: "gmail.com",
         category: "UI / UX",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kumar"
+        image: ""
     },
     {
         id: 4,
-        name: "Ketan Jain",
+        name: "John Doe",
         role: "UI/UX",
         department: "Computer Science Department",
-        email: "msshaurya0914@gmail.com",
-        phone: "9893284797",
+        email: "gmail.com",
         category: "UI / UX",
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ketan"
     },
@@ -50,72 +46,75 @@ const developerData = [
         role: "Frontend",
         department: "CSE",
         email: "john@code.com",
-        phone: "9998887776",
         category: "Frontend Developers",
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=John"
     },
     // --- Backend Developers ---
     {
         id: 7,
-        name: "Dr. Shilpa Tripathi",
-        role: "Chairperson",
+        name: "John Doe",
+        role: "Backend",
         department: "Computer Science Department",
-        email: "shilpa@university.edu",
-        phone: "9693284797",
+        email: "university.edu",
         category: "Backend Developers",
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa"
     },
     {
         id: 8,
-        name: "Dr. Shilpa Tripathi",
-        role: "Chairperson",
+        name: "John Doe",
+        role: "Backend",
         department: "Computer Science Department",
-        email: "shilpa@university.edu",
-        phone: "9693284797",
+        email: "university.edu",
         category: "Backend Developers",
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa"
     },
     {
         id: 9,
-        name: "Dr. Shilpa Tripathi",
-        role: "Chairperson",
+        name: "John Doe",
+        role: "Backend",
         department: "Computer Science Department",
-        email: "shilpa@university.edu",
-        phone: "9693284797",
+        email: "university.edu",
         category: "Backend Developers",
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa"
     },
     // --- Deployers ---
     {
         id: 10,
-        name: "Dr. Shilpa Tripathi",
-        role: "Chairperson",
+        name: "John Doe",
+        role: "Backend",
         department: "Computer Science Department",
         email: "shilpa@university.edu",
-        phone: "9693284797",
         category: "Deployers",
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa"
     },
     {
         id: 11,
-        name: "Dr. Shilpa Tripathi",
-        role: "Chairperson",
+        name: "John Doe",
+        role: "Deployer",
         department: "Computer Science Department",
-        email: "shilpa@university.edu",
-        phone: "9693284797",
+        email: "university.edu",
         category: "Deployers",
         image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa"
     },
+    
     {
-        id: 12,
-        name: "Dr. Shilpa Tripathi",
-        role: "Chairperson",
-        department: "Computer Science Department",
-        email: "shilpa@university.edu",
-        phone: "9693284797",
-        category: "Deployers",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa"
-    },
+    id: 13,
+    name: "Dr.Sanket Gupta",
+    role: " Mentor",
+    department: "Computer Science Department",
+    email: "@university.edu",
+    category: "Mentors",
+    image: ""
+},
+{
+    id: 14,
+    name: "Dr. Kailash C. Bandu",
+    role: "Mentor",
+    department: "Information Technology Department",
+    email: "@university.edu",
+    category: "Mentors",
+    image: ""
+},
 ];
 
 const categories = ["Mentors", "UI / UX", "Frontend Developers", "Backend Developers", "Deployers"];
@@ -132,7 +131,6 @@ export default function Developers() {
 
     return (
         <>
-            {/* 🌌 FIXED STAR BACKGROUND */}
             <div className="fixed inset-0 -z-10 bg-black overflow-hidden pointer-events-none">
                 {Array.from({ length: 40 }).map((_, i) => (
                     <span
@@ -157,7 +155,7 @@ export default function Developers() {
                 <div className="pt-28 container mx-auto px-4 max-w-7xl">
 
                     {/* --- HERO SECTION --- */}
-                    <div className="relative w-full max-w-6xl mx-auto rounded-tl-[20px] rounded-tr-[60px] rounded-br-[20px] rounded-bl-[60px] bg-gradient-to-br from-gray-900 via-[#1a1c2e] to-black overflow-hidden border border-gray-700/50 shadow-2xl mb-12">
+                    <div className="relative w-full max-w-6xl mx-auto rounded-tl-[20px] rounded-tr-[60px] rounded-br-[20px] rounded-bl-[60px] bg-black overflow-hidden border border-gray-700/50 shadow-2xl mb-12">
                         {/* Decorative Rings */}
                         <div className="hidden sm:block absolute right-0 top-0 h-full w-1/2 lg:w-1/3 overflow-hidden pointer-events-none opacity-20">
                             <div className="absolute -right-20 -top-20 w-64 h-64 sm:w-96 sm:h-96 rounded-full border-[30px] border-gray-600/30"></div>
@@ -232,7 +230,7 @@ export default function Developers() {
                                                             <span className="text-xs truncate">{dev.email}</span>
                                                         </div>
                                                         <div className="flex items-center gap-2 hover:text-blue-600 transition-colors cursor-pointer truncate">
-                                                            <Phone className="w-3.5 h-3.5 shrink-0" />
+                                                            {/* <Phone className="w-3.5 h-3.5 shrink-0" /> */}
                                                             <span className="text-xs truncate">{dev.phone}</span>
                                                         </div>
                                                     </div>
@@ -243,6 +241,9 @@ export default function Developers() {
                                 </div>
                             );
                         })}
+
+
+                        
                     </div>
 
                 </div>

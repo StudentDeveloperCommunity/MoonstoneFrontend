@@ -76,12 +76,12 @@ export default function Index() {
           >
             <div className="flex flex-col items-center justify-center  space-y-0">
               <h1
-                className="flex items-center justify-center text-white leading-none flex-nowrap gap-[0.15em]"
+                className="flex items-center justify-center text-white leading-none flex-nowrap gap-[0.20em]"
                 style={{
                   fontFamily: "Tac One",
                   fontWeight: 1000,
                   letterSpacing: "-0.12em",
-                  fontSize: "clamp(70px, 10vw, 110px)",
+                  fontSize: "clamp(100px, 10vw, 140px)",
                 }}
               >
                 <span>M</span>
