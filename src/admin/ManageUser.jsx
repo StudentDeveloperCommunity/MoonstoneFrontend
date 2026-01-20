@@ -84,9 +84,9 @@ export default function ManageUser() {
 
 
           <tbody>
-            {users.map((user,index) => (
+            {users.map((user, index) => (
               <tr
-                key={user._id}
+                key={user._id || `user-${index}`}
                 className="border-b hover:bg-gray-50 transition"
               >
                 <td className="p-3">{index+1}</td>

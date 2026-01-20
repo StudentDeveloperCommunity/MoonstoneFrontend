@@ -7,30 +7,33 @@ import { useEffect, useState } from "react";
 import WebsiteLoader from "../Loader/WebsiteLoader"
 import RegisterStats from "../api-files/RegisertAPIs/RegisterStats";
 
-export function DashboardOverview({ setActiveSection,userRole }) {
-const [stats, setstats] = useState([]);
-const [loading, setloading] = useState(false);
-    async function getstats(userRole){
-    // console.log(userRole)
-    setloading(true)
-    const data={ userRole:userRole}
-    const res=await RegisterStats(data)
-    // console.log(res)
-    if(res?.success){
-      setstats(res?.data)
-      setloading(false)
-    }
-    setloading(false)
-  } 
-  useEffect(()=>{
-    getstats(userRole)
-  },[userRole])
-  // const [loading, setloading] = useState(false);
-
+export function DashboardOverview({ setActiveSection, userRole }) {
+  const [stats, setstats] = useState([]);
+  const [loading, setloading] = useState(false);
+  
   const navigatetosection = (link) => {
-    setActiveSection(link);
-    window.scrollTo(0, 0);
+    if (setActiveSection && typeof setActiveSection === 'function') {
+      setActiveSection(link);
+      window.scrollTo(0, 0);
+    } else {
+      console.error('setActiveSection is not available or not a function');
+    }
   };
+
+  async function getstats(userRole) {
+    setloading(true);
+    const data = { userRole: userRole };
+    const res = await RegisterStats(data);
+    if (res?.success) {
+      setstats(res?.data);
+      setloading(false);
+    }
+    setloading(false);
+  }
+
+  useEffect(() => {
+    getstats(userRole);
+  }, [userRole]);
 
   // ✅ NEW EVENTS DATA
   const eventStats2 =stats || [];

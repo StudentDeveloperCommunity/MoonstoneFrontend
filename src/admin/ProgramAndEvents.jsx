@@ -3,7 +3,6 @@ import EventAdd from "../api-files/EventAPIs/EventAdd";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 import EventFetcher from "../api-files/EventAPIs/EventFetcher";
 import { API_URL } from "../NwConfig";
-import { form } from "framer-motion/client";
 import EventDelete from "../api-files/EventAPIs/EventDelete";
 
 export default function ProgramAndEvents({ userRole }) {
@@ -81,6 +80,7 @@ const updateEvent = (index, field, value) => {
 
 
   const addNewEvent = () => {
+  const timestamp = new Date().toLocaleTimeString();
   setEvents([
     ...events,
     {
@@ -102,23 +102,45 @@ const updateEvent = (index, field, value) => {
       student_cordinator:"",
       student_number:"",
       id: null, // Ensure id field is present
+      addedAt: timestamp, // ⭐ Track when event was added
     },
   ]);
 };
 
 
   const deleteEvent = async(index,event) => {
+    console.log("=== DELETE FUNCTION STARTED ===");
     console.log("Delete function called with:", { index, event });
+    console.log("Event ID:", event.id);
+    console.log("Event _id:", event._id);
+    console.log("Full event object:", JSON.stringify(event, null, 2));
     
+    // Check if it's an empty/new event (no valid ID)
+    const hasValidId = (event.id && event.id !== null && event.id !== undefined) || 
+                      (event._id && event._id !== null && event._id !== undefined);
+    
+    if(!hasValidId) {
+      console.log("Detected new event (no valid ID) - using client-side delete");
+      if(window.confirm("Are You Sure You Want To Delete This New Event?")) {
+        // Remove from local state only (client-side delete)
+        setEvents(events.filter((_, i) => i !== index));
+        alert("New event deleted successfully!");
+      }
+      return;
+    }
+    
+    console.log("Detected saved event (has ID) - using backend delete");
     if(window.confirm("Are You Sure You Want To Delete This Event?")){
       setLoading(true)
       
+      const eventId = event.id || event._id;
       const newevent={
-        id:event.id,
+        id: eventId,
         eventType:event.eventType,
         image: event.image && typeof event.image === 'object' ? event.image.name : event.image
       }
-      console.log("Sending delete request:", newevent)
+      console.log("Final event data being sent:", JSON.stringify(newevent, null, 2));
+      console.log("Event ID being sent:", eventId);
       
       try {
         const res=await EventDelete(newevent)
@@ -157,13 +179,24 @@ function formatDate(dateString) {
 }
 
 const urlToFile = async (url, filename) => {
-  const response = await fetch(url);
-  const blob = await response.blob();
-
-  return new File([blob], filename, {
-    type: blob.type,
-    lastModified: Date.now(),
-  });
+  try {
+    console.log("Fetching image from:", url);
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      console.error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+      return null;
+    }
+    
+    const blob = await response.blob();
+    return new File([blob], filename, {
+      type: blob.type,
+      lastModified: Date.now(),
+    });
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    return null;
+  }
 };
 
 const geteventsinfo = async () => {
@@ -219,9 +252,11 @@ const geteventsinfo = async () => {
   );
 
   // Show ALL events (don't filter incomplete ones)
+  console.log("Final mapped events:", mappedEvents);
   setEvents(mappedEvents);
 }
 else{
+    const timestamp = new Date().toLocaleTimeString();
     setEvents([{
       image: null,
       imagePreview: null,
@@ -241,6 +276,7 @@ else{
       student_cordinator:"",
       student_number:"",
       id: null, // Ensure id field is present
+      addedAt: timestamp, // ⭐ Track when event was added
     }]);
 }
 
@@ -442,15 +478,20 @@ eventsToSubmit.forEach((event, index) => {
 
       {/* Display All Events */}
       {events.map((event, index) => (
-        <div key={index} className={`border p-6 mb-6 bg-white rounded-lg shadow-md ${editMode[index] ? 'border-blue-500 border-2' : ''}`}>
+        <div key={event.id || `new-event-${index}`} className={`border p-6 mb-6 bg-white rounded-lg shadow-md ${editMode[index] ? 'border-blue-500 border-2' : ''}`}>
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-lg font-semibold">
                 Event #{index + 1}
                 {event.id && <span className="ml-2 text-sm text-gray-500">(ID: {event.id})</span>}
+                {!event.id && <span className="ml-2 text-sm text-orange-600">📝 New Event</span>}
+                {event.addedAt && <span className="ml-2 text-xs text-blue-500">Added: {event.addedAt}</span>}
               </h2>
               {event.id && !editMode[index] && (
                 <span className="text-sm text-orange-600 font-medium">🔒 Click Edit to modify</span>
+              )}
+              {!event.id && !editMode[index] && (
+                <span className="text-sm text-blue-600 font-medium">✏️ Ready to edit</span>
               )}
               {editMode[index] && (
                 <span className="text-sm text-blue-600 font-medium">✏️ Editing Mode</span>
@@ -459,16 +500,39 @@ eventsToSubmit.forEach((event, index) => {
 
             <div className="flex gap-2">
               {event.id && (userRole==="admin" || userRole==="event_convener") && (
-                <button
-                  onClick={() => toggleEditMode(index)}
-                  className={`px-3 py-1 text-white rounded text-sm ${
-                    editMode[index] 
-                      ? 'bg-gray-500 hover:bg-gray-600' 
-                      : 'bg-green-500 hover:bg-green-600'
-                  }`}
-                >
-                  {editMode[index] ? 'Cancel' : 'Edit'}
-                </button>
+                <>
+                  {!editMode[index] ? (
+                    <button
+                      onClick={() => toggleEditMode(index)}
+                      className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
+                    >
+                      Edit
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => toggleEditMode(index)}
+                        className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={async () => {
+                          console.log("Save button clicked for event:", event);
+                          await handleSubmit();
+                          // Exit edit mode after successful save
+                          setEditMode(prev => ({
+                            ...prev,
+                            [index]: false
+                          }));
+                        }}
+                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                      >
+                        Save
+                      </button>
+                    </>
+                  )}
+                </>
               )}
               
               {(userRole==="admin" || userRole==="event_convener") && (
@@ -477,7 +541,12 @@ eventsToSubmit.forEach((event, index) => {
                     console.log("Delete button clicked for event:", event);
                     deleteEvent(index,event);
                   }}
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                  className={`px-3 py-1 text-white rounded text-sm ${
+                    !event.id 
+                      ? 'bg-orange-500 hover:bg-orange-600' 
+                      : 'bg-red-500 hover:bg-red-600'
+                  }`}
+                  title={!event.id ? "Delete new event (local only)" : "Delete saved event"}
                 >
                   Delete
                 </button>
@@ -562,7 +631,7 @@ eventsToSubmit.forEach((event, index) => {
                 minLength={5}
                 readOnly={isFieldReadOnly(index)}
                 maxLength={50}
-                value={(event.event_at || "") || ""}
+                value={event.event_at || ""}
                 onChange={(e) => updateEvent(index, "event_at", e.target.value)}
                 placeholder="Enter event location (e.g., Main Auditorium)"
               />
@@ -575,7 +644,7 @@ eventsToSubmit.forEach((event, index) => {
                 readOnly={isFieldReadOnly(index)}
                 minLength={5}
                 maxLength={50}
-                value={(event.convener || "") || ""}
+                value={event.convener || ""}
                 onChange={(e) => updateEvent(index, "convener", e.target.value)}
               />
 
@@ -587,7 +656,7 @@ eventsToSubmit.forEach((event, index) => {
                 minLength={10}
                 readOnly={isFieldReadOnly(index)}
                 maxLength={10}
-                value={(event.convener_number || "") || ""}
+                value={event.convener_number || ""}
                 onChange={(e) => updateEvent(index, "convener_number", e.target.value)}
               />
 
@@ -599,7 +668,7 @@ eventsToSubmit.forEach((event, index) => {
                 minLength={5}
                 readOnly={isFieldReadOnly(index)}
                 maxLength={50}
-                value={(event.organised_by || "") || ""}
+                value={event.organised_by || ""}
                 onChange={(e) => updateEvent(index, "organised_by", e.target.value)}
               />
 
@@ -611,7 +680,7 @@ eventsToSubmit.forEach((event, index) => {
                 minLength={4}
                 readOnly={isFieldReadOnly(index)}
                 maxLength={50}
-                value={(event.student_cordinator || "") || ""}
+                value={event.student_cordinator || ""}
                 onChange={(e) => updateEvent(index, "student_cordinator", e.target.value)}
               />
 
@@ -623,7 +692,7 @@ eventsToSubmit.forEach((event, index) => {
                 minLength={10}
                 readOnly={isFieldReadOnly(index)}
                 maxLength={10}
-                value={(event.student_number || "") || ""}
+                value={event.student_number || ""}
                 onChange={(e) => updateEvent(index, "student_number", e.target.value)}
               />
 
@@ -673,7 +742,7 @@ eventsToSubmit.forEach((event, index) => {
               )}
 
               {/* Non-admin auto event type */}
-              {(userRole !== "admin" || userRole==="event_convener") && (
+              {(userRole !== "admin" && userRole !== "event_convener") && (
                 <div className="p-2 bg-gray-100 capitalize rounded text-sm text-gray-700">
                   Event Type: <b>{userRole}</b>
                 </div>
