@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Eye, EyeOff, UserPlus } from "lucide-react";
+import { Eye, EyeOff, UserPlus, Trash2 } from "lucide-react";
 import AddUserModal from "./AddUserModal";
 import AdminRegister from "../api-files/AdminAPIs/AdminRegister";
 import GetAdminUsers from "../api-files/AdminAPIs/GetAdminUsers";
+import RemoveUser from "../api-files/AdminAPIs/RemoveUser";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 export default function ManageUser() {
   const [open, setOpen] = useState(false);
@@ -20,6 +21,25 @@ export default function ManageUser() {
     }
     // setUsers((prev) => [...prev, newUser]);
     console.log("New User Added:", newUser);
+  };
+
+  const handleRemoveUser = async (userId) => {
+    if (!window.confirm("Are you sure you want to remove this user? This action cannot be undone.")) {
+      return;
+    }
+
+    try {
+      const res = await RemoveUser(userId);
+      if (res?.success) {
+        alert("User removed successfully");
+        setUsers((prev) => prev.filter(user => user._id !== userId));
+      } else {
+        alert(res?.message || "Failed to remove user");
+      }
+    } catch (error) {
+      console.error("Error removing user:", error);
+      alert("Error removing user");
+    }
   };
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([
@@ -79,6 +99,7 @@ export default function ManageUser() {
               <th className="p-3 font-semibold text-gray-700">Sr.No</th>
               <th className="p-3 font-semibold text-gray-700">Email</th>
               <th className="p-3 font-semibold text-gray-700">Role</th>
+              <th className="p-3 font-semibold text-gray-700">Actions</th>
             </tr>
           </thead>
 
@@ -92,6 +113,16 @@ export default function ManageUser() {
                 <td className="p-3">{index+1}</td>
                 <td className="p-3">{user.email}</td>
                 <td className="p-3">{user.role}</td>
+                <td className="p-3">
+                  <button
+                    onClick={() => handleRemoveUser(user._id)}
+                    className="flex items-center gap-2 bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+                    title="Remove User"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Remove
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
