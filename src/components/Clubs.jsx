@@ -58,51 +58,34 @@ export default function Index() {
         </div>
 
         {/* Event Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 place-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 place-items-center" style={{ contain: 'layout style paint' }}>
           {events.map((event) => (
             <Link
               key={event.id}
               to={event.linkto}
               className="relative group aspect-square w-full max-w-[420px] overflow-hidden rounded-xl cursor-pointer"
-              style={{ willChange: 'transform', transform: 'translateZ(0)' }}
             >
               {/* Event Image */}
               <img
                 src={event.image}
                 alt={event.title}
-                className="absolute inset-0 w-full h-full object-cover z-0 transition duration-500 group-hover:blur-[1px] group-hover:scale-[1.03]"
-                style={{ willChange: 'transform, filter', transform: 'translateZ(0)' }}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover z-0"
               />
 
-              {/* ✅ Dark overlay (for readability of button on any image) */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition duration-500 z-10" />
+              {/* ✅ Optimized overlay */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 z-10" />
 
-              {/* ✅ Glass overlay effect */}
-              <div
-                className="absolute top-0 right-0 w-12 h-12 rounded-lg
-                bg-white/10 border border-white/25
-                scale-100 group-hover:scale-[4]
-                opacity-0 group-hover:opacity-100
-                blur-[1px]
-                transition-all duration-400 ease-out
-                z-20 pointer-events-none"
-              />
-
-              {/* ✅ Title (visible normally, disappears on hover) */}
-              <div className="absolute bottom-8 left-8 z-30 transition-opacity duration-300 group-hover:opacity-0">
+              {/* ✅ Title (static) */}
+              <div className="absolute bottom-8 left-8 z-30">
                 <h3 className="text-white text-4xl font-bold tracking-wide">
                   {event.title}
                 </h3>
               </div>
 
-              {/* ✅ Explore More (appears in center on hover) */}
+              {/* ✅ Explore More button */}
               <div className="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span
-                  className="inline-flex items-center justify-center px-6 py-2 rounded-full
-                  bg-white/20 text-white text-sm md:text-base font-medium
-                  backdrop-blur-md border border-white/30
-                  hover:bg-white/30 transition duration-300"
-                >
+                <span className="inline-flex items-center justify-center px-6 py-2 rounded-full bg-white/20 text-white text-sm md:text-base font-medium backdrop-blur-sm border border-white/30">
                   Explore More
                 </span>
               </div>

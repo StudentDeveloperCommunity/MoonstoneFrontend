@@ -77,7 +77,7 @@ const Events = memo(function Events() {
               key={index}
               className="relative min-w-[600px] h-96 cursor-pointer rounded-2xl overflow-hidden shadow-xl flex-shrink-0 carousel-image"
               whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 1, ease: "easeOut" }}
             >
               <img
                 src={img}

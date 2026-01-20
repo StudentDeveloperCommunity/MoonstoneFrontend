@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import video1 from "../assets/herosection/moonstonediary.mp4";
 
 export default function About() {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  const videoRef = useRef(null);
   const containerRef = useRef(null);
+  const playerRef = useRef(null);
 
   // Intersection Observer for lazy loading
   useEffect(() => {
@@ -28,14 +27,44 @@ export default function About() {
     return () => observer.disconnect();
   }, []);
 
-  const handleVideoLoadStart = () => {
-    // Video is starting to load
-  };
+  // Initialize Cloudinary player when in view
+  useEffect(() => {
+    if (isInView && !playerRef.current) {
+      // Check if Cloudinary script is loaded
+      if (typeof window.cloudinary !== 'undefined' && window.cloudinary.VideoPlayer) {
+        try {
+          const player = window.cloudinary.VideoPlayer('player', {
+            cloud_name: 'dbzpt8fqa',
+            publicId: 'moonstonediary_trm92b',
+            autoplay: true,
+            loop: true,
+            muted: true,
+            controls: false,
+            fluid: true,
+            transformation: [
+              { quality: 'auto' },
+              { fetch_format: 'auto' }
+            ]
+          });
+          
+          playerRef.current = player;
+          
+          player.on('ready', () => {
+            console.log('Cloudinary player is ready');
+            setVideoLoaded(true);
+          });
+        } catch (error) {
+          console.error('Error initializing Cloudinary player:', error);
+        }
+      } else {
+        console.error('Cloudinary VideoPlayer not loaded. Check script inclusion.');
+        // Fallback: set as loaded to remove loading state
+        setTimeout(() => setVideoLoaded(true), 2000);
+      }
+    }
+  }, [isInView]);
 
-  const handleVideoCanPlay = () => {
-    setVideoLoaded(true);
-  };
-
+  
   return (
     <div className="min-h-screen  flex items-center justify-center py-16 px-4">
       <div className="w-full max-w-[1440px] mx-auto rounded-t-[25px] overflow-hidden">
@@ -55,24 +84,32 @@ export default function About() {
               </div>
             )}
 
-            <video
-              ref={videoRef}
-              className={`w-full h-full object-cover rounded-lg ml-8 transition-opacity duration-500 will-change-transform ${
+            {/* Cloudinary Video Player */}
+            <div 
+              id="player" 
+              className={`w-full h-full rounded-lg ml-8 transition-opacity duration-500 ${
                 videoLoaded ? "opacity-100" : "opacity-0"
               }`}
               style={{ transform: 'translateZ(0)' }}
-              autoPlay
-              loop
-              muted
-              playsInline
-              controls={false}
-              preload="metadata"
-              onLoadStart={handleVideoLoadStart}
-              onCanPlay={handleVideoCanPlay}
-            >
-              <source src={video1} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            />
+            
+            {/* Fallback video if Cloudinary player fails */}
+            {videoLoaded && !playerRef.current && (
+              <video
+                className="w-full h-full object-cover rounded-lg ml-8"
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls={false}
+              >
+                <source 
+                  src="https://res.cloudinary.com/dbzpt8fqa/video/upload/v1/moonstonediary_trm92b.mp4" 
+                  type="video/mp4" 
+                />
+                Your browser does not support the video tag.
+              </video>
+            )}
           </div>
 
           <div className="flex-1 px-6 lg:px-12 py-8 lg:py-16 flex flex-col justify-center">

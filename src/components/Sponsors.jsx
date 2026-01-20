@@ -10,13 +10,14 @@ export default function Sponsors() {
     const fetchSponsors = async () => {
       try {
         const res = await SponsorFetcher();
+        console.log("Sponsors API response:", res);
         if (res?.success && res?.sponsors?.length > 0) {
           const mappedSponsors = res.sponsors.map((sponsor) => ({
             id: sponsor._id || sponsor.id,
-            img: sponsor.image ? `${API_URL}/${sponsor.image}` : "/sponsors/default.png",
-            alt: sponsor.title || "Sponsor",
-            link: sponsor.link || "#"
-          }));
+            img: sponsor.image || sponsor.logo ? `${API_URL}/${sponsor.image || sponsor.logo}` : null,
+            alt: sponsor.title || sponsor.name || "Sponsor",
+            link: sponsor.link || sponsor.website || "#"
+          })).filter(sponsor => sponsor.img); // Only show sponsors with images
           setSponsors(mappedSponsors);
         }
       } catch (error) {
@@ -63,7 +64,15 @@ export default function Sponsors() {
             >
               Event Sponsors
             </h3>
-            <p className="text-white/70 text-sm md:text-base">Coming soon...</p>
+            <h2
+              className="text-2xl md:text-4xl lg:text-[36px] font-bold uppercase mb-3 text-white"
+              style={{ fontFamily: "Istok Web, sans-serif" }}
+            >
+              Supporting Every Step
+            </h2>
+            <p className="text-white/70 text-sm md:text-base max-w-[600px] mx-auto">
+              Our sponsors help make this event possible. Check back soon to see our amazing partners!
+            </p>
           </div>
         </div>
       </section>
@@ -110,7 +119,7 @@ export default function Sponsors() {
         <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black/45 to-transparent z-10" />
 
         {/* ✅ marquee track */}
-        <div className="flex w-max items-center gap-6 animate-sponsor-marquee">
+        <div className="flex items-center gap-12 animate-sponsor-marquee py-8">
           {marqueeSponsors.map((sp, idx) => (
             <a
               key={`${sp.id}-${idx}`}
@@ -119,27 +128,57 @@ export default function Sponsors() {
               rel="noopener noreferrer"
               className="
                 flex-shrink-0
-                w-[180px] h-[70px]
-                sm:w-[200px] sm:h-[75px]
-                md:w-[230px] md:h-[85px]
-                lg:w-[250px] lg:h-[90px]
-                rounded-xl overflow-hidden
-                bg-[#1a1a1a]
+                w-[280px] h-[180px]
+                sm:w-[320px] sm:h-[200px]
+                md:w-[360px] md:h-[220px]
+                lg:w-[400px] lg:h-[240px]
+                xl:w-[440px] xl:h-[260px]
+                rounded-2xl overflow-hidden
+                bg-gradient-to-br from-white to-gray-50
                 flex items-center justify-center
-                shadow-md
-                hover:scale-105 transition-transform duration-300
+                shadow-xl
+                hover:shadow-2xl hover:scale-105 transition-all duration-300
                 cursor-pointer
+                border border-gray-200
+                relative
+                group
               "
             >
-              <img
-                src={sp.img}
-                alt={sp.alt}
-                className="w-full h-full object-contain p-4"
-                draggable="false"
-                onError={(e) => {
-                  e.target.src = "/sponsors/default.png";
-                }}
-              />
+              {/* Background pattern for better visual appeal */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              {/* Content container */}
+              <div className="relative z-10 flex items-center justify-center w-full h-full p-8">
+                <img
+                  src={sp.img}
+                  alt={sp.alt}
+                  className="
+                    w-full h-full 
+                    object-contain 
+                    filter drop-shadow-lg
+                    group-hover:scale-110 transition-transform duration-300
+                  "
+                  draggable="false"
+                  onError={(e) => {
+                    console.error("Failed to load sponsor image:", sp.img);
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = `
+                      <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5a2 2 0 00-2-2v-5a2 2 0 00-2-2H5m14 0a2 2 0 002-2v-5a2 2 0 00-2-2H9m14 0V9a2 2 0 00-2-2H5a2 2 0 00-2 2v6m14 0v-5a2 2 0 00-2-2H7a2 2 0 00-2 2v5m14 0a2 2 0 002-2v-5a2 2 0 00-2-2H7a2 2 0 00-2 2v5m14 0a2 2 0 002-2v-5a2 2 0 00-2-2H7a2 2 0 00-2 2v5" />
+                        </svg>
+                        <span class="text-sm font-medium">Logo</span>
+                      </div>
+                    `;
+                  }}
+                />
+              </div>
+              
+              {/* Hover effect overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              
+              {/* Border highlight on hover */}
+              <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400 rounded-2xl transition-colors duration-300 pointer-events-none"></div>
             </a>
           ))}
         </div>
