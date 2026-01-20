@@ -10,7 +10,7 @@ import Sponsors from "../components/Sponsors";
 
 export default function Index() {
   const [countdownStart] = useState(
-    new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
+    new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
   );
 
   const stars = useMemo(() => {
@@ -57,8 +57,8 @@ export default function Index() {
               left: `${Math.min(star.left, 98)}%`,
               top: `${star.top}%`,
               opacity: star.opacity,
-              willChange: 'transform, opacity',
-              transform: 'translateZ(0)',
+              willChange: "transform, opacity",
+              transform: "translateZ(0)",
               animation: `
                 twinkleStrong ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate,
                 moveStar ${star.moveDuration}s linear ${star.moveDelay}s infinite alternate
@@ -71,10 +71,10 @@ export default function Index() {
       <div className="relative z-10 w-full">
         <div className="relative min-h-screen w-full overflow-hidden">
           <div
-            className="relative flex flex-col items-center text-center px-8"
+            className="relative flex flex-col items-center text-center px-2"
             style={{ paddingTop: "20vh" }}
           >
-            <div className="flex flex-col items-center justify-center space-y-0">
+            <div className="flex flex-col items-center justify-center  space-y-0">
               <h1
                 className="flex items-center justify-center text-white leading-none flex-nowrap gap-[0.15em]"
                 style={{
@@ -86,20 +86,22 @@ export default function Index() {
               >
                 <span>M</span>
 
-                <div className="w-[clamp(60px,10vw,100px)] h-[clamp(60px,10vw,100px)] rounded-full overflow-hidden">
-                  <video
-                    src={moonVideo}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover"
-                    style={{
-                      animation: "spin3D 15s linear infinite",
-                      transformStyle: "preserve-3d",
-                      backfaceVisibility: "hidden",
-                    }}
-                  />
+                <div
+                  style={{
+                    perspective: "1000px",
+                  }}
+                >
+                  <div className="w-[clamp(70px,10vw,110px)] h-[clamp(70px,10vw,110px)] rounded-full overflow-hidden">
+                    <video
+                      src={moonVideo}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
 
                 <span

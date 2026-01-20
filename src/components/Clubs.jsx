@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import eventimage1 from "../assets/events/cultural.webp"
 import eventImg3 from "../assets/events/Gemini_Generated_Image_yfmm0ryfmm0ryfmm (1).webp";
-import eventimage2 from "../assets/events/Kabaddi.png";
+import eventimage2 from "../assets/events/Kabaddi (1).webp";
 
 export default function Index() {
   const events = [
@@ -37,19 +37,25 @@ export default function Index() {
           <h2
             className="text-xl font-bold uppercase mb-4 tracking-wide text-gray-300"
             style={{
-              WebkitTextStroke: "0.2px #707070",
-              color: "transparent",
+              WebkitTextStroke: "0.2px white",
               fontFamily: "Istok Web, sans-serif",
             }}
           >
             Explore events
           </h2>
 
-          <h1 className="text-4xl md:text-5xl font-bold text-white uppercase mb-4">
-            Discover What's Happening Next
-          </h1>
+         <h1
+  className="
+    text-4xl md:text-5xl font-bold uppercase mb-4
+    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
+    bg-clip-text text-transparent
+  "
+>
+  Discover What's Happening Next
+</h1>
 
-          <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">
+
+          <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Stay in the loop with the exciting moments unfolding around you.
             From fresh experiences to major highlights, every event is crafted
             to spark curiosity and celebration. There’s always something new

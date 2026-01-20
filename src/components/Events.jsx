@@ -17,8 +17,7 @@ const Events = memo(function Events() {
           <h3
             className="text-xl md:text-2xl font-bold uppercase tracking-wide"
             style={{
-              WebkitTextStroke: "0.2px #606060ff",
-              color: "transparent",
+              WebkitTextStroke: "0.2px white",
               fontFamily: "Istok Web, sans-serif",
             }}
           >
@@ -26,14 +25,18 @@ const Events = memo(function Events() {
           </h3>
 
           <h2
-            className="text-2xl md:text-4xl lg:text-[36px] font-bold uppercase text-white whitespace-nowrap"
+            className="
+    text-2xl md:text-4xl lg:text-[36px] font-bold uppercase whitespace-nowrap
+    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
+    bg-clip-text text-transparent
+  "
             style={{ fontFamily: "Istok Web, sans-serif" }}
           >
             Flashback Frames
           </h2>
 
           <p
-            className="text-[#3A3A3A] text-sm md:text-base max-w-[851px] mx-auto "
+            className="text-white text-sm md:text-base max-w-[851px] mx-auto "
             style={{ fontFamily: "Istok Web, sans-serif" }}
           >
             Revisiting the highlights as we gear up for another great year.
@@ -70,23 +73,25 @@ const Events = memo(function Events() {
             transform: translateZ(0);
           }
         `}</style>
-        
+
         <div className="flex gap-4 scroll-container">
-          {[...imagesTop, ...imagesTop, ...imagesTop, ...imagesTop].map((img, index) => (
-            <motion.div
-              key={index}
-              className="relative min-w-[600px] h-96 cursor-pointer rounded-2xl overflow-hidden shadow-xl flex-shrink-0 carousel-image"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            >
-              <img
-                src={img}
-                alt={`Event ${index}`}
-                className="w-full h-full object-cover carousel-image"
-                loading="lazy"
-              />
-            </motion.div>
-          ))}
+          {[...imagesTop,...imagesTop, ...imagesTop, ...imagesTop, ...imagesTop].map(
+            (img, index) => (
+              <motion.div
+                key={index}
+                className="relative min-w-[400px] h-72 cursor-pointer rounded-2xl overflow-hidden shadow-xl flex-shrink-0 carousel-image"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              >
+                <img
+                  src={img}
+                  alt={`Event ${index}`}
+                  className="w-full h-full object-cover carousel-image"
+                  loading="lazy"
+                />
+              </motion.div>
+            ),
+          )}
         </div>
       </div>
     </section>
