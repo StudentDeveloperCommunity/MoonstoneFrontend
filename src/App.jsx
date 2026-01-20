@@ -11,6 +11,7 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import Eventsindetails from "./pages/Eventsindetails.jsx";
 import Payment from "./pages/Payment.jsx";
 import CheckRegistrationStatus from "./pages/CheckRegistrationStatus.jsx";
+import { API_URL, Frontend_API_URL } from './NwConfig.js';
 
 const AppContent = () => {
   const location = useLocation();
@@ -47,3 +48,6 @@ function App() {
 }
 
 export default App;
+
+// Use Frontend_API_URL in your components as needed
+console.log(Frontend_API_URL);

@@ -1,7 +1,7 @@
 // export const API_URL="http://localhost:3000"
-export const API_URL="https://moonstonebackend.onrender.com"
+export const API_URL="https://moonstone-api.miifoundation.com"
 // export const Frontend_API_URL="http://localhost:5173"
-export const Frontend_API_URL="https://moonstone-medicaps.vercel.app/"
+export const Frontend_API_URL="https://moonstone-api.miifoundation.com/"
 // AUTH APIS
 export const login="/api/auth/login"
 export const verify="/api/auth/verify"
