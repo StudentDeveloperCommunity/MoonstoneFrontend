@@ -1,0 +1,306 @@
+import { useState, useMemo } from "react";
+import "@fontsource/istok-web";
+import GetRegistrationStatus from "../api-files/RegisertAPIs/GetRegistartionStatus";
+import WebsiteLoader from "../Loader/WebsiteLoader";
+import { API_URL } from "../NwConfig";
+
+export default function CheckRegistrationStatus() {
+  // ⭐ Generate stars ONLY ONCE (so they don't change on re-render)
+  const stars = useMemo(() => {
+    const STAR_COUNT = 130;
+
+    return Array.from({ length: STAR_COUNT }).map((_, i) => {
+      const size = Math.random() > 0.7 ? 2 : 1;
+      const left = Math.random() * 98;
+      const top = Math.random() * 100;
+
+      const twinkleDuration = 0.8 + Math.random() * 1.8;
+      const twinkleDelay = Math.random() * 2;
+
+      const moveDuration = 10 + Math.random() * 18;
+      const moveDelay = Math.random() * 3;
+
+      const opacity = 0.35 + Math.random() * 0.65;
+      const glow = 6 + Math.random() * 10;
+
+      return {
+        id: i,
+        size,
+        left,
+        top,
+        twinkleDuration,
+        twinkleDelay,
+        moveDuration,
+        moveDelay,
+        opacity,
+        glow,
+      };
+    });
+  }, []);
+
+   const [Search, setSearch] = useState("");
+  const [searchType, setSearchType] = useState("id"); // 'id' or 'email'
+  const [loading, setLoading] = useState(false);
+  const [notfound, setnotfound] = useState(false);
+//   const [data, setData] = useState({});
+    const [result,setresult]=useState({})
+  
+  async function findreg() {
+    setLoading(true);
+    const form = searchType === "id" ? { id: Search } : { email: Search };
+    const res = await GetRegistrationStatus(form);
+    // console.log(res)
+    if (res?.success) {
+      setresult(res?.data?.[0]);
+      setnotfound(false)
+    } else {
+      setresult({});
+      setnotfound(true)
+    }
+    setLoading(false);
+  }
+
+  function formatDate(dateString) {
+  if (!dateString) return "";
+  return new Date(dateString).toISOString().split("T")[0];
+}
+
+  const getStatusBadge = (status) => {
+    switch (status?.toLowerCase()) {
+      case "approved":
+        return "bg-green-100 text-green-700 border-green-300";
+      case "pending":
+        return "bg-yellow-100 text-yellow-700 border-yellow-300";
+      case "rejected":
+        return "bg-red-100 text-red-700 border-red-300";
+      default:
+        return "bg-gray-100 text-gray-700 border-gray-300";
+    }
+  };
+
+  return (
+    <div className="relative w-full bg-black text-white overflow-hidden">
+      {/* ✅ Full-page animated stars background */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {stars.map((star) => (
+          <span
+            key={star.id}
+            className="absolute rounded-full bg-white"
+            style={{
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              left: `${Math.min(star.left, 98)}%`,
+              top: `${star.top}%`,
+              opacity: star.opacity,
+              boxShadow: `0 0 ${star.glow}px rgba(255,255,255,0.9)`,
+              animation: `
+                twinkleStrong ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate,
+                moveStar ${star.moveDuration}s linear ${star.moveDelay}s infinite alternate
+              `,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* ✅ Actual content above stars */}
+      <div className="relative z-10 w-full flex mt-0 flex-col items-center justify-center pt-20 pb-10">
+        {
+            loading && <WebsiteLoader/>
+        }
+        
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1
+            className="text-4xl md:text-6xl font-bold mb-4"
+            style={{ fontFamily: "'Istok Web', sans-serif" }}
+          >
+            Check Registration Status
+          </h1>
+          <p
+            className="text-lg text-gray-300 max-w-2xl mx-auto"
+            style={{ fontFamily: "'Istok Web', sans-serif" }}
+          >
+            Choose your search method and enter your details to check the status of your event registration
+          </p>
+        </div>
+
+        {/* Search Card */}
+        <div className="w-full max-w-2xl mx-auto px-6">
+          <div
+            className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20"
+            style={{
+              fontFamily: "'Istok Web', sans-serif",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            {/* Search Type Selection */}
+            <div className="flex gap-4 mb-8 justify-center">
+              <button
+                onClick={() => setSearchType("id")}
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                  searchType === "id"
+                    ? "bg-purple-600 text-white shadow-lg shadow-purple-600/30"
+                    : "bg-white/10 text-gray-300 hover:bg-white/20 border border-white/20"
+                }`}
+                style={{ fontFamily: "'Istok Web', sans-serif" }}
+              >
+                Registration ID
+              </button>
+              <button
+                onClick={() => setSearchType("email")}
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                  searchType === "email"
+                    ? "bg-purple-600 text-white shadow-lg shadow-purple-600/30"
+                    : "bg-white/10 text-gray-300 hover:bg-white/20 border border-white/20"
+                }`}
+                style={{ fontFamily: "'Istok Web', sans-serif" }}
+              >
+                Email
+              </button>
+            </div>
+
+            <input
+              type={searchType === "email" ? "email" : "text"}
+              placeholder={searchType === "id" ? "Enter valid Registration Number (e.g., 464493060360)" : "Enter your email address"}
+              value={Search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-4 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent mb-6 text-white placeholder-gray-400 text-[16px] backdrop-blur-sm"
+              style={{ fontFamily: "'Istok Web', sans-serif" }}
+            />
+
+            <button
+              onClick={findreg}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-purple-600/30"
+              style={{ fontFamily: "'Istok Web', sans-serif" }}
+            >
+              Check Status →
+            </button>
+          </div>
+          
+          <p
+            className="text-center text-gray-400 text-sm mt-6"
+            style={{ fontFamily: "'Istok Web', sans-serif" }}
+          >
+            Make sure that the registration status is approved. If you have any query regarding
+            your registration please contact the respective event coordinator.
+          </p>
+
+          <div className="text-center mt-6">
+            <a
+              href="https://www.moonstone.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-purple-400 font-medium transition-colors hover:text-purple-300"
+              style={{ fontFamily: "'Istok Web', sans-serif" }}
+            >
+              Visit Official Website
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        {/* No Results Found */}
+        {notfound && (
+          <div className="w-full max-w-2xl mx-auto mt-12 px-6">
+            <div
+              className="bg-white/10 backdrop-blur-md rounded-2xl p-8 flex flex-col items-center text-center border border-white/20"
+              style={{
+                fontFamily: "'Istok Web', sans-serif",
+              }}
+            >
+              {/* Icon */}
+              <svg
+                className="w-16 h-16 text-gray-400 mb-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v3.75m0 3h.008M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+
+              {/* Text */}
+              <h2 className="text-2xl font-bold text-white mb-3">
+                No Registration Found
+              </h2>
+
+              <p className="text-gray-300 mb-4">
+                We couldn't find any event registration with the provided
+                <span className="font-medium text-white"> {searchType === "id" ? "Registration ID" : "email address"}</span>.
+              </p>
+
+              <p className="text-gray-400">
+                Please check the {searchType === "id" ? "ID" : "email address"} and try again.
+              </p>
+            </div>
+          </div>
+        )}
+
+
+        {/* Result Card */}
+        {(result && Object.keys(result).length >= 1) && (
+          <div className="w-full max-w-4xl mx-auto mt-12 px-6">
+            <div 
+              className="bg-white/10 backdrop-blur-md rounded-2xl p-8 flex flex-col md:flex-row gap-8 border border-white/20"
+              style={{
+                fontFamily: "'Istok Web', sans-serif",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              {/* Image Section */}
+              <div className="flex-shrink-0">
+                <img
+                  src={`${API_URL}/${result?.eventID?.image?.startsWith('uploads/') ? result?.eventID?.image : `uploads/${result?.eventID?.image}`}
+                  alt="event"
+                  className="w-full md:w-64 h-64 object-cover rounded-xl"
+                />
+              </div>
+
+              {/* Details Section */}
+              <div className="flex-1 flex flex-col justify-center">
+                <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: "'Istok Web', sans-serif" }}>
+                  {result?.eventID?.title}
+                </h3>
+                <p className="text-gray-300 mb-6" style={{ fontFamily: "'Istok Web', sans-serif" }}>
+                  {formatDate(result?.eventID?.date)} | {result?.eventID?.event_at}
+                </p>
+
+                <p className="text-gray-300 mb-2" style={{ fontFamily: "'Istok Web', sans-serif" }}>
+                  <span className="font-semibold text-white">Event Coordinator Contact:</span>
+                </p>
+                <p className="text-white font-semibold mb-6" style={{ fontFamily: "'Istok Web', sans-serif" }}>
+                  {result?.eventID?.convener}, {result?.eventID?.convener_number}
+                </p>
+
+                <p className="text-gray-300 mb-3" style={{ fontFamily: "'Istok Web', sans-serif" }}>
+                  Registration Status
+                </p>
+                <div>
+                  <span className={`px-4 py-2 text-sm capitalize font-semibold rounded-full border ${getStatusBadge(result?.approved)}`}>
+                    {result?.approved}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

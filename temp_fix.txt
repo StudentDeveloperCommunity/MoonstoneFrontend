@@ -1,0 +1,3 @@
+                  <span className={`px-4 py-2 text-sm capitalize font-semibold rounded-full border ${getStatusBadge(result?.approved)`}>
+                    {result?.approved}
+                  </span>

@@ -21,7 +21,6 @@ import Sponsors from './Sponsors';
 const navigationItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'users', label: 'Manage User', icon: Users },
-  { id: 'about', label: 'About Page Editor', icon: FileText },
   { id: 'sponsor', label: 'Sponsors', icon: DollarSign },
   { id: 'events', label: 'Programs & Events', icon: Calendar },
   { id: 'registration', label: 'Registrations', icon: Trophy },
@@ -110,7 +109,8 @@ export function AdminDashboard({   }) {
 }, [activeSection]);
 
 const filteredNavigation = navigationItems.filter(item => {
-  if ((item.id === "users" || item.id==="about" || item.id=="sponsor") && userRole !== "admin") return false;
+  if ((item.id === "users" || item.id=="sponsor") && userRole !== "admin") return false;
+  if (item.id === "events" && userRole === "admin") return false;
   return true;
 });
 

@@ -24,6 +24,11 @@ const isFieldReadOnly = (index) => {
     return false;
   }
   
+  // For club admins, only allow editing events of their own type
+  if (["techno", "cultural", "sports"].includes(userRole) && event.eventType !== userRole) {
+    return true;
+  }
+  
   // For existing events, only allow editing when in edit mode
   return !editMode[index];
 };
@@ -88,7 +93,7 @@ const updateEvent = (index, field, value) => {
       imagePreview: null,
       title: "",
       description: "",
-      eventType: (userRole === "admin" || userRole ==="event_convener") ? "" : userRole,
+      eventType: (userRole === "admin" || userRole ==="event_convener") ? "" : (["techno", "cultural", "sports"].includes(userRole) ? userRole : userRole),
       eventCategory: "single",
       minParticipants: 1,   // ⭐ default for single
       maxParticipants: 1,   // ⭐ default for single
@@ -262,7 +267,7 @@ else{
       imagePreview: null,
       title: "",
       description: "",
-      eventType: (userRole === "admin" || userRole==="event_convener") ? "" : userRole,
+      eventType: (userRole === "admin" || userRole==="event_convener") ? "" : (["techno", "cultural", "sports"].includes(userRole) ? userRole : userRole),
       eventCategory: "single",
       minParticipants: 1,
       maxParticipants: 1,
@@ -325,7 +330,7 @@ useEffect(()=>{
         setLoading(false);
         return;
       }
-      if ((userRole === "admin" || userRole==="event_convener") && !e.eventType) {
+      if ((userRole === "admin" || userRole==="event_convener" || ["techno", "cultural", "sports"].includes(userRole)) && !e.eventType) {
         alert(`Event #${i + 1}: Event type must be selected`);
         setLoading(false);
         return;
@@ -464,7 +469,7 @@ eventsToSubmit.forEach((event, index) => {
           + Add New Event
         </button>
         {
-          (userRole==="admin" || userRole==="event_convener") && <button
+          (userRole==="admin" || userRole==="event_convener" || ["techno", "cultural", "sports"].includes(userRole)) && <button
             onClick={() => {
               console.log("Submit button clicked");
               handleSubmit();
@@ -499,7 +504,7 @@ eventsToSubmit.forEach((event, index) => {
             </div>
 
             <div className="flex gap-2">
-              {event.id && (userRole==="admin" || userRole==="event_convener") && (
+              {event.id && (userRole==="admin" || userRole==="event_convener" || (["techno", "cultural", "sports"].includes(userRole) && event.eventType === userRole)) && (
                 <>
                   {!editMode[index] ? (
                     <button
@@ -535,7 +540,7 @@ eventsToSubmit.forEach((event, index) => {
                 </>
               )}
               
-              {(userRole==="admin" || userRole==="event_convener") && (
+              {(userRole==="admin" || userRole==="event_convener" || (["techno", "cultural", "sports"].includes(userRole) && event.eventType === userRole)) && (
                 <button
                   onClick={() => {
                     console.log("Delete button clicked for event:", event);
@@ -719,8 +724,8 @@ eventsToSubmit.forEach((event, index) => {
 />
 
 
-              {/* EVENT TYPE — ADMIN ONLY */}
-              {(userRole === "admin" || userRole==="event_convener") && (
+              {/* EVENT TYPE — ADMIN AND CLUB ADMINS */}
+              {(userRole === "admin" || userRole==="event_convener" || ["techno", "cultural", "sports"].includes(userRole)) && (
                 <div className="mb-4">
                   <label className="block font-medium mb-2">Select Event Type</label>
                   <div className="space-y-2">
@@ -731,18 +736,21 @@ eventsToSubmit.forEach((event, index) => {
                           name={`eventType_${index}`}
                           value={type}
                           checked={event.eventType === type}
-                          disabled={isFieldReadOnly(index)}
-                          onChange={() => !isFieldReadOnly(index) && updateEvent(index, "eventType", type)}
+                          disabled={isFieldReadOnly(index) || (["techno", "cultural", "sports"].includes(userRole) && type !== userRole)}
+                          onChange={() => !isFieldReadOnly(index) && !(["techno", "cultural", "sports"].includes(userRole) && type !== userRole) && updateEvent(index, "eventType", type)}
                         />
-                        <span className="capitalize">{type}</span>
+                        <span className={`capitalize ${["techno", "cultural", "sports"].includes(userRole) && type !== userRole ? 'text-gray-400' : ''}`}>
+                          {type}
+                          {["techno", "cultural", "sports"].includes(userRole) && type === userRole && ' (Your Club)'}
+                        </span>
                       </label>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Non-admin auto event type */}
-              {(userRole !== "admin" && userRole !== "event_convener") && (
+              {/* Non-admin and non-club admin auto event type */}
+              {!(userRole === "admin" || userRole === "event_convener" || ["techno", "cultural", "sports"].includes(userRole)) && (
                 <div className="p-2 bg-gray-100 capitalize rounded text-sm text-gray-700">
                   Event Type: <b>{userRole}</b>
                 </div>

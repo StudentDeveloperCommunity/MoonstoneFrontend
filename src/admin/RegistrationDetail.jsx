@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { API_URL } from "../NwConfig";
 import FetchRegisterEvent from "../api-files/RegisertAPIs/FetchRegisteredEvent";
 import RegistrationUpdate from "../api-files/RegisertAPIs/RegistrationUpdate";
+import { DeleteRegistration } from "../api-files/RegisertAPIs/DeleteRegistration";
+import { Trash2 } from "lucide-react";
 
 export default function RegistrationDetail({ userRole }) {
   const [registrations, setRegistrations] = useState([
@@ -45,29 +47,39 @@ export default function RegistrationDetail({ userRole }) {
   /* ---------------- FILTERED DATA ---------------- */
   const filteredRegistrations = useMemo(() => {
   return registrations.filter((r) => {
-    if (eventFilter !== "all" && r?.event_type !== eventFilter) return false;
+    // For club admins, always filter by their event type
+    if (["techno", "cultural", "sports"].includes(userRole)) {
+      if (r?.event_type !== userRole) return false;
+    } else if (userRole === 'admin' && eventFilter !== "all" && r?.event_type !== eventFilter) {
+      return false;
+    }
 
     if (statusFilter !== "all" && r?.approved !== statusFilter) return false;
 
     return true;
   });
-}, [registrations, eventFilter, statusFilter]);
+}, [registrations, eventFilter, statusFilter, userRole]);
 
 
   /* ---------------- STATS ---------------- */
   const stats = useMemo(() => {
-  const approvedRegs = registrations.filter(
-    (r) => r?.approved === "approved"
-  );
+    // Filter registrations based on user role
+    const relevantRegistrations = ["techno", "cultural", "sports"].includes(userRole) 
+      ? registrations.filter(r => r?.event_type === userRole)
+      : registrations;
+    
+    const approvedRegs = relevantRegistrations.filter(
+      (r) => r?.approved === "approved"
+    );
 
-  return {
-    totalAmount: approvedRegs.reduce((sum, r) => sum + r?.fee, 0),
-    total: registrations.length,
-    approved: approvedRegs.length,
-    pending: registrations.filter((r) => r?.approved === "pending").length,
-    rejected: registrations.filter((r) => r?.approved === "rejected").length,
-  };
-}, [registrations]);
+    return {
+      totalAmount: approvedRegs.reduce((sum, r) => sum + r?.fee, 0),
+      total: relevantRegistrations.length,
+      approved: approvedRegs.length,
+      pending: relevantRegistrations.filter((r) => r?.approved === "pending").length,
+      rejected: relevantRegistrations.filter((r) => r?.approved === "rejected").length,
+    };
+}, [registrations, userRole]);
 
 
   /* ---------------- ACTIONS ---------------- */
@@ -93,6 +105,24 @@ export default function RegistrationDetail({ userRole }) {
 };
 
 const [loading, setLoading] = useState(false);
+
+  const deleteRegistration = async(id) => {
+    if (!window.confirm('Are you sure you want to delete this registration?')) {
+      return;
+    }
+    
+    setLoading(true);
+    const data = { registrationId: id };
+    const res = await DeleteRegistration(data);
+    
+    if (res?.success) {
+      setRegistrations((prev) => prev.filter((r) => r?._id !== id));
+      alert('Registration deleted successfully');
+    } else {
+      alert('Failed to delete registration');
+    }
+    setLoading(false);
+  };
 async function fetchRegistrations() {
   setLoading(true)
   const data={ userRole:userRole}
@@ -135,6 +165,12 @@ fetchRegistrations()
           <option value="sports">Sports</option>
         </select>
 }
+        {["techno", "cultural", "sports"].includes(userRole) && (
+          <div className="p-2 bg-white rounded">
+            <span className="text-sm text-gray-600">Showing: </span>
+            <span className="font-medium capitalize">{userRole} Events</span>
+          </div>
+        )}
 
         <select
           className="p-2 rounded"
@@ -153,6 +189,7 @@ fetchRegistrations()
           <thead className="bg-gray-200">
             <tr>
               <Th>Lead</Th>
+              <Th>Registration ID</Th>
               <Th>Event</Th>
               <Th>Members</Th>
               <Th>Fee</Th>
@@ -168,6 +205,11 @@ fetchRegistrations()
                 <Td>
                   <p className="font-semibold">{r?.LeadName}</p>
                   <p className="text-sm text-gray-500">{r?.LeadEmail}</p>
+                  {userRole === 'admin' && <p className="text-xs text-gray-400">{r?.LeadMobileNumber}</p>}
+                </Td>
+
+                <Td>
+                  <p className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">{r?._id}</p>
                 </Td>
 
                 <Td>
@@ -193,7 +235,11 @@ fetchRegistrations()
 
                 <Td>
                   <button
-                    onClick={() => {setPreviewImage(`${API_URL}/${r?.paymentFile}`); setutrNumber(r?.utrNumber)}}
+                    onClick={() => {
+                      const imagePath = r?.paymentFile?.startsWith('uploads/') ? r?.paymentFile : `uploads/${r?.paymentFile}`;
+                      setPreviewImage(`${API_URL}/${imagePath}`);
+                      setutrNumber(r?.utrNumber);
+                    }}
                     className="text-blue-600 underline"
                   >
                     View
@@ -201,23 +247,41 @@ fetchRegistrations()
                 </Td>
 
                   <Td className="space-x-2">
-                    {r?.approved === "pending" && (
+{userRole === 'admin' && (
   <div className="flex gap-2">
-    <button
-      onClick={() => updateStatus(r?._id, "approved")}
-      className="bg-green-500 text-white px-3 py-1 rounded-md"
+    <select
+      onChange={(e) => {
+        if (e.target.value && e.target.value !== r?.approved) {
+          updateStatus(r?._id, e.target.value);
+          e.target.value = ''; // Reset select
+        }
+      }}
+      className="px-2 py-1 border rounded text-sm"
+      defaultValue=""
     >
-      Approve
-    </button>
+      <option value="" disabled>Change Status</option>
+      <option value="approved">Approve</option>
+      <option value="pending">Pending</option>
+      <option value="rejected">Reject</option>
+    </select>
     <button
-      onClick={() => updateStatus(r?._id, "rejected")}
-      className="bg-red-500 text-white px-3 py-1 rounded-md"
+      onClick={() => deleteRegistration(r?._id)}
+      className="bg-red-600 text-white px-3 py-1 rounded-md flex items-center gap-1"
+      title="Delete Registration"
     >
-      Reject
+      <Trash2 size={14} />
+      Delete
     </button>
   </div>
 )}
-
+{["techno", "cultural", "sports"].includes(userRole) && (
+  <div>
+    <span className="text-sm text-gray-500 italic">View Only</span>
+    <div className="text-xs text-gray-400 mt-1" title="Only master admin can change club admin status">
+      Contact admin to change status
+    </div>
+  </div>
+)}
                   </Td>
               </tr>
             ))}
