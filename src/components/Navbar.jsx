@@ -1,6 +1,6 @@
 import { useState, memo } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo/mnsnt 2.png";
+import logo from "../assets/logo/FinalLogo.png";
 
 const Navbar = memo(function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
