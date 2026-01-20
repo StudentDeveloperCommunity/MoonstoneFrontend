@@ -8,7 +8,7 @@ export default async function EventAdd(form) {
     return resp
     }
     catch(error){
-        console.log(error)
+        console.log("EventAdd API - Error:", error.response?.status, error.message);
         return error
     }
 }

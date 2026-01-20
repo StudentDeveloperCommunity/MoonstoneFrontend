@@ -1,5 +1,6 @@
-import React from "react";
-import logo from "../assets/logo/moonstone-logo.png";
+import React, { useMemo } from "react";
+import logo from "../assets/logo/mnsnt 2.png";
+import { Link } from "react-router-dom";
 import {
   FaLinkedinIn,
   FaInstagram,
@@ -9,100 +10,172 @@ import {
 } from "react-icons/fa6";
 
 export default function Footer() {
+  const stars = useMemo(() => {
+    const STAR_COUNT = 150;
+
+    return Array.from({ length: STAR_COUNT }).map((_, i) => {
+      const size = Math.random() > 0.7 ? 2 : 1;
+      const left = Math.random() * 98;
+      const top = Math.random() * 100;
+
+      const twinkleDuration = 0.8 + Math.random() * 1.8;
+      const twinkleDelay = Math.random() * 2;
+
+      const moveDuration = 10 + Math.random() * 18;
+      const moveDelay = Math.random() * 3;
+
+      const opacity = 0.2 + Math.random() * 0.8;
+
+      return {
+        id: i,
+        size,
+        left,
+        top,
+        twinkleDuration,
+        twinkleDelay,
+        moveDuration,
+        moveDelay,
+        opacity,
+      };
+    });
+  }, []);
+
+  const socialLinks = [
+    { icon: FaLinkedinIn, link: "#", label: "LinkedIn" },
+    { icon: FaInstagram, link: "#", label: "Instagram" },
+    { icon: FaYoutube, link: "#", label: "YouTube" },
+    { icon: FaXTwitter, link: "#", label: "Twitter" },
+    { icon: FaFacebookF, link: "#", label: "Facebook" },
+  ];
+
+  const gradientHover = "hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-orange-400 hover:via-pink-500 hover:to-cyan-400 transition-all duration-300 hover:scale-105 inline-block origin-left";
+
   return (
-    <footer className="relative w-full bg-black text-white py-10 px-4 md:px-10 overflow-hidden">
-      
-      {/* 🌌 FOOTER STAR BACKGROUND (CONTAINED) */}
-      <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 35 }).map((_, i) => (
-          <span
-            key={i}
-            className="absolute rounded-full bg-white"
+    <footer className="relative w-full bg-black text-white py-12 px-4 md:px-10 overflow-hidden font-sans">
+      {/* background - same as home page */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        {stars.map((star) => (
+          <div
+            key={star.id}
+            className="absolute rounded-full bg-white will-change-transform"
             style={{
-              width: Math.random() > 0.5 ? "1px" : "2px",
-              height: Math.random() > 0.5 ? "1px" : "2px",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              opacity: 0.3,
-              animation: `twinkle ${2 + Math.random() * 3}s infinite alternate`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              left: `${Math.min(star.left, 98)}%`,
+              top: `${star.top}%`,
+              opacity: star.opacity,
+              willChange: 'transform, opacity',
+              transform: 'translateZ(0)',
+              animation: `
+                twinkleStrong ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate,
+                moveStar ${star.moveDuration}s linear ${star.moveDelay}s infinite alternate
+              `,
             }}
           />
         ))}
       </div>
 
-      {/* CONTENT */}
-      <div className="relative max-w-[1440px] mx-auto">
+      <div className="relative max-w-[1440px] mx-auto z-10">
         <div
-          className="border border-[#8C8C8C] rounded-2xl px-6 md:px-10 lg:px-20 py-8 md:py-10"
-          style={{
-            backgroundColor: "rgba(41, 39, 39, 0.31)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-          }}
+          className="
+            border border-white/20 rounded-3xl px-6 md:px-12 py-10 md:py-16
+            bg-transparent
+            transition-all duration-500
+          "
         >
-          {/* TOP */}
-          <div className="flex flex-col lg:flex-row justify-between items-start gap-10 mb-16">
-            <img
-              src={logo}
-              alt="Moonstone Logo"
-              className="w-[150px] md:w-[190px]"
-            />
+          <div className="flex flex-col xl:flex-row justify-between items-start gap-12 mb-10">
+            <div className="group cursor-pointer w-full xl:w-auto flex justify-center xl:justify-start">
+              <img
+                src={logo}
+                alt="Moonstone Logo"
+                className="w-80 sm:w-96 md:w-[28rem] h-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+              />
+            </div>
 
-            <div className="flex flex-col gap-6">
-              <p className="text-[10px] tracking-wider uppercase opacity-60">
-                Information
-              </p>
-              <nav className="flex flex-col gap-1">
-                <a className="hover:opacity-70">Home</a>
-                <a className="hover:opacity-70">About</a>
-                <a className="hover:opacity-70">Events</a>
-              </nav>
+            <div className="flex-1 w-full xl:w-auto xl:min-w-[50%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 sm:gap-8 text-base sm:text-sm font-light text-gray-300 text-center sm:text-left">
+              <div className="space-y-4 flex flex-col items-center sm:items-start">
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+917313111500" className="hover:text-white transition-colors block text-lg sm:text-sm">+91 7313111500</a>
+                  <a href="tel:+917313111501" className="hover:text-white transition-colors block text-lg sm:text-sm">+91 7313111501</a>
+                </div>
+                <div className="flex flex-col gap-1 text-gray-400">
+                  <p className="text-lg sm:text-sm">A.B. Road Pigdamber, Rau</p>
+                  <p className="text-lg sm:text-sm">Indore, MP 453331</p>
+                </div>
+                <div>
+                  <a href="mailto:director.admissions@medicaps.ac.in" className="hover:text-white transition-colors break-words text-lg sm:text-sm">
+                    director.admissions@medicaps.ac.in
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4 sm:gap-3 md:pl-4 items-center sm:items-start">
+                <Link to="/" className={`${gradientHover} text-lg sm:text-sm`}>Home</Link>
+                <Link to="/about" className={`${gradientHover} text-lg sm:text-sm`}>About</Link>
+                <Link to="/allevents" className={`${gradientHover} text-lg sm:text-sm`}>Events</Link>
+                <Link to="/developers" className={`${gradientHover} text-lg sm:text-sm`}>Developers</Link>
+              </div>
+
+              <div className="flex flex-col gap-4 sm:gap-3 md:pl-4 items-center sm:items-start">
+                <a href="#" className={`${gradientHover} text-lg sm:text-sm`}>Facebook</a>
+                <a href="#" className={`${gradientHover} text-lg sm:text-sm`}>Twitter</a>
+                <a href="#" className={`${gradientHover} text-lg sm:text-sm`}>Linkedin</a>
+                <a href="#" className={`${gradientHover} text-lg sm:text-sm`}>Instagram</a>
+              </div>
             </div>
           </div>
 
-          {/* BOTTOM */}
-          <div className="flex flex-col lg:flex-row justify-between gap-8">
-            <div className="flex gap-2">
-              {[FaLinkedinIn, FaInstagram, FaYoutube, FaXTwitter, FaFacebookF].map(
-                (Icon, i) => (
-                  <div
-                    key={i}
-                    className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center"
-                  >
-                    <Icon />
-                  </div>
-                )
-              )}
-            </div>
-
-            <div className="flex flex-wrap gap-8 text-xs">
-              <div>
-                <p>+91 7313111500</p>
-                <p>+91 7313111501</p>
-              </div>
-              <div>
-                <p>A.B. Road Pigdamber, Rau</p>
-                <p>Indore, MP 453331</p>
-              </div>
-              <div>
-                <p>director.admissions@medicaps.ac.in</p>
-              </div>
-            </div>
+          <div className="flex gap-6 sm:gap-4 justify-center xl:justify-start flex-wrap">
+            {socialLinks.map((item, i) => (
+              <a
+                key={i}
+                href={item.link}
+                aria-label={item.label}
+                className="
+                  group relative w-12 h-12 sm:w-10 sm:h-10 rounded-full flex items-center justify-center
+                  bg-white/10 border border-white/10 overflow-hidden
+                  transition-all duration-300 ease-out
+                  hover:scale-110 hover:shadow-[0_0_20px_rgba(236,72,153,0.6)]
+                  hover:border-transparent
+                "
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-br from-orange-500 via-pink-500 to-cyan-500 transition-opacity duration-300" />
+                <item.icon className="relative z-10 text-xl sm:text-lg text-gray-300 group-hover:text-white transition-colors duration-300" />
+              </a>
+            ))}
           </div>
         </div>
 
-        <div className="mt-12">
-          <h2 className="text-3xl font-extrabold">MOONSTONE 2k26</h2>
-          <p className="text-xs mt-2">© 2026 — Copyright</p>
+        <div className="mt-12 flex flex-col md:flex-row justify-between items-center md:items-end border-t border-white/10 pt-8 gap-6 md:gap-0 text-center md:text-left">
+          <div>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter uppercase leading-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-pink-500 to-cyan-400 animate-pulse">
+                MOONSTONE 2k26
+              </span>
+            </h2>
+            <p className="text-xs text-gray-500 mt-2 tracking-widest uppercase">
+              Designed & Developed by Team Moonstone
+            </p>
+          </div>
+          <p className="text-xs text-gray-600">
+            2026 — All Rights Reserved.
+          </p>
         </div>
       </div>
 
       <style>{`
-        @keyframes twinkle {
-          0%,100% { opacity: 0.2; }
-          50% { opacity: 1; }
+        @keyframes twinkleStrong {
+          0%   { opacity: 0.05; transform: scale3d(0.9, 0.9, 1) translateZ(0); }
+          50%  { opacity: 1;    transform: scale3d(1.35, 1.35, 1) translateZ(0); }
+          100% { opacity: 0.15; transform: scale3d(1, 1, 1) translateZ(0); }
+        }
+
+        @keyframes moveStar {
+          0%   { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(80px, -60px, 0); }
         }
       `}</style>
+
     </footer>
   );
 }

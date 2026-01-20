@@ -4,24 +4,7 @@ export default function EventsHero() {
       {/* ↓ banner height reduced */}
       <div className="relative max-w-[1152px] w-full min-h-[200px] overflow-hidden rounded-tl-[20px] rounded-tr-[60px] rounded-br-[20px] rounded-bl-[60px] bg-black">
 
-        {/* 🌌 FULL TWINKLE BACKGROUND */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {Array.from({ length: 40 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full bg-white"
-              style={{
-                width: Math.random() > 0.5 ? "1px" : "2px",
-                height: Math.random() > 0.5 ? "1px" : "2px",
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                opacity: 0.35,
-                animation: `twinkle ${2 + Math.random() * 3}s infinite alternate,
-                            moveStar ${5 + Math.random() * 5}s linear infinite alternate`,
-              }}
-            />
-          ))}
-        </div>
+        
 
         {/* ✨ Soft light wash */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/5 to-transparent" />

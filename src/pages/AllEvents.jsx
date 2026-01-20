@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import EventsHero from "../components/Events/EventsHero";
@@ -6,7 +6,6 @@ import EventsSearch from "../components/Events/EventsSearch";
 import EventsFilters from "../components/Events/EventsFilters";
 import EventCard from "../components/Events/EventCard";
 import Pagination from "../components/Pagination";
-import WebsiteLoader from "../Loader/WebsiteLoader";
 
 import EventFetcher from "../api-files/EventAPIs/EventFetcher";
 
@@ -61,7 +60,6 @@ export default function AllEvents() {
   const id = searchParams.get("id");
 
   const [role, setRole] = useState("admin");
-  const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([]);
 
   const [page, setPage] = useState(1);
@@ -69,7 +67,6 @@ export default function AllEvents() {
 
   /* ---------------- FETCH EVENTS (UNCHANGED LOGIC) ---------------- */
   const getclubevents = async () => {
-    setLoading(true);
     try {
       const form = { role, page, limit: 6 };
       const res = await EventFetcher(form);
@@ -79,11 +76,12 @@ export default function AllEvents() {
         setTotalPages(res.pagination?.totalPages || 1);
       } else {
         setEvents([]);
+        setTotalPages(1);
       }
     } catch (err) {
       setEvents([]);
+      setTotalPages(1);
     }
-    setLoading(false);
   };
 
   /* ---------------- URL PARAM → ROLE ---------------- */
@@ -111,17 +109,14 @@ export default function AllEvents() {
   /* ---------------- SEARCH ---------------- */
   const [search, setSearch] = useState("");
 
-  /* 🔑 VERY IMPORTANT FIX
-     If API fails → use DEMO_EVENTS */
+  /* 🔑 If API fails → use DEMO_EVENTS */
   const sourceEvents = events.length > 0 ? events : DEMO_EVENTS;
 
   const filteredEvents = sourceEvents.filter((event) => {
-    const matchCategory =
-      filter === "all" || event.eventType === filter;
+    const matchCategory = filter === "all" || event.eventType === filter;
 
     const matchSearch =
-      !search ||
-      event.title.toLowerCase().includes(search.toLowerCase());
+      !search || event.title.toLowerCase().includes(search.toLowerCase());
 
     return matchCategory && matchSearch;
   });
@@ -131,21 +126,58 @@ export default function AllEvents() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  /* ✅ STABLE STAR BACKGROUND */
+  const stars = useMemo(() => {
+    const STAR_COUNT = 140;
+
+    return Array.from({ length: STAR_COUNT }).map((_, i) => {
+      const size = Math.random() > 0.75 ? 2 : 1;
+      const left = Math.random() * 98;
+      const top = Math.random() * 100;
+
+      const twinkleDuration = 0.8 + Math.random() * 1.8;
+      const twinkleDelay = Math.random() * 2;
+
+      const moveDuration = 10 + Math.random() * 18;
+      const moveDelay = Math.random() * 3;
+
+      const opacity = 0.35 + Math.random() * 0.65;
+      const glow = 6 + Math.random() * 10;
+
+      return {
+        id: i,
+        size,
+        left,
+        top,
+        twinkleDuration,
+        twinkleDelay,
+        moveDuration,
+        moveDelay,
+        opacity,
+        glow,
+      };
+    });
+  }, []);
+
   return (
     <>
       {/* 🌌 FIXED STAR BACKGROUND */}
       <div className="fixed inset-0 -z-10 bg-black overflow-hidden pointer-events-none">
-        {Array.from({ length: 40 }).map((_, i) => (
+        {stars.map((star) => (
           <span
-            key={i}
+            key={star.id}
             className="absolute rounded-full bg-white"
             style={{
-              width: Math.random() > 0.5 ? "1px" : "2px",
-              height: Math.random() > 0.5 ? "1px" : "2px",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              opacity: 0.35,
-              animation: `twinkle ${2 + Math.random() * 3}s infinite alternate`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              left: `${Math.min(star.left, 98)}%`,
+              top: `${star.top}%`,
+              opacity: star.opacity,
+              boxShadow: `0 0 ${star.glow}px rgba(255,255,255,0.9)`,
+              animation: `
+                twinkleStrong ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate,
+                moveStar ${star.moveDuration}s linear ${star.moveDelay}s infinite alternate
+              `,
             }}
           />
         ))}
@@ -153,8 +185,6 @@ export default function AllEvents() {
 
       {/* PAGE CONTENT */}
       <section className="relative w-full text-white pb-32">
-        {loading && <WebsiteLoader />}
-
         {/* SPACE BELOW FIXED NAVBAR */}
         <div className="pt-28">
           <EventsHero />
@@ -163,7 +193,7 @@ export default function AllEvents() {
         <EventsSearch search={search} setSearch={setSearch} />
         <EventsFilters filter={filter} setFilter={setFilter} />
 
-        {/* ✅ EVENTS GRID – NOW ALWAYS VISIBLE */}
+        {/* ✅ EVENTS GRID */}
         <div className="relative z-20 max-w-[1100px] mx-auto mt-12 px-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
             {filteredEvents.map((event) => (
@@ -180,9 +210,15 @@ export default function AllEvents() {
       </section>
 
       <style>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.2; }
-          50% { opacity: 1; }
+        @keyframes twinkleStrong {
+          0%   { opacity: 0.15; transform: scale(0.9); }
+          50%  { opacity: 1; transform: scale(1.5); }
+          100% { opacity: 0.25; transform: scale(1); }
+        }
+
+        @keyframes moveStar {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(80px, -60px); }
         }
       `}</style>
     </>

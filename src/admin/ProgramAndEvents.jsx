@@ -8,8 +8,28 @@ import EventDelete from "../api-files/EventAPIs/EventDelete";
 
 export default function ProgramAndEvents({ userRole }) {
   const [events, setEvents] = useState([]);
+  const [editMode, setEditMode] = useState({}); // Track edit mode for each event
 
-  const updateEvent = (index, field, value) => {
+  const toggleEditMode = (index) => {
+  setEditMode(prev => ({
+    ...prev,
+    [index]: !prev[index]
+  }));
+};
+
+const isFieldReadOnly = (index) => {
+  const event = events[index];
+  
+  // Always allow editing for new events (no id)
+  if (!event.id) {
+    return false;
+  }
+  
+  // For existing events, only allow editing when in edit mode
+  return !editMode[index];
+};
+
+const updateEvent = (index, field, value) => {
   const updated = [...events];
 
   updated[index][field] = value;
@@ -30,21 +50,31 @@ export default function ProgramAndEvents({ userRole }) {
 
 
   const handleImageUpload = (index, file) => {
-  if (!file) return;
+  console.log("Image upload called:", index, file);
+  if (!file) {
+    console.log("No file selected");
+    return;
+  }
 
-  const maxSize = 4 * 1024 * 1024; // 2MB in bytes
+  const maxSize = 4 * 1024 * 1024; // 4MB in bytes
 
   if (file.size > maxSize) {
     alert("File size must be less than 4MB!");
     return;
   }
 
+  console.log("Processing file:", file.name, "Size:", file.size);
   const reader = new FileReader();
   reader.onload = () => {
+    console.log("FileReader loaded, updating events");
     const updated = [...events];
     updated[index].image = file;
     updated[index].imagePreview = reader.result;
     setEvents(updated);
+    console.log("Image uploaded successfully");
+  };
+  reader.onerror = (error) => {
+    console.error("FileReader error:", error);
   };
   reader.readAsDataURL(file);
 };
@@ -71,26 +101,52 @@ export default function ProgramAndEvents({ userRole }) {
       organised_by:"",
       student_cordinator:"",
       student_number:"",
-      id:null,
+      id: null, // Ensure id field is present
     },
   ]);
 };
 
 
   const deleteEvent = async(index,event) => {
+    console.log("Delete function called with:", { index, event });
+    
     if(window.confirm("Are You Sure You Want To Delete This Event?")){
       setLoading(true)
-      const newevent={id:event.id,eventType:event.eventType,image:event.image.name}
-      // console.log(newevent)
-      const res=await EventDelete(newevent)
-      // console.log(res)
-      if(res?.success){
-        setEvents(events.filter((_, i) => i !== index));
-        setLoading(false)
+      
+      const newevent={
+        id:event.id,
+        eventType:event.eventType,
+        image: event.image && typeof event.image === 'object' ? event.image.name : event.image
       }
-      else{
-        alert("Error Deleting Event!!")
-        setLoading(false)
+      console.log("Sending delete request:", newevent)
+      
+      try {
+        const res=await EventDelete(newevent)
+        console.log("Delete response received:", res)
+        
+        // Check if it's an axios error (has response property)
+        if (res && res.response) {
+          console.error("Delete API Error:", res.response.status, res.response.data);
+          alert(`Error deleting event: ${res.response.data?.message || "Please try again."}`);
+          setLoading(false);
+          return;
+        }
+        
+        if(res?.success){
+          console.log("Delete successful, removing event from list");
+          setEvents(events.filter((_, i) => i !== index));
+          setLoading(false)
+          alert("Event deleted successfully!")
+        }
+        else{
+          console.error("Delete failed - no success flag:", res)
+          alert(res?.message || "Error Deleting Event!!")
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error("Delete function error:", error);
+        alert("Error deleting event. Please try again.");
+        setLoading(false);
       }
     }
   };
@@ -110,11 +166,14 @@ const urlToFile = async (url, filename) => {
   });
 };
 
-async function geteventsinfo() {
+const geteventsinfo = async () => {
   setLoading(true);
+  
+  // Clear corrupted state first
+  setEvents([]);
+  
   const data={role:userRole};
   const res = await EventFetcher(data);
-  // console.log("Fetched Events:", res);  
   if (res?.success && res?.events?.length > 0) {
   const mappedEvents = await Promise.all(
     res.events.map(async (event) => {
@@ -132,18 +191,34 @@ async function geteventsinfo() {
 
       return {
         ...event,
-
         // actual File stored here 👇
         image: imageFile,
-
         // preview for UI
         imagePreview,
-
         eventDate: formatDate(event.eventDate),
+        // Ensure all required fields are present with fallbacks
+        event_at: event.event_at || "",
+        convener: event.convener || "",
+        convener_number: event.convener_number || "",
+        organised_by: event.organised_by || "",
+        student_cordinator: event.student_cordinator || "",
+        student_number: event.student_number || "",
+        eventCategory: event.eventCategory || "single",
+        minParticipants: event.minParticipants || 1,
+        maxParticipants: event.maxParticipants || 1,
+        fee: event.fee || "",
+        eventTime: event.eventTime || "",
+        description: event.description || "",
+        title: event.title || "",
+        // Preserve the original event type
+        eventType: event.event_type || event.eventType || "",
+        // Preserve the ID
+        id: event._id || event.id,
       };
     })
   );
 
+  // Show ALL events (don't filter incomplete ones)
   setEvents(mappedEvents);
 }
 else{
@@ -153,11 +228,11 @@ else{
       title: "",
       description: "",
       eventType: (userRole === "admin" || userRole==="event_convener") ? "" : userRole,
-      eventCategory: "single", // ⭐ NEW FIELD
+      eventCategory: "single",
       minParticipants: 1,
       maxParticipants: 1,
       eventDate: "",
-    eventTime: "",
+      eventTime: "",
       fee:"",
       event_at:"",
       convener:"",
@@ -165,87 +240,101 @@ else{
       organised_by:"",
       student_cordinator:"",
       student_number:"",
-      id:null,
+      id: null, // Ensure id field is present
     }]);
-  }
+}
 
   setLoading(false);
-}
+};
 
 useEffect(()=>{
     geteventsinfo()
 },[])
   const handleSubmit = async() => {
+    console.log("handleSubmit function called");
     setLoading(true);
-  for (let i = 0; i < events.length; i++) {
-    const e = events[i];
+  
+    // Validation first - only validate events that have been modified or are new
+    for (let i = 0; i < events.length; i++) {
+      const e = events[i];
 
-    if (!e.image) {
-      alert(`Event #${i + 1}: Image is required`);
-      return;
-    }
-    if (e.title.trim().length < 10 || e.title.trim().length > 50) {
-      alert(`Event #${i + 1}: Title must be at least 10 and atmost 50 characters`);
-      return;
-    }
-    if (e.description.trim().length < 30 || e.description.trim().length > 500) {
-      alert(`Event #${i + 1}: Description must be at least 30 and atmost 500 characters`);
-      return;
-    }
-    if (!e.eventDate) {
-      alert(`Event #${i + 1}: Event date is required`);
-      return;
-    }
-    if (!e.eventTime) {
-      alert(`Event #${i + 1}: Event time is required`);
-      return;
-    }
-    if ((userRole === "admin" || userRole==="event_convener") && !e.eventType) {
-      alert(`Event #${i + 1}: Event type must be selected`);
-      return;
-    }
-    if (e.fee < 50 || e.fee > 50000) {
-        alert(`Event #${i + 1}: Minimum Fees must be alteast 50 and atmost 50000`);
-        return;
+      // Skip validation for events that are completely empty (except for new events being submitted)
+      if (!e.title && !e.description && !e.image && !e.eventDate) {
+        continue;
       }
-    if (e.event_at.trim().length < 5 || e.event_at.trim().length > 50) {
-        alert(`Event #${i + 1}: Minimum event At must be alteast 5 and atmost 50 charcters long`);
-        return;
-      }
-      if (e.convener.trim().length < 5 || e.convener.trim().length > 50) {
-        alert(`Event #${i + 1}: Minimum Convener  must be alteast 5 and Atmost 50 charcters long`);
-        return;
-      }
-      if (e.convener_number.trim().length < 10 || e.convener_number.trim().length > 10) {
-        alert(`Event #${i + 1}: Minimum Convener Number must be alteast and Atmost 10 charcters long`);
-        return;
-      }
-      if (e.organised_by.trim().length < 5 || e.organised_by.trim().length > 50 ) {
-        alert(`Event #${i + 1}: Minimum Organised By must be alteast 5 and Atmost 50 charcters long`);
-        return;
-      }
-      if (e.student_cordinator.trim().length < 4 || e.student_cordinator.trim().length > 50) {
-        alert(`Event #${i + 1}: Minimum Student Cordinator must be alteast 4 and Atmost 50 charcters long`);
-        return;
-      }
-      if (e.student_number.trim().length < 10 || e.student_number.trim().length > 10) {
-        alert(`Event #${i + 1}: Minimum Student Number must be alteast and Atmost 10 charcters long`);
-        return;
-      }
-      
 
-    // Team validation
-    if (e.eventCategory === "team") {
-      if (e.minParticipants < 1) {
-        alert(`Event #${i + 1}: Minimum participants must be at least 1`);
+      // Basic validation with reasonable requirements
+      if (!e.image) {
+        alert(`Event #${i + 1}: Image is required`);
+        setLoading(false);
         return;
       }
-      if (e.maxParticipants < e.minParticipants) {
-        alert(`Event #${i + 1}: Maximum participants must be >= minimum participants`);
+      if (!e.title || e.title.trim().length < 5) {
+        alert(`Event #${i + 1}: Title must be at least 5 characters`);
+        setLoading(false);
+        return;
+      }
+      if (!e.description || e.description.trim().length < 10) {
+        alert(`Event #${i + 1}: Description must be at least 10 characters`);
+        setLoading(false);
+        return;
+      }
+      if (!e.eventDate) {
+        alert(`Event #${i + 1}: Event date is required`);
+        setLoading(false);
+        return;
+      }
+      if (!e.eventTime) {
+        alert(`Event #${i + 1}: Event time is required`);
+        setLoading(false);
+        return;
+      }
+      if ((userRole === "admin" || userRole==="event_convener") && !e.eventType) {
+        alert(`Event #${i + 1}: Event type must be selected`);
+        setLoading(false);
+        return;
+      }
+      if (!e.eventCategory) {
+        alert(`Event #${i + 1}: Event category must be selected`);
+        setLoading(false);
+        return;
+      }
+      if (!e.fee || e.fee < 0) {
+        alert(`Event #${i + 1}: Fee must be 0 or greater`);
+        setLoading(false);
+        return;
+      }
+      if (!e.event_at || e.event_at.trim().length < 2) {
+        alert(`Event #${i + 1}: Event location is required (min 2 characters)`);
+        setLoading(false);
+        return;
+      }
+      if (!e.convener || e.convener.trim().length < 2) {
+        alert(`Event #${i + 1}: Convener name is required (min 2 characters)`);
+        setLoading(false);
+        return;
+      }
+      if (!e.convener_number || !/^[0-9]{10}$/.test(e.convener_number)) {
+        alert(`Event #${i + 1}: Convener number must be a valid 10-digit number`);
+        setLoading(false);
+        return;
+      }
+      if (!e.organised_by || e.organised_by.trim().length < 2) {
+        alert(`Event #${i + 1}: Organized by field is required (min 2 characters)`);
+        setLoading(false);
+        return;
+      }
+      if (!e.student_cordinator || e.student_cordinator.trim().length < 2) {
+        alert(`Event #${i + 1}: Student coordinator name is required (min 2 characters)`);
+        setLoading(false);
+        return;
+      }
+      if (!e.student_number || !/^[0-9]{10}$/.test(e.student_number)) {
+        alert(`Event #${i + 1}: Student number must be a valid 10-digit number`);
+        setLoading(false);
         return;
       }
     }
-  }
 
   // If all good → submit final data
   const finalEvents = events.map(event => ({
@@ -253,87 +342,168 @@ useEffect(()=>{
     eventType: event.eventType || userRole,
   }));
 
-//   console.log("FINAL EVENTS LIST:", finalEvents);
-const formData=new FormData()
-events.forEach((event, index) => {
-    if (event.id) {
-  formData.append(`events[${index}][_id]`, event.id);
+console.log("FINAL EVENTS BEFORE SUBMISSION:", finalEvents);
+
+// Only send events that have actual data (not completely empty)
+const eventsToSubmit = finalEvents.filter(event => 
+  event.title || event.description || event.image || event.eventDate
+);
+
+console.log("Submitting events:", eventsToSubmit.length, "out of", finalEvents.length);
+
+if (eventsToSubmit.length === 0) {
+  alert("No events to submit. Please add at least one event with data.");
+  setLoading(false);
+  return;
 }
-    formData.append(`events[${index}][title]`, event.title);
-    formData.append(`events[${index}][description]`, event.description);
-    formData.append(`events[${index}][eventDate]`, event.eventDate);
-    formData.append(`events[${index}][eventTime]`, event.eventTime);
-    formData.append(`events[${index}][eventCategory]`, event.eventCategory);
-    formData.append(`events[${index}][fee]`, event.fee);
-    // auto-set eventType for non-admins
-    formData.append(`events[${index}][eventType]`, event.eventType || userRole);
 
-      formData.append(`events[${index}][minParticipants]`, event.minParticipants);
-      formData.append(`events[${index}][maxParticipants]`, event.maxParticipants);
-      formData.append(`events[${index}][event_at]`, event.event_at);
-      formData.append(`events[${index}][convener]`, event.convener);
-      formData.append(`events[${index}][convener_number]`, event.convener_number);
-      formData.append(`events[${index}][organised_by]`, event.organised_by);
-      formData.append(`events[${index}][student_cordinator]`, event.student_cordinator);
-      formData.append(`events[${index}][student_number]`, event.student_number);
+const formData = new FormData();
+formData.append("user", userRole);
 
-    // file (multer expects a file)
-    formData.append(`eventimages[${index}][${event.eventType}]`, event.image);
-  });
-  formData.append(`user`, userRole);
-  const res=await EventAdd(formData);
-//   console.log(res);
-if(res?.success){
+// Append all event data and images
+eventsToSubmit.forEach((event, index) => {
+    if (event.id) {
+        formData.append(`events[${index}][_id]`, event.id);
+    }
+    formData.append(`events[${index}][title]`, event.title || "");
+    formData.append(`events[${index}][description]`, event.description || "");
+    formData.append(`events[${index}][eventDate]`, event.eventDate || "");
+    formData.append(`events[${index}][eventTime]`, event.eventTime || "");
+    formData.append(`events[${index}][eventCategory]`, event.eventCategory || "");
+    formData.append(`events[${index}][fee]`, event.fee || "");
+    formData.append(`events[${index}][eventType]`, event.eventType || "");
+    formData.append(`events[${index}][minParticipants]`, event.minParticipants || 1);
+    formData.append(`events[${index}][maxParticipants]`, event.maxParticipants || 1);
+    formData.append(`events[${index}][event_at]`, event.event_at || "");
+    formData.append(`events[${index}][convener]`, event.convener || "");
+    formData.append(`events[${index}][convener_number]`, event.convener_number || "");
+    formData.append(`events[${index}][organised_by]`, event.organised_by || "");
+    formData.append(`events[${index}][student_cordinator]`, event.student_cordinator || "");
+    formData.append(`events[${index}][student_number]`, event.student_number || "");
+
+    // Append images with proper field name format
+    if (event.image && typeof event.image !== 'string') {
+        const eventType = event.eventType || userRole;
+        formData.append(`eventimages[${index}][${eventType}]`, event.image);
+    }
+});
+
+  const res = await EventAdd(formData);
+  console.log("EventAdd response:", res);
+  
+  // Check if it's an axios error (has response property)
+  if (res && res.response) {
+    console.error("API Error:", res.response.status, res.response.data);
+    alert(`Error adding events: ${res.response.data?.message || "Please try again."}`);
+    setLoading(false);
+    return;
+  }
+  
+  // Check for successful response
+  if (res && res.success === true) {
     alert("Events added successfully!");
     setLoading(false);
-}
-else{
-    alert("Error adding events. Please try again.");
+    // Refresh events from backend to get the latest data
+    await geteventsinfo();
+  } else {
+    console.error("Unexpected response:", res);
+    alert(`Error adding events: ${res?.message || "Please try again."}`);
     setLoading(false);
-}
+    return;
+  }
 };
 
 
   return (
     <div className="p-6">
-        {
-            loading && <WebsiteLoader/>
-        }
       <h1 className="text-2xl font-semibold mb-4">Program and Events Management</h1>
       <p className="mb-6 capitalize">User Role: {userRole}</p>
+      
+      {/* Add New Event Button */}
+      <div className="mb-6 flex gap-4">
+        <button
+          onClick={addNewEvent}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 font-medium"
+        >
+          + Add New Event
+        </button>
+        {
+          (userRole==="admin" || userRole==="event_convener") && <button
+            onClick={() => {
+              console.log("Submit button clicked");
+              handleSubmit();
+            }}
+            className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Submit Changes
+          </button>
+        }
+      </div>
 
+      {/* Display All Events */}
       {events.map((event, index) => (
-        <div key={index} className="border p-6 mb-6 bg-white rounded-lg shadow-md">
+        <div key={index} className={`border p-6 mb-6 bg-white rounded-lg shadow-md ${editMode[index] ? 'border-blue-500 border-2' : ''}`}>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Event #{index + 1}</h2>
+            <div>
+              <h2 className="text-lg font-semibold">
+                Event #{index + 1}
+                {event.id && <span className="ml-2 text-sm text-gray-500">(ID: {event.id})</span>}
+              </h2>
+              {event.id && !editMode[index] && (
+                <span className="text-sm text-orange-600 font-medium">🔒 Click Edit to modify</span>
+              )}
+              {editMode[index] && (
+                <span className="text-sm text-blue-600 font-medium">✏️ Editing Mode</span>
+              )}
+            </div>
 
-            {(events.length > 1 && (userRole==="admin" || userRole==="event_convener")) && (
-              <button
-                onClick={() => deleteEvent(index,event)}
-                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
-              >
-                Delete
-              </button>
-            )}
+            <div className="flex gap-2">
+              {event.id && (userRole==="admin" || userRole==="event_convener") && (
+                <button
+                  onClick={() => toggleEditMode(index)}
+                  className={`px-3 py-1 text-white rounded text-sm ${
+                    editMode[index] 
+                      ? 'bg-gray-500 hover:bg-gray-600' 
+                      : 'bg-green-500 hover:bg-green-600'
+                  }`}
+                >
+                  {editMode[index] ? 'Cancel' : 'Edit'}
+                </button>
+              )}
+              
+              {(userRole==="admin" || userRole==="event_convener") && (
+                <button
+                  onClick={() => {
+                    console.log("Delete button clicked for event:", event);
+                    deleteEvent(index,event);
+                  }}
+                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                >
+                  Delete
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* LEFT: IMAGE */}
             <div>
-              {
-                (userRole==="admin" || userRole==="event_convener") && 
-              
               <div>
               <label className="block font-medium mb-2">Upload Image</label>
               <input
                 type="file"
                 accept="image/*"
-                required
-                onChange={(e) => handleImageUpload(index, e.target.files[0])}
+                required={!event.id} // Required only for new events
+                disabled={isFieldReadOnly(index)}
+                onChange={(e) => {
+                  if (!isFieldReadOnly(index)) {
+                    console.log("File input changed:", e.target.files);
+                    handleImageUpload(index, e.target.files[0]);
+                  }
+                }}
                 className="mb-4"
               />
               </div>
-}
 
               {event.imagePreview && (
                 <img
@@ -350,9 +520,9 @@ else{
               <label className="block font-medium mb-2">Title</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded mb-4"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 required
-                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 minLength={10}
                 maxLength={100}
                 value={event.title}
@@ -362,10 +532,10 @@ else{
               {/* DESCRIPTION */}
               <label className="block font-medium mb-2">Description</label>
               <textarea
-                className="w-full p-2 border rounded mb-4"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 rows={3}
                 required
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 minLength={30}
                 maxLength={500}
                 value={event.description}
@@ -375,10 +545,10 @@ else{
               <label className="block font-medium mb-2">Registration Fees</label>
               <input
                 type="number"
-                className="w-full p-2 border rounded mb-4"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 required
                 min={50}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 max={50000}
                 value={event.fee}
                 onChange={(e) => updateEvent(index, "fee", e.target.value)}
@@ -387,72 +557,73 @@ else{
               <label className="block font-medium mb-2">Event Conducted At</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded mb-4"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 required
                 minLength={5}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 maxLength={50}
-                value={event.event_at}
+                value={(event.event_at || "") || ""}
                 onChange={(e) => updateEvent(index, "event_at", e.target.value)}
+                placeholder="Enter event location (e.g., Main Auditorium)"
               />
 
               <label className="block font-medium mb-2">Event Convener</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded mb-4"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 required
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 minLength={5}
                 maxLength={50}
-                value={event.convener}
+                value={(event.convener || "") || ""}
                 onChange={(e) => updateEvent(index, "convener", e.target.value)}
               />
 
               <label className="block font-medium mb-2">Event Convener Mobile Number</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded mb-4"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 required
                 minLength={10}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 maxLength={10}
-                value={event.convener_number}
+                value={(event.convener_number || "") || ""}
                 onChange={(e) => updateEvent(index, "convener_number", e.target.value)}
               />
 
               <label className="block font-medium mb-2">Event Organised By</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded mb-4"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 required
                 minLength={5}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 maxLength={50}
-                value={event.organised_by}
+                value={(event.organised_by || "") || ""}
                 onChange={(e) => updateEvent(index, "organised_by", e.target.value)}
               />
 
               <label className="block font-medium mb-2">Event Student Cordinator</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded mb-4"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 required
                 minLength={4}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 maxLength={50}
-                value={event.student_cordinator}
+                value={(event.student_cordinator || "") || ""}
                 onChange={(e) => updateEvent(index, "student_cordinator", e.target.value)}
               />
 
               <label className="block font-medium mb-2">Event Student Cordinator Number</label>
               <input
                 type="text"
-                className="w-full p-2 border rounded mb-4" 
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
                 required
                 minLength={10}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                readOnly={isFieldReadOnly(index)}
                 maxLength={10}
-                value={event.student_number}
+                value={(event.student_number || "") || ""}
                 onChange={(e) => updateEvent(index, "student_number", e.target.value)}
               />
 
@@ -460,9 +631,9 @@ else{
 <label className="block font-medium mb-2">Event Date</label>
 <input
   type="date"
-  className="w-full p-2 border rounded mb-4"
-  value={event.eventDate}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+  className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
+  value={event.eventDate || ""}
+  readOnly={isFieldReadOnly(index)}
   required
   onChange={(e) => updateEvent(index, "eventDate", e.target.value)}
 />
@@ -471,9 +642,9 @@ else{
 <label className="block font-medium mb-2">Event Time</label>
 <input
   type="time"
-  className="w-full p-2 border rounded mb-4"
-  value={event.eventTime}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+  className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
+  value={event.eventTime || ""}
+  readOnly={isFieldReadOnly(index)}
   required
   onChange={(e) => updateEvent(index, "eventTime", e.target.value)}
 />
@@ -491,7 +662,8 @@ else{
                           name={`eventType_${index}`}
                           value={type}
                           checked={event.eventType === type}
-                          onChange={() => updateEvent(index, "eventType", type)}
+                          disabled={isFieldReadOnly(index)}
+                          onChange={() => !isFieldReadOnly(index) && updateEvent(index, "eventType", type)}
                         />
                         <span className="capitalize">{type}</span>
                       </label>
@@ -518,10 +690,10 @@ else{
                         type="radio"
                         name={`eventCategory_${index}`}
                         required
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
+                        disabled={isFieldReadOnly(index)}
                         value={cat}
                         checked={event.eventCategory === cat}
-                        onChange={() => updateEvent(index, "eventCategory", cat)}
+                        onChange={() => !isFieldReadOnly(index) && updateEvent(index, "eventCategory", cat)}
                       />
                       <span className="capitalize">{cat}</span>
                     </label>
@@ -529,35 +701,47 @@ else{
                 </div>
               </div>
 
-              {/* ⭐ SHOW ONLY IF "team" SELECTED */}
-              {event.eventCategory === "team" && (
+              {/* ⭐ SHOW PARTICIPANTS INPUTS BASED ON CATEGORY */}
+              {event.eventCategory === "team" ? (
                 <div className="mt-4">
-                  <label className="block font-medium">Minimum Participants</label>
+                  <label className="block font-medium">Team Size (Min-Max Participants)</label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="number"
+                      min="2"
+                      max="10"
+                      required
+                      readOnly={isFieldReadOnly(index)}
+                      className={`w-1/2 p-2 border rounded ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
+                      placeholder="Min"
+                      value={event.minParticipants}
+                      onChange={(e) =>
+                        updateEvent(index, "minParticipants", e.target.value)
+                      }
+                    />
+                    <input
+                      type="number"
+                      min={event.minParticipants || 2}
+                      max="20"
+                      required
+                      readOnly={isFieldReadOnly(index)}
+                      className={`w-1/2 p-2 border rounded ${isFieldReadOnly(index) ? 'bg-gray-100' : ''}`}
+                      placeholder="Max"
+                      value={event.maxParticipants}
+                      onChange={(e) =>
+                        updateEvent(index, "maxParticipants", e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-4">
+                  <label className="block font-medium">Participants</label>
                   <input
-                    type="number"
-                    min="1"
-                    max="10"
-                    required
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
-                    className="w-full p-2 border rounded mb-3"
-                    value={event.minParticipants}
-                    onChange={(e) =>
-                      updateEvent(index, "minParticipants", e.target.value)
-                    }
-                  />
-
-                  <label className="block font-medium">Maximum Participants</label>
-                  <input
-                    type="number"
-                    min={event.minParticipants || 1}
-                    max={20}
-                    required
-                    className="w-full p-2 border rounded"
-                    value={event.maxParticipants}
-                                readOnly={!(userRole==="admin" || userRole==="event_convener")}
-                    onChange={(e) =>
-                      updateEvent(index, "maxParticipants", e.target.value)
-                    }
+                    type="text"
+                    value="Single Participant"
+                    readOnly
+                    className="w-full p-2 border rounded bg-gray-100"
                   />
                 </div>
               )}
@@ -567,23 +751,6 @@ else{
          
         </div>
       ))}
-      {
-        (userRole==="admin" || userRole==="event_convener") && <div className="w-full  flex justify-between">
- <button
-            onClick={addNewEvent}
-            className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-900"
-          >
-            + Add New Event
-          </button>
-      <button
-        onClick={handleSubmit}
-        className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Submit Changes
-      </button>
       </div>
-      }
-      
-    </div>
   );
 }

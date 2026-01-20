@@ -8,8 +8,9 @@ export default async function EventDelete(data) {
         return res
 
     }catch(error){
-        console.log(error.message)
-        return error.message
+        console.log("EventDelete API Error:", error.response?.status, error.message);
+        // Return the error object so frontend can handle it properly
+        return error;
     }
     
 }

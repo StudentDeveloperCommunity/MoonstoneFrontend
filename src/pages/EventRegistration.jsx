@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import eventImg from "../assets/events/TAN05892.webp";
+import eventImg from "../assets/events/TAN04895.webp";
 import { useLocation } from "react-router-dom";
 import { API_URL, Frontend_API_URL } from "../NwConfig";
 import RegisterToEvent from "../api-files/RegisertAPIs/RegiseterToEvent";
@@ -280,7 +280,7 @@ members.forEach((m, i) => {
 
           <p className="text-sm font-medium mb-2">Pay The Registration fees Here</p>
 
-          <a href={`${Frontend_API_URL}/payment`} target="_black" className="w-full bg-green-600  text-white py-3 rounded-lg flex justify-center items-center gap-3 cursor-pointer hover:opacity-90 transition">
+          <a href="https://portal.medicaps.ac.in/accsoft2/MiscellaneousPayment.aspx" target="_blank" className="w-full bg-green-600  text-white py-3 rounded-lg flex justify-center items-center gap-3 cursor-pointer hover:opacity-90 transition">
             Go To Payment Page <ArrowBigRight />
           </a>
 

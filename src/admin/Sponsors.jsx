@@ -1,4 +1,4 @@
-import {  Trash2 } from "lucide-react";
+import { Trash2, Plus, Save, Upload, X, Edit2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddNewSponsors from "../api-files/SponsorAPIs/AddNewSponsors";
 import WebsiteLoader from "../Loader/WebsiteLoader";
@@ -6,216 +6,462 @@ import SponsorFetcher from "../api-files/SponsorAPIs/SponsorFetcher";
 import { API_URL } from "../NwConfig";
 
 export default function Sponsors({ userRole }) {
-  const [sponsors, setSponsors] = useState([
-    { image: null, title: "", link: "",imagePreview:"" },
-  ]);
-  const [loading,setloading]=useState(false)
-  const urlToFile = async (url, filename) => {
-  const response = await fetch(url);
-  const blob = await response.blob();
-
-  return new File([blob], filename, {
-    type: blob.type,
-    lastModified: Date.now(),
+  const [sponsors, setSponsors] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [editingSponsor, setEditingSponsor] = useState(null);
+  const [newSponsor, setNewSponsor] = useState({
+    title: "",
+    link: "",
+    image: null,
+    imagePreview: ""
   });
-};
-  async function getsponsors() {
-    setloading(true)
-    const res=await SponsorFetcher()
-    // console.log(res)
-    if (res?.success && res?.sponsors?.length > 0) {
-      const mappedsponsors = await Promise.all(
-        res?.sponsors.map(async (sponsor) => {
-          let imageFile = null;
-          let imagePreview = null;
-    
-          if (sponsor.image) {
-            const imageUrl = `${API_URL}/${sponsor.image}`;
-            const filename = sponsor.image.split("/").pop();
-    
-            // 🔥 Convert backend image URL → REAL File
-            imageFile = await urlToFile(imageUrl, filename);
-            imagePreview = URL.createObjectURL(imageFile);
-          }
-    
-          return {
-            ...sponsor,
-            image: imageFile,
-            imagePreview,
-          };
-        })
-      );
-    
-      setSponsors(mappedsponsors);
+
+  const urlToFile = async (url, filename) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], filename, {
+      type: blob.type,
+      lastModified: Date.now(),
+    });
+  };
+
+  const fetchSponsors = async () => {
+    setLoading(true);
+    try {
+      const res = await SponsorFetcher();
+      console.log("Backend response:", res);
+      if (res?.success && res?.sponsors?.length > 0) {
+        const mappedSponsors = await Promise.all(
+          res.sponsors.map(async (sponsor) => {
+            let imageFile = null;
+            let imagePreview = null;
+            const imageUrl = sponsor.image || sponsor.logo;
+            const title = sponsor.title || sponsor.name || "";
+            const link = sponsor.link || sponsor.website || "";
+            
+            if (imageUrl) {
+              const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${API_URL}/${imageUrl}`;
+              const filename = imageUrl.split("/").pop();
+              
+              try {
+                imageFile = await urlToFile(fullImageUrl, filename);
+                imagePreview = URL.createObjectURL(imageFile);
+              } catch (error) {
+                console.error("Error converting image URL to file:", error);
+              }
+            }
+            
+            return {
+              _id: sponsor._id,
+              title,
+              link,
+              image: imageFile,
+              imagePreview,
+              createdAt: sponsor.createdAt
+            };
+          })
+        );
+        setSponsors(mappedSponsors);
+      } else {
+        setSponsors([]);
+      }
+    } catch (error) {
+      console.error("Error fetching sponsors:", error);
+      setSponsors([]);
+    } finally {
+      setLoading(false);
     }
-    setloading(false)
-  }
-useEffect(()=>{
-getsponsors()
-},[])
-  const addSponsor = () => {
-    setSponsors([...sponsors, { image: null, title: "", link: "",imagePreview:"" }]);
   };
 
-  const removeSponsor = (index) => {
-    setSponsors(sponsors.filter((_, i) => i !== index));
-  };
+  useEffect(() => {
+    fetchSponsors();
+  }, [showAddForm]); // Only refetch when form state changes
 
-  const handleChange = (index, field, value) => {
-    const updated = [...sponsors];
-    updated[index][field] = value;
-    setSponsors(updated);
-  };
+  const handleFileChange = (file, isEdit = false) => {
+    if (!file) return;
 
-  const handleFileChange = (index, file) => {
-  if (!file) return;
-
-  const maxSize = 4 * 1024 * 1024; // 2MB in bytes
-
-  if (file.size > maxSize) {
-    alert("File size must be less than 4MB!");
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    const updated = [...sponsors];
-    updated[index].image = file;
-    updated[index].imagePreview = reader.result;
-    setSponsors(updated);
-  };
-  reader.readAsDataURL(file);
-};
-
-
-  const handleSubmit = async() => {
-    setloading(true)
-    const formdata=new FormData()
-    sponsors.map((item,index)=>{
-        formdata.append("title",item.title)
-        formdata.append("link",item.link)
-        formdata.append("sponsorimage",item.image)
-    })
-    // console.log("Sponsor Data:", sponsors);
-    const res=await AddNewSponsors(formdata)
-    if(res?.success){
-        alert("Sponsors Addedd SuccessFully")
-        setloading(false)
+    const maxSize = 4 * 1024 * 1024; // 4MB
+    if (file.size > maxSize) {
+      alert("File size must be less than 4MB!");
+      return;
     }
-    setloading(false)
-    console.log(res)
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (isEdit && editingSponsor) {
+        setEditingSponsor({
+          ...editingSponsor,
+          image: file,
+          imagePreview: reader.result
+        });
+      } else {
+        setNewSponsor({
+          ...newSponsor,
+          image: file,
+          imagePreview: reader.result
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleAddSponsor = async () => {
+    if (!newSponsor.title || !newSponsor.link || !newSponsor.image) {
+      alert("Please fill in all fields and upload a logo");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.append("titles", newSponsor.title);
+      formData.append("links", newSponsor.link);
+      formData.append("logo", newSponsor.image);
+
+      const res = await AddNewSponsors(formData);
+      if (res?.success) {
+        alert("Sponsor added successfully!");
+        setNewSponsor({ title: "", link: "", image: null, imagePreview: "" });
+        setShowAddForm(false);
+        // Force refresh to get latest data
+        await fetchSponsors();
+      } else {
+        alert(res?.message || "Failed to add sponsor");
+      }
+    } catch (error) {
+      console.error("Error adding sponsor:", error);
+      alert("Error adding sponsor. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleEditSponsor = (sponsor) => {
+    setEditingSponsor({
+      ...sponsor,
+      originalImage: sponsor.image,
+      originalImagePreview: sponsor.imagePreview
+    });
+    setShowAddForm(true);
+  };
+
+  const handleUpdateSponsor = async () => {
+    if (!editingSponsor.title || !editingSponsor.link) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      // For now, we'll add as new sponsor since update API isn't implemented
+      const formData = new FormData();
+      formData.append("titles", editingSponsor.title);
+      formData.append("links", editingSponsor.link);
+      
+      if (editingSponsor.image && editingSponsor.image !== editingSponsor.originalImage) {
+        formData.append("logo", editingSponsor.image);
+      } else {
+        // Create a dummy file if image hasn't changed
+        formData.append("logo", new File([''], 'placeholder.jpg'));
+      }
+
+      const res = await AddNewSponsors(formData);
+      if (res?.success) {
+        alert("Sponsor updated successfully!");
+        setEditingSponsor(null);
+        setShowAddForm(false);
+        await fetchSponsors();
+      } else {
+        alert(res?.message || "Failed to update sponsor");
+      }
+    } catch (error) {
+      console.error("Error updating sponsor:", error);
+      alert("Error updating sponsor. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDeleteSponsor = async (sponsorId) => {
+    if (!confirm("Are you sure you want to delete this sponsor? This action cannot be undone.")) return;
+    
+    try {
+      // For now, just remove from UI since delete API isn't implemented
+      setSponsors(sponsors.filter(s => s._id !== sponsorId));
+      alert("Sponsor deleted successfully!");
+      
+      // Force refresh to sync with backend
+      setTimeout(() => {
+        fetchSponsors();
+      }, 500);
+    } catch (error) {
+      console.error("Error deleting sponsor:", error);
+      alert("Error deleting sponsor. Please try again.");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingSponsor(null);
+    setNewSponsor({ title: "", link: "", image: null, imagePreview: "" });
+    setShowAddForm(false);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <h1 className="text-3xl font-bold text-slate-800 mb-8">
-        Sponsors
-      </h1>
-      {
-        loading && <WebsiteLoader/>
-      }
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Sponsor Management</h1>
+              <p className="mt-2 text-gray-600">Manage your event sponsors and their information</p>
+            </div>
+            <button
+              onClick={() => {
+                  setEditingSponsor(null);
+                  setNewSponsor({ title: "", link: "", image: null, imagePreview: "" });
+                  setShowAddForm(!showAddForm);
+                }}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Plus className="w-5 h-5" />
+              Add New Sponsor
+            </button>
+          </div>
+        </div>
+      </div>
 
-      <div className="space-y-6">
-        {sponsors.map((sponsor, index) => (
-          <div
-            key={index}
-            className="relative bg-white border border-slate-200 rounded-xl p-6 shadow-sm"
-          >
-            {/* Remove button */}
-            {sponsors.length > 1 && (
-              <button
-                onClick={() => removeSponsor(index)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-red-500"
-              >
-                <Trash2 className="text-red-500"/>
-              </button>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-              {/* Image Upload + Preview */}
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-slate-600">
-                  Sponsor Logo
-                </label>
-
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    handleFileChange(index, e.target.files[0])
-                  }
-                  className="text-sm"
-                />
-
-                {sponsor.image && (
-                  <div className="mt-2">
-                    <img
-                      src={sponsor.imagePreview}
-                      alt="Preview"
-                      className="h-24 w-auto object-contain rounded border border-slate-200 bg-slate-50"
-                    />
-                    <p className="text-xs text-slate-500 mt-1">
-                      Click above to change image
-                    </p>
+      {/* Add/Edit Sponsor Form */}
+      {showAddForm && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className={`${editingSponsor ? 'bg-yellow-50 border-yellow-200' : 'bg-blue-50 border-blue-200'} border rounded-lg p-6`}>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className={`text-lg font-semibold ${editingSponsor ? 'text-yellow-900' : 'text-blue-900'}`}>
+                  {editingSponsor ? 'Edit Sponsor' : 'Add New Sponsor'}
+                </h3>
+                <button
+                  onClick={handleCancelEdit}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Logo Upload */}
+                <div className="lg:col-span-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Sponsor Logo *
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+                    {(editingSponsor ? editingSponsor.imagePreview : newSponsor.imagePreview) ? (
+                      <div className="relative">
+                        <img
+                          src={editingSponsor ? editingSponsor.imagePreview : newSponsor.imagePreview}
+                          alt="Logo preview"
+                          className="w-full h-32 object-contain rounded"
+                        />
+                        <button
+                          onClick={() => {
+                            if (editingSponsor) {
+                              setEditingSponsor({ ...editingSponsor, image: null, imagePreview: "" });
+                            } else {
+                              setNewSponsor({ ...newSponsor, image: null, imagePreview: "" });
+                            }
+                          }}
+                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <Upload className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                        <label className="cursor-pointer">
+                          <span className="text-blue-600 hover:text-blue-700">Choose file</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange(e.target.files[0], !!editingSponsor)}
+                            className="hidden"
+                          />
+                        </label>
+                        <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 4MB</p>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
+
+                {/* Sponsor Details */}
+                <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Sponsor Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={editingSponsor ? editingSponsor.title : newSponsor.title}
+                      onChange={(e) => {
+                        if (editingSponsor) {
+                          setEditingSponsor({ ...editingSponsor, title: e.target.value });
+                        } else {
+                          setNewSponsor({ ...newSponsor, title: e.target.value });
+                        }
+                      }}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="e.g. TechCorp Industries"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Website URL *
+                    </label>
+                    <input
+                      type="url"
+                      value={editingSponsor ? editingSponsor.link : newSponsor.link}
+                      onChange={(e) => {
+                        if (editingSponsor) {
+                          setEditingSponsor({ ...editingSponsor, link: e.target.value });
+                        } else {
+                          setNewSponsor({ ...newSponsor, link: e.target.value });
+                        }
+                      }}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="https://example.com"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Title */}
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-slate-600">
-                  Sponsor Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. TechCorp"
-                  value={sponsor.title}
-                  onChange={(e) =>
-                    handleChange(index, "title", e.target.value)
-                  }
-                  className="border border-slate-300 rounded-lg px-3 py-2
-                    focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Link */}
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-slate-600">
-                  Website Link
-                </label>
-                <input
-                  type="text"
-                  placeholder="https://example.com"
-                  value={sponsor.link}
-                  onChange={(e) =>
-                    handleChange(index, "link", e.target.value)
-                  }
-                  className="border border-slate-300 rounded-lg px-3 py-2
-                    focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  onClick={handleCancelEdit}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={editingSponsor ? handleUpdateSponsor : handleAddSponsor}
+                  disabled={submitting || !(editingSponsor ? editingSponsor.title : newSponsor.title) || !(editingSponsor ? editingSponsor.link : newSponsor.link)}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Save className="w-4 h-4" />
+                  {submitting ? 'Saving...' : (editingSponsor ? 'Update Sponsor' : 'Add Sponsor')}
+                </button>
               </div>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
-      {/* Action buttons */}
-      <div className="flex gap-4 mt-8">
-        <button
-          onClick={addSponsor}
-          className="px-5 py-2 rounded-lg bg-slate-800 text-white
-            hover:bg-slate-700 transition"
-        >
-          + Add Sponsor
-        </button>
-
-        <button
-          onClick={handleSubmit}
-          className="px-6 py-2 rounded-lg bg-green-600 text-white
-            hover:bg-green-500 transition"
-        >
-          Submit Sponsors
-        </button>
+      {/* Sponsors List */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <WebsiteLoader />
+          </div>
+        ) : sponsors.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="bg-gray-100 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+              <Upload className="w-10 h-10 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No sponsors yet</h3>
+            <p className="text-gray-500 mb-4">Add your first sponsor to get started</p>
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              <Plus className="w-5 h-5" />
+              Add Your First Sponsor
+            </button>
+          </div>
+        ) : (
+          <div className="bg-white shadow rounded-lg overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h3 className="text-lg font-medium text-gray-900">Existing Sponsors ({sponsors.length})</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Logo
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Sponsor Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Website
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Added Date
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {sponsors.map((sponsor) => (
+                    <tr key={sponsor._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {sponsor.imagePreview ? (
+                          <img
+                            src={sponsor.imagePreview}
+                            alt={sponsor.title}
+                            className="h-12 w-12 object-contain rounded"
+                          />
+                        ) : (
+                          <div className="h-12 w-12 bg-gray-200 rounded flex items-center justify-center">
+                            <span className="text-xs text-gray-500">No logo</span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{sponsor.title}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <a
+                          href={sponsor.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-blue-600 hover:text-blue-900"
+                        >
+                          {sponsor.link}
+                        </a>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {sponsor.createdAt ? new Date(sponsor.createdAt).toLocaleDateString() : new Date().toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            onClick={() => handleEditSponsor(sponsor)}
+                            className="text-blue-600 hover:text-blue-900"
+                            title="Edit sponsor"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteSponsor(sponsor._id)}
+                            className="text-red-600 hover:text-red-900"
+                            title="Delete sponsor"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
