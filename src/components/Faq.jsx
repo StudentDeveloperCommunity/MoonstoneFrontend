@@ -9,21 +9,13 @@ export default function Index() {
       answer:
         "Moonstone is our annual cultural and technical fest featuring nail-biting techno-management competitions, intense sports challenges, exciting club activities, and captivating cultural performances. It's an unbeatable combination of talent and teamwork.",
     },
-    {
-      question: "When and where is Moonstone 2026 happening?",
-      answer:
-        "Moonstone 2026 will be held at our college campus with multiple venues for different events. The fest spans over several days with both daytime and evening events. Exact dates and venue details will be announced soon.",
-    },
+    
     {
       question: "How can I register for events?",
       answer:
         "You can register for events through our online registration portal. Simply visit the registration page, select your desired events, fill in your details, and complete the registration process. Early bird discounts are available for limited time.",
     },
-    {
-      question: "Is there a registration fee?",
-      answer:
-        "Yes, most events have a nominal registration fee to cover organizational costs. However, some workshops and technical events may have different pricing. Detailed fee structure is available on the registration page.",
-    },
+    
     {
       question: "Can I participate in multiple events?",
       answer:
@@ -34,11 +26,7 @@ export default function Index() {
       answer:
         "Yes, all competitions have exciting prizes for winners and runners-up. Prizes include cash awards, certificates, trophies, and merchandise from our sponsors. The prize distribution ceremony happens on the final day.",
     },
-    {
-      question: "Is accommodation available for outstation participants?",
-      answer:
-        "Limited accommodation facilities are available for participants coming from other cities. Please contact the organizing team well in advance to arrange accommodation. Additional charges may apply for accommodation services.",
-    },
+    
     {
       question: "How can I become a sponsor or partner?",
       answer:
@@ -51,11 +39,20 @@ export default function Index() {
   };
 
   return (
-    // ✅ opacity removed
-    // ✅ bg opacity only
+    
     <div className="bg-black/40 flex items-center justify-center mt-8 py-2 px-4 sm:px-6 lg:px-6">
       <div className="w-full max-w-[1440px]">
         <div className="text-center mb-8">
+          <h1
+  className="
+    text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold uppercase mb-3
+    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-400
+    bg-clip-text text-transparent
+  "
+  style={{ fontFamily: "'Istok Web', sans-serif" }}
+>
+  FAQ's
+</h1>
           <div
             className="text-xl sm:text-2xl font-bold uppercase mb-3"
             style={{
@@ -63,20 +60,15 @@ export default function Index() {
               fontFamily: "Istok Web, sans-serif",
             }}
           >
-            FAQ's
+            Frequently asked questions
+            
           </div>
 
-          <h1
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold uppercase mb-3 text-white"
-            style={{
-              fontFamily: "'Istok Web',sans-serif",
-            }}
-          >
-            Frequently asked questions
-          </h1>
+          
+
 
           <p
-            className="text-sm sm:text-base md:text-lg text-white max-w-[800px] mx-auto"
+            className="  text-gray-400 max-w-[800px] mx-auto"
             style={{
               fontFamily: "'Istok Web',sans-serif",
             }}
