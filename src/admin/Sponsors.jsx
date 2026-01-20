@@ -1,6 +1,8 @@
 import { Trash2, Plus, Save, Upload, X, Edit2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddNewSponsors from "../api-files/SponsorAPIs/AddNewSponsors";
+import UpdateSponsor from "../api-files/SponsorAPIs/UpdateSponsor";
+import DeleteSponsor from "../api-files/SponsorAPIs/DeleteSponsor";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 import SponsorFetcher from "../api-files/SponsorAPIs/SponsorFetcher";
 import { API_URL } from "../NwConfig";
@@ -77,7 +79,7 @@ export default function Sponsors({ userRole }) {
 
   useEffect(() => {
     fetchSponsors();
-  }, [showAddForm]); // Only refetch when form state changes
+  }, []); // Only fetch once on mount
 
   const handleFileChange = (file, isEdit = false) => {
     if (!file) return;
@@ -125,8 +127,7 @@ export default function Sponsors({ userRole }) {
         alert("Sponsor added successfully!");
         setNewSponsor({ title: "", link: "", image: null, imagePreview: "" });
         setShowAddForm(false);
-        // Force refresh to get latest data
-        await fetchSponsors();
+        fetchSponsors();
       } else {
         alert(res?.message || "Failed to add sponsor");
       }
@@ -155,24 +156,24 @@ export default function Sponsors({ userRole }) {
 
     setSubmitting(true);
     try {
-      // For now, we'll add as new sponsor since update API isn't implemented
       const formData = new FormData();
       formData.append("titles", editingSponsor.title);
       formData.append("links", editingSponsor.link);
-      
-      if (editingSponsor.image && editingSponsor.image !== editingSponsor.originalImage) {
+
+      // Only send new logo if user selected a different file
+      if (
+        editingSponsor.image &&
+        editingSponsor.image !== editingSponsor.originalImage
+      ) {
         formData.append("logo", editingSponsor.image);
-      } else {
-        // Create a dummy file if image hasn't changed
-        formData.append("logo", new File([''], 'placeholder.jpg'));
       }
 
-      const res = await AddNewSponsors(formData);
+      const res = await UpdateSponsor(editingSponsor._id, formData);
       if (res?.success) {
         alert("Sponsor updated successfully!");
         setEditingSponsor(null);
         setShowAddForm(false);
-        await fetchSponsors();
+        fetchSponsors();
       } else {
         alert(res?.message || "Failed to update sponsor");
       }
@@ -188,14 +189,13 @@ export default function Sponsors({ userRole }) {
     if (!confirm("Are you sure you want to delete this sponsor? This action cannot be undone.")) return;
     
     try {
-      // For now, just remove from UI since delete API isn't implemented
-      setSponsors(sponsors.filter(s => s._id !== sponsorId));
-      alert("Sponsor deleted successfully!");
-      
-      // Force refresh to sync with backend
-      setTimeout(() => {
+      const res = await DeleteSponsor(sponsorId);
+      if (res?.success) {
+        alert("Sponsor deleted successfully!");
         fetchSponsors();
-      }, 500);
+      } else {
+        alert(res?.message || "Failed to delete sponsor");
+      }
     } catch (error) {
       console.error("Error deleting sponsor:", error);
       alert("Error deleting sponsor. Please try again.");
@@ -211,12 +211,12 @@ export default function Sponsors({ userRole }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Sponsor Management</h1>
-              <p className="mt-2 text-gray-600">Manage your event sponsors and their information</p>
+              <h1 className="text-3xl font-bold text-white">Sponsor Management</h1>
+              <p className="mt-2 text-blue-100">Manage your event sponsors and their information</p>
             </div>
             <button
               onClick={() => {
@@ -224,7 +224,7 @@ export default function Sponsors({ userRole }) {
                   setNewSponsor({ title: "", link: "", image: null, imagePreview: "" });
                   setShowAddForm(!showAddForm);
                 }}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors shadow-md"
             >
               <Plus className="w-5 h-5" />
               Add New Sponsor
@@ -235,20 +235,20 @@ export default function Sponsors({ userRole }) {
 
       {/* Add/Edit Sponsor Form */}
       {showAddForm && (
-        <div className="bg-white border-b border-gray-200">
+        <div className="bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className={`${editingSponsor ? 'bg-yellow-50 border-yellow-200' : 'bg-blue-50 border-blue-200'} border rounded-lg p-6`}>
-              <div className="flex justify-between items-center mb-4">
-                <h3 className={`text-lg font-semibold ${editingSponsor ? 'text-yellow-900' : 'text-blue-900'}`}>
-                  {editingSponsor ? 'Edit Sponsor' : 'Add New Sponsor'}
-                </h3>
-                <button
-                  onClick={handleCancelEdit}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+            <div className={`${editingSponsor ? 'bg-yellow-50 border-2 border-yellow-300' : 'bg-blue-50 border-2 border-blue-300'} rounded-lg p-6 shadow-lg`}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className={`text-lg font-semibold ${editingSponsor ? 'text-yellow-900' : 'text-blue-900'}`}>
+                {editingSponsor ? 'Edit Sponsor' : 'Add New Sponsor'}
+              </h3>
+              <button
+                onClick={handleCancelEdit}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Logo Upload */}

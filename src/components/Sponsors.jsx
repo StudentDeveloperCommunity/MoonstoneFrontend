@@ -27,11 +27,28 @@ export default function Sponsors() {
       }
     };
 
+    // Initial fetch
     fetchSponsors();
+
+    // Auto-refresh every 10 seconds
+    const interval = setInterval(() => {
+      fetchSponsors();
+    }, 10000); // 10 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, []);
 
-  // ✅ duplicate array for seamless marquee loop
-  const marqueeSponsors = useMemo(() => sponsors.length > 0 ? [...sponsors, ...sponsors] : [], [sponsors]);
+  // ✅ duplicate array for seamless marquee loop (8x for perfect mobile scroll)
+  const marqueeSponsors = useMemo(() => {
+    if (sponsors.length === 0) return [];
+    // 8x duplication ensures all sponsors scroll continuously on mobile
+    const repeated = [];
+    for (let i = 0; i < 8; i++) {
+      repeated.push(...sponsors);
+    }
+    return repeated;
+  }, [sponsors]);
 
   if (loading) {
     return (
@@ -118,8 +135,8 @@ export default function Sponsors() {
         <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-black/45 to-transparent z-10" />
         <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black/45 to-transparent z-10" />
 
-        {/* ✅ marquee track */}
-        <div className="flex items-center gap-12 animate-sponsor-marquee py-8">
+        {/* ✅ marquee track - continuous smooth animation */}
+        <div className="flex items-center gap-2 sm:gap-4 md:gap-8 lg:gap-12 animate-sponsor-marquee py-8 will-change-transform">
           {marqueeSponsors.map((sp, idx) => (
             <a
               key={`${sp.id}-${idx}`}
@@ -128,13 +145,13 @@ export default function Sponsors() {
               rel="noopener noreferrer"
               className="
                 flex-shrink-0
-                w-[280px] h-[180px]
-                sm:w-[320px] sm:h-[200px]
-                md:w-[360px] md:h-[220px]
+                w-[100px] h-[70px]
+                sm:w-[200px] sm:h-[140px]
+                md:w-[280px] md:h-[180px]
                 lg:w-[400px] lg:h-[240px]
                 xl:w-[440px] xl:h-[260px]
                 rounded-2xl overflow-hidden
-                bg-gradient-to-br from-white to-gray-50
+                bg-transparent
                 flex items-center justify-center
                 shadow-xl
                 hover:shadow-2xl hover:scale-105 transition-all duration-300
@@ -145,10 +162,10 @@ export default function Sponsors() {
               "
             >
               {/* Background pattern for better visual appeal */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
               
               {/* Content container */}
-              <div className="relative z-10 flex items-center justify-center w-full h-full p-8">
+              <div className="relative z-10 flex items-center justify-center w-full h-full p-2">
                 <img
                   src={sp.img}
                   alt={sp.alt}
@@ -186,20 +203,42 @@ export default function Sponsors() {
 
       {/* optional bottom line like screenshot */}
 
-      {/* ✅ marquee keyframes */}
+      {/* ✅ Smooth infinite marquee animation */}
       <style>{`
         @keyframes sponsorMarquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0% { 
+            transform: translateX(0); 
+          }
+          100% { 
+            transform: translateX(-50%); 
+          }
         }
 
         .animate-sponsor-marquee {
-          animation: sponsorMarquee 18s linear infinite;
+          animation: sponsorMarquee 25s linear infinite;
         }
 
-        /* ✅ smoother on hover (optional) */
+        /* Much faster on mobile/tablet to show all sponsors quickly */
+        @media (max-width: 768px) {
+          .animate-sponsor-marquee {
+            animation: sponsorMarquee 12s linear infinite;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .animate-sponsor-marquee {
+            animation: sponsorMarquee 5s linear infinite;
+          }
+        }
+
+        /* Pause animation on hover to see details */
         .animate-sponsor-marquee:hover {
           animation-play-state: paused;
+        }
+
+        /* Hardware acceleration for smoother performance */
+        .will-change-transform {
+          will-change: transform;
         }
       `}</style>
     </section>

@@ -191,9 +191,9 @@ members.forEach((m, i) => {
         onClose={() => setShowModal(false)}
         registrationId={registration_id}
       />
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center mt-12">
         <h1 className="text-2xl font-semibold text-black">Event Registration</h1>
-        <p className="text-gray-500 text-sm mt-1">
+        <p className="text-gray-500 text-sm mt-2">
           Please enter your details to complete your registration
         </p>
       </div>
@@ -205,7 +205,7 @@ members.forEach((m, i) => {
           className="rounded-lg w-48 h-48 object-cover"
           alt="event"
         />
-        <div className="flex flex-col  gap-2">
+        <div className="flex flex-col justify-center gap-2">
           <Detail label="Event name:" value={event?.title} />
           <Detail label="Event details:" value={event?.description} />
           <Detail label="Event Date And Time:" value={`${formatDate(event?.eventDate)} - ${event?.eventTime}`} />
