@@ -93,113 +93,110 @@ export default function AboutUs() {
         </section>
 
         {/* ---------- TECHNO CLUB ---------- */}
-<section className="w-full max-w-6xl grid md:grid-cols-2 gap-10 px-6 mb-20">
-  {/* Left Image */}
-  <div className="flex justify-center items-center">
-    <div className="rounded-2xl border border-white/20 p-3 bg-transparent shadow-lg">
-      <img
-        src={img1}
-        alt="Techno Club"
-        className="w-full max-w-lg h-72 md:h-72 object-contain rounded-xl"
-      />
-    </div>
-  </div>
+        <section id="techno-club" className="w-full max-w-6xl grid md:grid-cols-2 gap-10 px-6 mb-20">
+          {/* Left Image */}
+          <div className="flex justify-center items-center">
+            <div className="rounded-2xl border border-white/20 p-3 bg-transparent shadow-lg">
+              <img
+                src={img1}
+                alt="Techno Club"
+                className="w-full max-w-lg h-72 md:h-72 object-contain rounded-xl"
+              />
+            </div>
+          </div>
 
-  {/* Right Text */}
-  <div className="flex flex-col justify-center">
-    <h3 className="text-2xl font-bold mb-3">Techno Club</h3>
+          {/* Right Text */}
+          <div className="flex flex-col justify-center">
+            <h3 className="text-2xl font-bold mb-3">Techno Club</h3>
 
-    <p className="text-gray-300 text-lg leading-relaxed">
-      The Techno Club empowers students interested in programming,
-      robotics, AI, and modern tech innovations. Through workshops,
-      hackathons, mentorship sessions, and technical events, the club
-      helps students develop strong problem-solving and development
-      skills.
-    </p>
+            <p className="text-gray-300 text-lg leading-relaxed">
+              The Techno Club empowers students interested in programming,
+              robotics, AI, and modern tech innovations. Through workshops,
+              hackathons, mentorship sessions, and technical events, the club
+              helps students develop strong problem-solving and development
+              skills.
+            </p>
 
-    <button
-      className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
+            <button
+              className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
                  text-white font-semibold rounded-full shadow-xl mt-5
                  transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-      onClick={() => (window.location.href = "/allevents?id=1")}
-    >
-      View Events →
-    </button>
-  </div>
-</section>
-
+              onClick={() => (window.location.href = "/allevents?id=1")}
+            >
+              View Events →
+            </button>
+          </div>
+        </section>
 
         {/* ---------- CULTURAL CLUB (REVERSED) ---------- */}
-<section className="w-full max-w-6xl grid md:grid-cols-2 gap-10 px-6 mb-20">
-  {/* Right Image on Desktop */}
-  <div className="md:order-2 flex justify-center items-center">
-    <div className="rounded-2xl border border-white/20 p-3 bg-transparent shadow-lg">
-      <img
-        src={img2}
-        alt="Cultural Club"
-        className="w-full max-w-lg h-60 md:h-80 object-contain rounded-xl"
-      />
-    </div>
-  </div>
+        <section id="cultural-club" className="w-full max-w-6xl grid md:grid-cols-2 gap-10 px-6 mb-20">
+          {/* Right Image on Desktop */}
+          <div className="md:order-2 flex justify-center items-center">
+            <div className="rounded-2xl border border-white/20 p-3 bg-transparent shadow-lg">
+              <img
+                src={img2}
+                alt="Cultural Club"
+                className="w-full max-w-lg h-60 md:h-80 object-contain rounded-xl"
+              />
+            </div>
+          </div>
 
-  {/* Text */}
-  <div className="flex flex-col justify-center md:order-1">
-    <h3 className="text-2xl font-bold mb-3">Cultural Club</h3>
+          {/* Text */}
+          <div className="flex flex-col justify-center md:order-1">
+            <h3 className="text-2xl font-bold mb-3">Cultural Club</h3>
 
-    <p className="text-gray-300 text-lg leading-relaxed">
-      The Cultural Club celebrates creativity through dance, music,
-      theatre, and visual arts. It creates a space for students to
-      express themselves and discover their artistic talents while
-      organising university-wide cultural events and festivals.
-    </p>
+            <p className="text-gray-300 text-lg leading-relaxed">
+              The Cultural Club celebrates creativity through dance, music,
+              theatre, and visual arts. It creates a space for students to
+              express themselves and discover their artistic talents while
+              organising university-wide cultural events and festivals.
+            </p>
 
-    <button
-      className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
+            <button
+              className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
                  text-white font-semibold rounded-full shadow-xl mt-5
                  transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-      onClick={() => (window.location.href = "/allevents?id=3")}
-    >
-      View Events →
-    </button>
-  </div>
-</section>
-
+              onClick={() => (window.location.href = "/allevents?id=3")}
+            >
+              View Events →
+            </button>
+          </div>
+        </section>
 
         {/* ---------- SPORTS CLUB ---------- */}
-<section className="w-full max-w-6xl grid md:grid-cols-2 gap-10 px-6">
-  {/* Left Image */}
-  <div className="flex justify-center items-center">
-  <div className="rounded-2xl border-2 border-white/20 p-3 bg-transparent shadow-lg">
-    <img
-      src={img3}
-      alt="Sports Club"
-      className="w-full max-w-lg h-80 object-contain rounded-xl"
-    />
-  </div>
-</div>
+        <section id="sports-club" className="w-full max-w-6xl grid md:grid-cols-2 gap-10 px-6">
+          {/* Left Image */}
+          <div className="flex justify-center items-center">
+            <div className="rounded-2xl border-2 border-white/20 p-3 bg-transparent shadow-lg">
+              <img
+                src={img3}
+                alt="Sports Club"
+                className="w-full max-w-lg h-80 object-contain rounded-xl"
+              />
+            </div>
+          </div>
 
+          {/* Right Text */}
+          <div className="flex flex-col justify-center">
+            <h3 className="text-2xl font-bold mb-3">Sports Club</h3>
 
-  {/* Right Text */}
-  <div className="flex flex-col justify-center">
-    <h3 className="text-2xl font-bold mb-3">Sports Club</h3>
+            <p className="text-gray-300 text-lg leading-relaxed">
+              The Sports Club promotes fitness, teamwork, discipline, and
+              competitive spirit. Through tournaments, training sessions, and
+              various indoor/outdoor games, students learn to maintain a healthy
+              lifestyle while representing the university.
+            </p>
 
-    <p className="text-gray-300 text-lg leading-relaxed">
-      The Sports Club promotes fitness, teamwork, discipline, and
-      competitive spirit. Through tournaments, training sessions, and
-      various indoor/outdoor games, students learn to maintain a healthy
-      lifestyle while representing the university.
-    </p>
-
-    <button
-      className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
+            <button
+              className="h-12 w-44 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
                  text-white font-semibold rounded-full shadow-xl mt-5
                  transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-      onClick={() => (window.location.href = "/allevents?id=2")}
-    >
-      View Events →
-    </button>
-  </div>
-</section>
+              onClick={() => (window.location.href = "/allevents?id=2")}
+            >
+              View Events →
+            </button>
+          </div>
+        </section>
 
       </div>
 

@@ -1,5 +1,5 @@
 // AddUserModal.jsx
-import {  useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff, X } from "lucide-react";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 
@@ -10,6 +10,17 @@ export default function AddUserModal({ open, setOpen, onAddUser }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Clear form when modal opens
+  useEffect(() => {
+    if (open) {
+      setEmail("");
+      setPassword("");
+      setEvent("");
+      setShowPassword(false);
+      setLoading(false);
+    }
+  }, [open]);
   const handleSubmit = () => {
     if (!email || !password || !event) {
       alert("All fields are required!");
@@ -23,10 +34,12 @@ setLoading(true);
       role: event,
     });
 
-    // setOpen(false);
-    // setEmail("");
-    // setPassword("");
-    // setEvent("");
+    // Clear form after submission
+    setOpen(false);
+    setEmail("");
+    setPassword("");
+    setEvent("");
+    setLoading(false);
   };
 
   if (!open) return null;
@@ -97,8 +110,7 @@ setLoading(true);
               <option value="techno">Techno</option>
               <option value="sports">Sport</option>
               <option value="cultural">Cultural</option>
-              <option value="event_convener">Event Conevener</option>
-            </select>
+                          </select>
           </div>
         </div>
 

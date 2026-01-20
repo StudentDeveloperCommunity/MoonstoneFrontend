@@ -26,7 +26,7 @@ const Events = memo(function Events() {
 
           <h2
             className="
-    text-2xl md:text-4xl lg:text-[36px] font-bold uppercase whitespace-nowrap
+    text-8xl md:text-5xl font-bold uppercase mb-4
     bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
     bg-clip-text text-transparent
   "

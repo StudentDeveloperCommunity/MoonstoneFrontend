@@ -96,7 +96,7 @@ export function AdminDashboard({   }) {
       return <ProgramAndEvents userRole={userRole} />;
 
     case "registration":
-      return isAdmin==="event_convener"? <DashboardOverview />: <RegistrationDetail userRole={userRole} />;
+      return <RegistrationDetail userRole={userRole} />;
 
     default:
       return <DashboardOverview />;
@@ -110,7 +110,6 @@ export function AdminDashboard({   }) {
 
 const filteredNavigation = navigationItems.filter(item => {
   if ((item.id === "users" || item.id=="sponsor") && userRole !== "admin") return false;
-  if (item.id === "events" && userRole === "admin") return false;
   return true;
 });
 

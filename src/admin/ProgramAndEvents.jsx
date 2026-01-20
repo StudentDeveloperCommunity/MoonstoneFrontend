@@ -93,7 +93,7 @@ const updateEvent = (index, field, value) => {
       imagePreview: null,
       title: "",
       description: "",
-      eventType: (userRole === "admin" || userRole ==="event_convener") ? "" : (["techno", "cultural", "sports"].includes(userRole) ? userRole : userRole),
+      eventType: (userRole === "admin") ? "" : ( ["techno", "cultural", "sports"].includes(userRole) ? userRole : userRole),
       eventCategory: "single",
       minParticipants: 1,   // ⭐ default for single
       maxParticipants: 1,   // ⭐ default for single
@@ -267,7 +267,7 @@ else{
       imagePreview: null,
       title: "",
       description: "",
-      eventType: (userRole === "admin" || userRole==="event_convener") ? "" : (["techno", "cultural", "sports"].includes(userRole) ? userRole : userRole),
+      eventType: (userRole === "admin") ? "" : (["techno", "cultural", "sports"].includes(userRole) ? userRole : userRole),
       eventCategory: "single",
       minParticipants: 1,
       maxParticipants: 1,
@@ -330,7 +330,7 @@ useEffect(()=>{
         setLoading(false);
         return;
       }
-      if ((userRole === "admin" || userRole==="event_convener" || ["techno", "cultural", "sports"].includes(userRole)) && !e.eventType) {
+      if ((userRole === "admin" || ["techno", "cultural", "sports"].includes(userRole)) && !e.eventType) {
         alert(`Event #${i + 1}: Event type must be selected`);
         setLoading(false);
         return;
@@ -469,7 +469,7 @@ eventsToSubmit.forEach((event, index) => {
           + Add New Event
         </button>
         {
-          (userRole==="admin" || userRole==="event_convener" || ["techno", "cultural", "sports"].includes(userRole)) && <button
+          (userRole==="admin" || ["techno", "cultural", "sports"].includes(userRole)) && <button
             onClick={() => {
               console.log("Submit button clicked");
               handleSubmit();
@@ -504,7 +504,7 @@ eventsToSubmit.forEach((event, index) => {
             </div>
 
             <div className="flex gap-2">
-              {event.id && (userRole==="admin" || userRole==="event_convener" || (["techno", "cultural", "sports"].includes(userRole) && event.eventType === userRole)) && (
+              {event.id && (userRole==="admin" || (["techno", "cultural", "sports"].includes(userRole) && event.eventType === userRole)) && (
                 <>
                   {!editMode[index] ? (
                     <button
@@ -540,7 +540,7 @@ eventsToSubmit.forEach((event, index) => {
                 </>
               )}
               
-              {(userRole==="admin" || userRole==="event_convener" || (["techno", "cultural", "sports"].includes(userRole) && event.eventType === userRole)) && (
+              {(userRole==="admin" || (["techno", "cultural", "sports"].includes(userRole) && event.eventType === userRole)) && (
                 <button
                   onClick={() => {
                     console.log("Delete button clicked for event:", event);
@@ -725,7 +725,7 @@ eventsToSubmit.forEach((event, index) => {
 
 
               {/* EVENT TYPE — ADMIN AND CLUB ADMINS */}
-              {(userRole === "admin" || userRole==="event_convener" || ["techno", "cultural", "sports"].includes(userRole)) && (
+              {(userRole === "admin" || ["techno", "cultural", "sports"].includes(userRole)) && (
                 <div className="mb-4">
                   <label className="block font-medium mb-2">Select Event Type</label>
                   <div className="space-y-2">
@@ -750,7 +750,7 @@ eventsToSubmit.forEach((event, index) => {
               )}
 
               {/* Non-admin and non-club admin auto event type */}
-              {!(userRole === "admin" || userRole === "event_convener" || ["techno", "cultural", "sports"].includes(userRole)) && (
+              {!(userRole === "admin" || ["techno", "cultural", "sports"].includes(userRole)) && (
                 <div className="p-2 bg-gray-100 capitalize rounded text-sm text-gray-700">
                   Event Type: <b>{userRole}</b>
                 </div>

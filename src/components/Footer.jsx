@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo/FinalLogo.png";
-import { Link } from "react-router-dom";
 import {
   FaLinkedinIn,
   FaInstagram,
@@ -10,6 +10,24 @@ import {
 } from "react-icons/fa6";
 
 export default function Footer() {
+  const navigate = useNavigate();
+
+  const handleClubNavigation = (clubId) => {
+    // Navigate to about page first
+    navigate('/about');
+    
+    // Then scroll to the specific club section after a short delay
+    setTimeout(() => {
+      const element = document.getElementById(clubId);
+      if (element) {
+        element.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }, 100);
+  };
+
   const stars = useMemo(() => {
     const STAR_COUNT = 150;
 
@@ -119,18 +137,30 @@ export default function Footer() {
 
                 {/* Column 2 */}
                 <div className="flex flex-col gap-2">
-                  <Link to="/clubs" className={gradientHover}>
+                  <button 
+                    onClick={() => handleClubNavigation('techno-club')}
+                    className={gradientHover + " text-left"}
+                  >
                     Subordinate Clubs
-                  </Link>
-                  <Link to="/techno" className={gradientHover}>
+                  </button>
+                  <button 
+                    onClick={() => handleClubNavigation('techno-club')}
+                    className={gradientHover + " text-left"}
+                  >
                     Techno
-                  </Link>
-                  <Link to="/cultural" className={gradientHover}>
+                  </button>
+                  <button 
+                    onClick={() => handleClubNavigation('cultural-club')}
+                    className={gradientHover + " text-left"}
+                  >
                     Cultural
-                  </Link>
-                  <Link to="/sports" className={gradientHover}>
+                  </button>
+                  <button 
+                    onClick={() => handleClubNavigation('sports-club')}
+                    className={gradientHover + " text-left"}
+                  >
                     Sports
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

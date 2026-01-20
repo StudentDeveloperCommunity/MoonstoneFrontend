@@ -107,6 +107,29 @@ export default function CheckRegistrationStatus() {
             loading && <WebsiteLoader/>
         }
         
+        {/* Images Section */}
+        <div className="w-full max-w-6xl mx-auto px-6 mb-12">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-8">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <img
+                src="/src/assets/logo/FinalLogo.png"
+                alt="Moonstone Logo"
+                className="w-32 h-32 md:w-40 md:h-40 object-contain"
+              />
+            </div>
+            
+            {/* Banner */}
+            <div className="flex-1 max-w-2xl">
+              <img
+                src="/src/assets/herosection/banner.png"
+                alt="Event Banner"
+                className="w-full h-auto rounded-xl shadow-2xl"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1
@@ -186,7 +209,7 @@ export default function CheckRegistrationStatus() {
 
           <div className="text-center mt-6">
             <a
-              href="https://www.moonstone.com"
+              href="https://www.medicaps.ac.in/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-purple-400 font-medium transition-colors hover:text-purple-300"
