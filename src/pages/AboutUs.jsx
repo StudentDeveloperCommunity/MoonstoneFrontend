@@ -1,9 +1,6 @@
 
 import React, { useMemo } from "react";
-// import banner from "../assets/herosection/banner.png";
-import img1 from "../assets/club/techno-club-banner.png";
-import img2 from "../assets/club/sports-club-banner.png";
-import img3 from "../assets/club/cultural-club-banner.png";
+
 import banner from "../assets/events/Banner_Ashking.png";
 
 export default function AboutUs() {
