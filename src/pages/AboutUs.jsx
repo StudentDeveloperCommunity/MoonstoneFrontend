@@ -183,7 +183,7 @@ export default function AboutUs() {
 
             <p className="text-gray-300 text-lg leading-relaxed">
               The Sports Club promotes fitness, teamwork, discipline, and
-              competitive spirit. Through tournaments, training sessions, and
+              competitive spirit. Through tournaments, training sessions and
               various indoor/outdoor games, students learn to maintain a healthy
               lifestyle while representing the university.
             </p>
