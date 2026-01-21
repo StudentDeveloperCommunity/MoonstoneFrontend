@@ -275,10 +275,32 @@ fetchRegistrations()
   </div>
 )}
 {["techno", "cultural", "sports"].includes(userRole) && (
-  <div>
-    <span className="text-sm text-gray-500 italic">View Only</span>
-    <div className="text-xs text-gray-400 mt-1" title="Only master admin can change club admin status">
-      Contact admin to change status
+  <div className="flex gap-2">
+    <select
+      onChange={(e) => {
+        if (e.target.value && e.target.value !== r?.approved) {
+          updateStatus(r?._id, e.target.value);
+          e.target.value = ''; // Reset select
+        }
+      }}
+      className="px-2 py-1 border rounded text-sm"
+      defaultValue=""
+    >
+      <option value="" disabled>Change Status</option>
+      <option value="approved">Approve</option>
+      <option value="pending">Pending</option>
+      <option value="rejected">Reject</option>
+    </select>
+    <button
+      onClick={() => deleteRegistration(r?._id)}
+      className="bg-red-600 text-white px-3 py-1 rounded-md flex items-center gap-1"
+      title="Delete Registration"
+    >
+      <Trash2 size={14} />
+      Delete
+    </button>
+    <div className="text-xs text-gray-500 italic self-center">
+      Club Admin
     </div>
   </div>
 )}
