@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, memo } from "react";
 import { motion } from "framer-motion";
 
-import img3 from "../assets/events/SHIV5804.webp";
-import img4 from "../assets/events/199A2325.webp";
-import img5 from "../assets/events/199A3109.webp";
-import img6 from "../assets/events/TAN06227.webp";
-import img7 from "../assets/events/TAN04895.webp";
+
 
 const Events = memo(function Events() {
-  const imagesTop = [img3, img7, img5, img6, img4];
+  const imagesTop = ["https://res.cloudinary.com/desybsga6/image/upload/v1768937737/199A3109_dxm6od.webp",
+     "https://res.cloudinary.com/desybsga6/image/upload/v1768937602/199A2325_i2kkgi.webp",
+      "https://res.cloudinary.com/desybsga6/image/upload/v1768938467/TAN04895_tvoxxf.webp",
+       "https://res.cloudinary.com/desybsga6/image/upload/v1768938518/SHIV5804_rv0ssx.webp",
+     "https://res.cloudinary.com/desybsga6/image/upload/v1768938932/TAN06636_ahdmd0.webp",
+      ];
 
   return (
     <section id="events" className="py-20 pt-4 text-white">

@@ -1,27 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import eventimage1 from "../assets/events/cultural.webp"
-import eventImg3 from "../assets/events/Gemini_Generated_Image_yfmm0ryfmm0ryfmm (1).webp";
-import eventimage2 from "../assets/events/Kabaddi (1).webp";
+
 
 export default function Index() {
   const events = [
     {
       id: 1,
       title: "Sports",
-      image: eventimage2,
+      image: "https://res.cloudinary.com/desybsga6/image/upload/v1768938825/Kabaddi_1_akr5kj.webp",
       linkto: "/allevents?id=2",
     },
     {
       id: 2,
       title: "Techno",
-      image: eventImg3,
+      image: "https://res.cloudinary.com/desybsga6/image/upload/v1768938646/Gemini_Generated_Image_yfmm0ryfmm0ryfmm_1_ghfkwd.webp",
       linkto: "/allevents?id=1",
     },
     {
       id: 3,
       title: "Cultural",
-      image: eventimage1,
+      image: "https://res.cloudinary.com/desybsga6/image/upload/v1768938427/199A4372_oc9cng.webp",
       linkto: "/allevents?id=3",
     },
   ];

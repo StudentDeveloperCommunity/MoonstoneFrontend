@@ -3,7 +3,6 @@ import { Countdown } from "../components/Countdown";
 import Events from "../components/Events";
 import Clubs from "../components/Clubs";
 import VideoCarousel from "../components/VideoCarousel";
-import moonVideo from "../assets/herosection/moon.mp4";
 
 import Faq from "../components/Faq";
 import Sponsors from "../components/Sponsors";
@@ -93,7 +92,7 @@ export default function Index() {
                 >
                   <div className="w-[clamp(70px,10vw,110px)] h-[clamp(70px,10vw,110px)] rounded-full overflow-hidden">
                     <video
-                      src={moonVideo}
+                      src={"https://res.cloudinary.com/desybsga6/video/upload/v1768939310/moon_zsbpxz.mp4"}
                       autoPlay
                       loop
                       muted
