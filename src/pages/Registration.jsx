@@ -245,7 +245,7 @@ export default function EventRegistration() {
             <Input
               label="UTR Number"
               name="utrNumber"
-              placeholder="Enter valid UTR number"
+              placeholder="Make sure to provide correct UTR Number"
               value={form.utrNumber}
               onChange={onChange("utrNumber")}
               error={errors.utrNumber}

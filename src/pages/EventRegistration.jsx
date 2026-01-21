@@ -132,7 +132,7 @@ members.forEach((m, i) => {
     if (!paymentFile) e.paymentFile = "Payment screenshot required";
 
     if (!form.utrNumber.trim()) e.utrNumber = "UTR number required";
-    if(form.utrNumber.trim().length<22) e.utrNumber="Enter valid UTR number";
+    else if (form.utrNumber.trim().length < 5) e.utrNumber = "UTR number must be at least 5 characters";
 
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -317,7 +317,7 @@ members.forEach((m, i) => {
             <Input
               label="UTR Number"
               name="utrNumber"
-              placeholder="Enter valid UTR number"
+              placeholder="Make sure to provide correct UTR Number"
               value={form.utrNumber}
               onChange={onChange("utrNumber")}
               error={errors.utrNumber}

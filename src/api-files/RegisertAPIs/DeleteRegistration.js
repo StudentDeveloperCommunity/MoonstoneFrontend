@@ -3,10 +3,13 @@ import { API_URL } from "../../NwConfig";
 
 export const DeleteRegistration = async (data) => {
   try {
-    const response = await axios.delete(`${API_URL}/api/register/deleteregistration`, {
-      data: data,
-      withCredentials: true
-    });
+    const response = await axios.post(
+      `${API_URL}/api/register/deleteregistration`,
+      data,
+      {
+        withCredentials: true
+      }
+    );
 
     return response.data;
   } catch (error) {

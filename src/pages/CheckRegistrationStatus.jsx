@@ -3,6 +3,7 @@ import "@fontsource/istok-web";
 import GetRegistrationStatus from "../api-files/RegisertAPIs/GetRegistartionStatus";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 import { API_URL } from "../NwConfig";
+import fallbackImg from "../assets/eventsindetails/Frame.svg";
 
 export default function CheckRegistrationStatus() {
   // ⭐ Generate stars ONLY ONCE (so they don't change on re-render)
@@ -42,26 +43,44 @@ export default function CheckRegistrationStatus() {
   const [searchType, setSearchType] = useState("id"); // 'id' or 'email'
   const [loading, setLoading] = useState(false);
   const [notfound, setnotfound] = useState(false);
-    const [result, setresult] = useState({})
+  const [results, setresults] = useState([])
   
   async function findreg() {
     setLoading(true);
     const form = searchType === "id" ? { id: Search } : { email: Search };
     const res = await GetRegistrationStatus(form);
-    // console.log(res)
+    console.log("Registration Status Response:", res);
     if (res?.success) {
-      setresult(res?.data?.[0]);
+      console.log("Results data:", res?.data);
+      setresults(res?.data);
       setnotfound(false)
     } else {
-      setresult({});
+      setresults([]);
       setnotfound(true)
     }
     setLoading(false);
   }
 
   function formatDate(dateString) {
+  if (!dateString) return "--";
+  return new Date(dateString).getDate();
+}
+
+function formatMonth(dateString) {
   if (!dateString) return "";
-  return new Date(dateString).toISOString().split("T")[0];
+  return new Date(dateString).toLocaleString("default", {
+    month: "short",
+  });
+}
+
+function formatFullDate(dateString) {
+  if (!dateString) return "Date not available";
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
 }
 
   const getStatusBadge = (status) => {
@@ -253,45 +272,86 @@ export default function CheckRegistrationStatus() {
           </div>
         )}
 
-        {/* Result Card */}
-        {(result && Object.keys(result).length >= 1) && (
-          <div className="w-full max-w-4xl mx-auto mt-12 px-6">
-            <div 
-              className="bg-white/10 backdrop-blur-md rounded-2xl p-8 flex flex-col md:flex-row gap-8 border border-white/20"
-              style={{
-                fontFamily: "'Istok Web', sans-serif",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              {/* Event image removed to display details without images */}
+        {/* Result Cards */}
+        {results.length > 0 && (
+          <div className="w-full max-w-6xl mx-auto mt-12 px-6">
+            <div className="mb-8 text-center">
+              <h2 className="text-3xl font-bold text-white mb-3" style={{ fontFamily: "'Istok Web', sans-serif" }}>
+                {searchType === "id" ? "Registration Details" : `Found ${results.length} Registration(s)`}
+              </h2>
+              <p className="text-gray-300 text-lg" style={{ fontFamily: "'Istok Web', sans-serif" }}>
+                {searchType === "id" 
+                  ? "Your event registration details" 
+                  : "All events registered with this email address"}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center">
+              {results.map((result, index) => {
+                console.log(`Rendering result ${index}:`, result);
+                return (
+                <div
+                  key={result._id || index}
+                  className="
+                    relative w-[300px] h-[400px]
+                    rounded-[20px] overflow-hidden
+                    border border-white/25
+                    bg-[#1a1a1a]
+                    transition-all duration-300
+                    hover:-translate-y-1 hover:shadow-xl
+                  "
+                >
+                  {/* EVENT IMAGE */}
+                  <img
+                    src={
+                      result?.eventID?.image
+                        ? `${API_URL}/${result.eventID.image}`
+                        : fallbackImg
+                    }
+                    onError={(e) => {
+                      e.currentTarget.src = fallbackImg;
+                    }}
+                    alt={result?.eventID?.title || "Event"}
+                    className="w-full h-full object-cover block"
+                  />
 
-              {/* Details Section */}
-              <div className="flex-1 flex flex-col justify-center">
-                <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: "'Istok Web', sans-serif" }}>
-                  {result?.eventID?.title}
-                </h3>
-                <p className="text-gray-300 mb-6" style={{ fontFamily: "'Istok Web', sans-serif" }}>
-                  {formatDate(result?.eventID?.date)} | {result?.eventID?.event_at}
-                </p>
+                  {/* REGISTRATION STATUS BADGE */}
+                  <div className="absolute top-3 left-3 z-20">
+                    <div className={`
+                      px-4 py-2 text-sm font-bold rounded-full border
+                      ${getStatusBadge(result?.approved)}
+                    `}>
+                      {result?.approved?.toUpperCase()}
+                    </div>
+                  </div>
 
-                <p className="text-gray-300 mb-2" style={{ fontFamily: "'Istok Web', sans-serif" }}>
-                  <span className="font-semibold text-white">Event Coordinator Contact:</span>
-                </p>
-                <p className="text-white font-semibold mb-6" style={{ fontFamily: "'Istok Web', sans-serif" }}>
-                  {result?.eventID?.convener}, {result?.eventID?.convener_number}
-                </p>
+                  {/* BOTTOM GRADIENT */}
+                  <div className="absolute bottom-0 left-0 w-full h-[80px] bg-gradient-to-t from-black/95 via-black/70 to-transparent z-10" />
 
-                <p className="text-gray-300 mb-3" style={{ fontFamily: "'Istok Web', sans-serif" }}>
-                  Registration Status
-                </p>
-                <div>
-                  <span 
-                    className={"px-4 py-2 text-sm capitalize font-semibold rounded-full border " + getStatusBadge(result?.approved)}
-                  >
-                    {result?.approved}
-                  </span>
+                  {/* CONTENT - Only Event Title and Status */}
+                  <div className="absolute bottom-3 left-3 right-3 z-20">
+                    <h2 className="text-white font-bold text-[16px] leading-[20px] uppercase mb-2">
+                      {result?.eventID?.title || "Event Title"}
+                    </h2>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-purple-400 text-xs font-medium">
+                        {searchType === "id" ? "Your Registration" : `Registration ${index + 1}`}
+                      </span>
+                      <div className={`
+                        px-2 py-1 text-xs font-medium rounded
+                        ${result?.approved === 'approved' ? 'bg-green-500/20 text-green-400' : 
+                          result?.approved === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : 
+                          'bg-red-500/20 text-red-400'}
+                      `}>
+                        {result?.approved === 'approved' ? '✓ Approved' : 
+                         result?.approved === 'pending' ? '⏳ Pending' : 
+                         '✗ Rejected'}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )})}
             </div>
           </div>
         )}
