@@ -78,6 +78,7 @@ export default function EventRegistration() {
     if (!paymentFile) e.paymentFile = "Payment screenshot required";
 
     if (!form.utrNumber.trim()) e.utrNumber = "UTR number required";
+    else if (form.utrNumber.trim().length < 5) e.utrNumber = "UTR number must be at least 5 characters";
 
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -182,7 +183,7 @@ export default function EventRegistration() {
             <Input
               label="UTR Number"
               name="utrNumber"
-              placeholder="Enter valid UTR number"
+              placeholder="Make sure to provide correct UTR Number"
               value={form.utrNumber}
               onChange={onChange("utrNumber")}
               error={errors.utrNumber}
