@@ -102,33 +102,12 @@ export default function CheckRegistrationStatus() {
       </div>
 
       {/* ✅ Actual content above stars */}
-      <div className="relative z-10 w-full flex mt-0 flex-col items-center justify-center pt-20 pb-10">
+  <div className="relative z-10 w-full flex mt-0 flex-col items-center justify-center pt-40 md:pt-48 pb-10">
         {
             loading && <WebsiteLoader/>
         }
         
-        {/* Images Section */}
-        <div className="w-full max-w-6xl mx-auto px-6 mb-12">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-8">
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <img
-                src="/src/assets/logo/FinalLogo.png"
-                alt="Moonstone Logo"
-                className="w-32 h-32 md:w-40 md:h-40 object-contain"
-              />
-            </div>
-            
-            {/* Banner */}
-            <div className="flex-1 max-w-2xl">
-              <img
-                src="/src/assets/herosection/banner.png"
-                alt="Event Banner"
-                className="w-full h-auto rounded-xl shadow-2xl"
-              />
-            </div>
-          </div>
-        </div>
+        {/* Images removed: top logo and banner intentionally hidden on this page */}
 
         {/* Header */}
         <div className="text-center mb-12">
@@ -284,14 +263,7 @@ export default function CheckRegistrationStatus() {
                 boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
               }}
             >
-              {/* Image Section */}
-              <div className="flex-shrink-0">
-                <img
-                  src={API_URL + "/" + (result?.eventID?.image?.startsWith('uploads/') ? result?.eventID?.image : "uploads/" + result?.eventID?.image)}
-                  alt="event"
-                  className="w-full md:w-64 h-64 object-cover rounded-xl"
-                />
-              </div>
+              {/* Event image removed to display details without images */}
 
               {/* Details Section */}
               <div className="flex-1 flex flex-col justify-center">

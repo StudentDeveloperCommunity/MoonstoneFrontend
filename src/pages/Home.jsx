@@ -192,7 +192,9 @@ export default function Index() {
         <VideoCarousel />
         <Events />
         <Clubs />
+        <section id="sponsors">
         <Sponsors />
+        </section>
         <Faq />
       </div>
     </div>

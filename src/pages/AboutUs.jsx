@@ -4,6 +4,7 @@ import banner from "../assets/herosection/banner.png";
 import img1 from "../assets/club/techno-club-banner.png";
 import img2 from "../assets/club/sports-club-banner.png";
 import img3 from "../assets/club/cultural-club-banner.png";
+// import banner from "../assets/events/New_Banner.png";
 
 export default function AboutUs() {
   // ⭐ Generate stars ONLY ONCE (so they don't change on re-render)
@@ -66,10 +67,10 @@ export default function AboutUs() {
       {/* ✅ Actual content above stars */}
       <div className="relative z-10 w-full flex mt-0 flex-col items-center justify-center pt-20 pb-10">
         {/* ---------- TOP SECTION (FULL WIDTH IMAGE) ---------- */}
-        <section className="w-full h-full mb-20">
+        <section className="w-3/4 h-3/4 mb-20">
           {/* Full Width Image */}
           <img
-            src={"https://res.cloudinary.com/desybsga6/image/upload/v1768939215/banner_vcwnek.png"}
+            src={banner}
             alt="Moonstone at Medicaps"
             className="w-full h-1/2 object-cover mb-8"
           />

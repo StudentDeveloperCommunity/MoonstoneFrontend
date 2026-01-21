@@ -12,6 +12,7 @@ import Eventsindetails from "./pages/Eventsindetails.jsx";
 import Payment from "./pages/Payment.jsx";
 import CheckRegistrationStatus from "./pages/CheckRegistrationStatus.jsx";
 import Developers from "./pages/Developers.jsx"
+// import Sponsers from "./components/Sponsors.jsx";
 const AppContent = () => {
   const location = useLocation();
   const excludedPaths = ['/admin','/admin_dashboard','/payment'];
@@ -29,7 +30,6 @@ const AppContent = () => {
         <Route path="/eventsindetails" element={<Eventsindetails />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/check-registration" element={<CheckRegistrationStatus />} />
-
         <Route path="/admin" element={<Login />} />
         <Route path="/admin_dashboard" element={<AdminDashboard />} />
       </Routes>

@@ -73,29 +73,29 @@ export default function About() {
           <div className="flex-1 px-6 lg:px-12 py-8 lg:py-16 flex flex-col justify-center">
             <div className="flex flex-col items-center text-center">
               <h2
-                className="text-xl md:text-2xl lg:text-3xl font-bold uppercase mb-2 tracking-wide"
-                style={{
-                  color: "white",
-                  fontFamily: "Istok Web, sans-serif",
-                }}
+                className="text-xl font-bold uppercase mb-2 tracking-wide text-gray-300"
+            style={{
+              WebkitTextStroke: "0.2px white",
+              fontFamily: "Istok Web, sans-serif",
+            }}
               >
                 About Moonstone
               </h2>
 
-              <h3
+              <h1
                 className="
-    text-lg md:text-xl lg:text-2xl font-bold uppercase mb-6 lg:mb-8
+    text-4xl md:text-5xl font-bold uppercase mb-4
     bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
     bg-clip-text text-transparent
   "
-                style={{ fontFamily: "Istok Web, sans-serif" }}
+                // style={{ fontFamily: "Istok Web, sans-serif" }}
               >
                 It's Back
-              </h3>
+              </h1>
 
               <p
-                className="text-white text-xl font-mono md:text-base lg:text-2xl leading-relaxed text-justify mb-8"
-                style={{ fontFamily: "Istok Web, sans-serif" }}
+                className="className= text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
+                // style={{ fontFamily: "Istok Web, sans-serif" }}
               >
                 The fest is an unbeatable combination of talent and teamwork,
                 featuring nail-biting techno-management competitions, intense
@@ -109,12 +109,7 @@ export default function About() {
               </p>
             </div>
 
-            <a
-              href="#"
-              className="text-gray-400 text-base md:text-sm lg:text-sm hover:text-gray-300 transition-colors inline-flex items-center gap-1 self-end"
-            >
-              Know More
-            </a>
+            
           </div>
         </div>
       </div>

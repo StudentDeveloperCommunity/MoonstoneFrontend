@@ -15,29 +15,29 @@ const Events = memo(function Events() {
     <section id="events" className="py-20 pt-4 text-white">
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
         <div className="text-center mb-10">
-          <h3
-            className="text-xl md:text-2xl font-bold uppercase tracking-wide"
+          <h2
+            className="text-xl font-bold uppercase mb-4 tracking-wide text-gray-300"
             style={{
               WebkitTextStroke: "0.2px white",
               fontFamily: "Istok Web, sans-serif",
             }}
           >
             Glimpses Of Events
-          </h3>
+          </h2>
 
-          <h2
+          <h1
             className="
-    text-8xl md:text-5xl font-bold uppercase mb-4
+   text-4xl md:text-5xl font-bold uppercase mb-4
     bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
     bg-clip-text text-transparent
   "
-            style={{ fontFamily: "Istok Web, sans-serif" }}
+            // style={{ fontFamily: "Istok Web, sans-serif" }}
           >
             Flashback Frames
-          </h2>
+          </h1>
 
           <p
-            className="text-white text-sm md:text-base max-w-[851px] mx-auto "
+            className="text-gray-300 max-w-2xl mx-auto leading-relaxed "
             style={{ fontFamily: "Istok Web, sans-serif" }}
           >
             Revisiting the highlights as we gear up for another great year.

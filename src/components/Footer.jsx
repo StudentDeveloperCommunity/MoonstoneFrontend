@@ -5,7 +5,6 @@ import {
   FaLinkedinIn,
   FaInstagram,
   FaYoutube,
-  FaXTwitter,
   FaFacebookF,
 } from "react-icons/fa6";
 
@@ -14,15 +13,15 @@ export default function Footer() {
 
   const handleClubNavigation = (clubId) => {
     // Navigate to about page first
-    navigate('/about');
-    
+    navigate("/about");
+
     // Then scroll to the specific club section after a short delay
     setTimeout(() => {
       const element = document.getElementById(clubId);
       if (element) {
-        element.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'center'
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
         });
       }
     }, 100);
@@ -59,11 +58,27 @@ export default function Footer() {
   }, []);
 
   const socialLinks = [
-    { icon: FaLinkedinIn, link: "https://www.linkedin.com/school/medicaps-university-indore/posts/?feedView=all", label: "LinkedIn" },
-    { icon: FaInstagram, link: "https://www.instagram.com/medicaps_university/", label: "Instagram" },
-    { icon: FaYoutube, link: "https://www.youtube.com/@medicaps_university", label: "YouTube" },
+    {
+      icon: FaLinkedinIn,
+      link: "https://www.linkedin.com/school/medicaps-university-indore/posts/?feedView=all",
+      label: "LinkedIn",
+    },
+    {
+      icon: FaInstagram,
+      link: "https://www.instagram.com/medicaps_university/",
+      label: "Instagram",
+    },
+    {
+      icon: FaYoutube,
+      link: "https://www.youtube.com/@medicaps_university",
+      label: "YouTube",
+    },
     // { icon: FaXTwitter, link: "#", label: "Twitter" },
-    { icon: FaFacebookF, link: "https://www.facebook.com/medicapsuniversityindore/", label: "Facebook" },
+    {
+      icon: FaFacebookF,
+      link: "https://www.facebook.com/medicapsuniversityindore/",
+      label: "Facebook",
+    },
   ];
 
   const gradientHover =
@@ -118,8 +133,9 @@ export default function Footer() {
               <div className="grid grid-cols-2 gap-x-16 gap-y-3 text-sm font-semibold text-gray-300">
                 {/* Column 1 */}
                 <div className="flex flex-col gap-2">
+                  {/* About page changed to highlights */}
                   <Link to="/about" className={gradientHover}>
-                    About
+                    Highlights
                   </Link>
                   <Link to="/allevents" className={gradientHover}>
                     Events
@@ -127,36 +143,38 @@ export default function Footer() {
                   <Link to="/developers" className={gradientHover}>
                     Developers
                   </Link>
-                  <Link to="/sponsors" className={gradientHover}>
+                  
+                  {/* <Link to="/" state={{ scrollTo: "sponsors" }}>
                     Sponsors
-                  </Link>
-                  <Link to="/contact" className={gradientHover}>
-                    Contact
-                  </Link>
+                  </Link> */}
+                  <Link to="/" state={{ scrollTo: "sponsors" }} className={gradientHover}>
+  Sponsors
+</Link>
+
                 </div>
 
                 {/* Column 2 */}
                 <div className="flex flex-col gap-2">
-                  <button 
-                    onClick={() => handleClubNavigation('techno-club')}
+                  <button
+                    onClick={() => handleClubNavigation("techno-club")}
                     className={gradientHover + " text-left"}
                   >
                     Subordinate Clubs
                   </button>
-                  <button 
-                    onClick={() => handleClubNavigation('techno-club')}
+                  <button
+                    onClick={() => handleClubNavigation("techno-club")}
                     className={gradientHover + " text-left"}
                   >
                     Techno
                   </button>
-                  <button 
-                    onClick={() => handleClubNavigation('cultural-club')}
+                  <button
+                    onClick={() => handleClubNavigation("cultural-club")}
                     className={gradientHover + " text-left"}
                   >
                     Cultural
                   </button>
-                  <button 
-                    onClick={() => handleClubNavigation('sports-club')}
+                  <button
+                    onClick={() => handleClubNavigation("sports-club")}
                     className={gradientHover + " text-left"}
                   >
                     Sports

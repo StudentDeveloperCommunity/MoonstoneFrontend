@@ -210,16 +210,16 @@ export default function Developers() {
                                         {categoryDevs.map((dev) => (
                                             <div
                                                 key={dev.id}
-                                                className="group relative bg-white rounded-2xl p-6 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(100,180,255,0.4)] border border-transparent hover:border-blue-400/50 flex items-start gap-4"
+                                                className="group relative bg-white rounded-2xl p-6 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(100,180,255,0.4)] border border-transparent hover:border-blue-400/50 flex flex-col md:flex-row items-center md:items-center text-center md:text-left gap-4 min-h-[220px]"
                                             >
-                                                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-100 shrink-0 bg-gray-200">
+                                                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-100 shrink-0 bg-gray-200">
                                                     <img src={dev.image} alt={dev.name} className="w-full h-full object-cover" />
                                                 </div>
 
                                                 {/* Details */}
                                                 <div className="flex-1 min-w-0">
                                                     <h3 className="text-black font-bold text-lg leading-tight truncate">{dev.name}</h3>
-                                                    <span className="inline-block mt-1 bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded">
+                                                    <span className="inline-block mt-2 bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded">
                                                         {dev.role}
                                                     </span>
 

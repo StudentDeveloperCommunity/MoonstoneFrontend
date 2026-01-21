@@ -77,25 +77,25 @@ export default function Sponsors() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="text-center">
             <h3
-              className="text-xl md:text-2xl text-white font-bold uppercase mb-2 "
-              style={{
-                fontFamily: "Istok Web, sans-serif",
+             className="text-xl sm:text-2xl font-bold uppercase mb-3"
+            style={{
+              color: "white",
               }}
             >
               Event Sponsors
             </h3>
-            <h2
+            {/* <h2
               className="
-    text-2xl md:text-4xl lg:text-[36px] font-bold uppercase mb-3
-    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-400
-    bg-clip-text text-transparent
+    text-4xl md:text-5xl font-bold uppercase mb-4
+    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
+    bg-clip-text text-transparen
   "
-              style={{ fontFamily: "Istok Web, sans-serif" }}
+              // style={{ fontFamily: "Istok Web, sans-serif" }}
             >
               Supporting Every Step
-            </h2>
+            </h2> */}
 
-            <p className="text-white/70 text-sm md:text-base max-w-[600px] mx-auto">
+            <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
               Our sponsors help make this event possible. Check back soon to see
               our amazing partners!
             </p>

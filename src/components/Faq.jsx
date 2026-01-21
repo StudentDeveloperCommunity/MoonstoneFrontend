@@ -44,12 +44,12 @@ export default function Index() {
       <div className="w-full max-w-[1440px]">
         <div className="text-center mb-8">
           <h1
-  className="
-    text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold uppercase mb-3
-    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-400
+  
+className="
+    text-4xl md:text-5xl font-bold uppercase mb-4
+    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
     bg-clip-text text-transparent
   "
-  style={{ fontFamily: "'Istok Web', sans-serif" }}
 >
   FAQ's
 </h1>
@@ -57,7 +57,7 @@ export default function Index() {
             className="text-xl sm:text-2xl font-bold uppercase mb-3"
             style={{
               color: "white",
-              fontFamily: "Istok Web, sans-serif",
+              // fontFamily: "Istok Web, sans-serif",
             }}
           >
             Frequently asked questions
@@ -68,7 +68,7 @@ export default function Index() {
 
 
           <p
-            className="  text-gray-400 max-w-[800px] mx-auto"
+           className="text-gray-300 max-w-2xl mx-auto leading-relaxed"
             style={{
               fontFamily: "'Istok Web',sans-serif",
             }}
