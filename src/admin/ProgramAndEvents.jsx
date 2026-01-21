@@ -4,6 +4,7 @@ import WebsiteLoader from "../Loader/WebsiteLoader";
 import EventFetcher from "../api-files/EventAPIs/EventFetcher";
 import { API_URL } from "../NwConfig";
 import EventDelete from "../api-files/EventAPIs/EventDelete";
+import defaultEventImage from "../assets/events/Gemini_Generated_Image_yfmm0ryfmm0ryfmm (1).webp";
 
 export default function ProgramAndEvents({ userRole }) {
   const [events, setEvents] = useState([]);
@@ -88,7 +89,6 @@ export default function ProgramAndEvents({ userRole }) {
   const addNewEvent = () => {
     const timestamp = new Date().toLocaleTimeString();
     setEvents([
-      ...events,
       {
         image: null,
         imagePreview: null,
@@ -115,7 +115,7 @@ export default function ProgramAndEvents({ userRole }) {
         id: null, // Ensure id field is present
         addedAt: timestamp, // ⭐ Track when event was added
       },
-    ]);
+    ].concat(events));
   };
 
   const deleteEvent = async (index, event) => {
@@ -227,6 +227,13 @@ export default function ProgramAndEvents({ userRole }) {
 
   const geteventsinfo = async () => {
     setLoading(true);
+
+    // Revoke any stale object URLs to avoid broken previews
+    events.forEach(event => {
+      if (event.imagePreview && event.imagePreview.startsWith('blob:')) {
+        URL.revokeObjectURL(event.imagePreview);
+      }
+    });
 
     // Clear corrupted state first
     setEvents([]);
@@ -675,11 +682,10 @@ export default function ProgramAndEvents({ userRole }) {
                 <input
                   type="file"
                   accept="image/*"
-                  required={!event.id} // Required only for new events
+                  required={!event.id}
                   disabled={isFieldReadOnly(index)}
                   onChange={(e) => {
                     if (!isFieldReadOnly(index)) {
-                      console.log("File input changed:", e.target.files);
                       handleImageUpload(index, e.target.files[0]);
                     }
                   }}
@@ -687,11 +693,14 @@ export default function ProgramAndEvents({ userRole }) {
                 />
               </div>
 
-              {event.imagePreview && (
+              {(event.imagePreview || (!event.imagePreview && !event.image)) && (
                 <img
-                  src={event.imagePreview}
+                  src={event.imagePreview || defaultEventImage}
                   alt="Preview"
                   className="w-full h-48 object-cover rounded border"
+                  onError={(e) => {
+                    e.target.src = defaultEventImage;
+                  }}
                 />
               )}
             </div>

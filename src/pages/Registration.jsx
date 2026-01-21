@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import eventImg from "../assets/events/event-2.avif";
+import RegisterToEvent from "../api-files/RegisertAPIs/RegiseterToEvent";
 
 export default function EventRegistration() {
   const [form, setForm] = useState({
@@ -18,9 +19,11 @@ export default function EventRegistration() {
 
   const [paymentFile, setPaymentFile] = useState(null);
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   const phoneRegex = /^[6-9]\d{9}$/;
+  const utrRegex = /^\d+$/;
 
   const setField = (key, val) => {
     setForm((prev) => ({ ...prev, [key]: val }));
@@ -37,6 +40,18 @@ export default function EventRegistration() {
     }
 
     setField(key, val);
+
+    // Live UTR validation feedback
+    if (key === "utrNumber") {
+      const trimmed = val.trim();
+      if (trimmed && !utrRegex.test(trimmed)) {
+        setErrors((prev) => ({ ...prev, utrNumber: "Enter a valid UTR (numbers only)" }));
+      } else if (trimmed && trimmed.length < 5) {
+        setErrors((prev) => ({ ...prev, utrNumber: "UTR must be at least 5 digits" }));
+      } else {
+        setErrors((prev) => ({ ...prev, utrNumber: null }));
+      }
+    }
   };
 
   /** --------------- FILE VALIDATION (1 MB LIMIT) ----------------- */
@@ -77,17 +92,65 @@ export default function EventRegistration() {
 
     if (!paymentFile) e.paymentFile = "Payment screenshot required";
 
-    if (!form.utrNumber.trim()) e.utrNumber = "UTR number required";
+    if (!form.utrNumber.trim()) e.utrNumber = "UTR number is required";
+    else {
+      const trimmedUtr = form.utrNumber.trim();
+      const testResult = utrRegex.test(trimmedUtr);
+      console.log("UTR debug:", { raw: form.utrNumber, trimmed: trimmedUtr, test: testResult });
+      // On-screen debug for non-dev users
+      alert(`UTR debug:\nRaw: "${form.utrNumber}"\nTrimmed: "${trimmedUtr}"\nRegex test: ${testResult}`);
+      if (!testResult) e.utrNumber = "Enter a valid UTR (numbers only)";
+      else if (trimmedUtr.length < 5) e.utrNumber = "UTR must be at least 5 digits";
+    }
 
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    alert("Registration validated successfully with payment details");
+    setSubmitting(true);
+    const formData = new FormData();
+    formData.append("leadName", form.leadName);
+    formData.append("leadEnroll", form.leadEnroll);
+    formData.append("leadEmail", form.leadEmail);
+    formData.append("leadPhone", form.leadPhone);
+    formData.append("m2Name", form.m2Name);
+    formData.append("m2Enroll", form.m2Enroll);
+    formData.append("m3Name", form.m3Name);
+    formData.append("m3Enroll", form.m3Enroll);
+    formData.append("m4Name", form.m4Name);
+    formData.append("m4Enroll", form.m4Enroll);
+    formData.append("utrNumber", form.utrNumber);
+    if (paymentFile) {
+      formData.append("paymentFile", paymentFile);
+    }
+
+    const result = await RegisterToEvent(formData);
+    setSubmitting(false);
+
+    if (result?.success) {
+      alert("Registration submitted successfully!");
+      // Optionally reset form
+      setForm({
+        leadName: "",
+        leadEnroll: "",
+        leadEmail: "",
+        leadPhone: "",
+        m2Name: "",
+        m2Enroll: "",
+        m3Name: "",
+        m3Enroll: "",
+        m4Name: "",
+        m4Enroll: "",
+        utrNumber: "",
+      });
+      setPaymentFile(null);
+    } else {
+      alert(`Registration failed: ${result?.message || "Please try again."}`);
+    }
   };
 
   return (
@@ -117,7 +180,7 @@ export default function EventRegistration() {
       </div>
 
       {/* Form Sections */}
-      <form className="w-full max-w-3xl mt-10 flex flex-col gap-8">
+      <form className="w-full max-w-3xl mt-10 flex flex-col gap-8" onSubmit={onSubmit}>
 
         {/* Team Lead */}
         <FormSection title="Team Lead">
@@ -194,12 +257,12 @@ export default function EventRegistration() {
         <div className="w-full flex justify-center">
           <button
             type="submit"
-            onClick={onSubmit}
+            disabled={submitting}
             className="px-10 py-3 rounded-lg text-white font-medium 
             bg-gradient-to-r from-blue-900 via-purple-600 to-red-600 
-            hover:opacity-90 transition"
+            hover:opacity-90 transition disabled:opacity-50"
           >
-            Complete Registration
+            {submitting ? "Submitting..." : "Complete Registration"}
           </button>
         </div>
       </form>
