@@ -77,6 +77,7 @@ export default function ProgramAndEvents({ userRole }) {
       const updated = [...events];
       updated[index].image = file;
       updated[index].imagePreview = reader.result;
+      updated[index].imageChanged = true;
       setEvents(updated);
       console.log("Image uploaded successfully");
     };
@@ -92,6 +93,8 @@ export default function ProgramAndEvents({ userRole }) {
       {
         image: null,
         imagePreview: null,
+        imageChanged: false,
+        backendImagePath: "",
         title: "",
         description: "",
         eventType:
@@ -229,8 +232,8 @@ export default function ProgramAndEvents({ userRole }) {
     setLoading(true);
 
     // Revoke any stale object URLs to avoid broken previews
-    events.forEach(event => {
-      if (event.imagePreview && event.imagePreview.startsWith('blob:')) {
+    events.forEach((event) => {
+      if (event.imagePreview && event.imagePreview.startsWith("blob:")) {
         URL.revokeObjectURL(event.imagePreview);
       }
     });
@@ -262,10 +265,12 @@ export default function ProgramAndEvents({ userRole }) {
 
           return {
             ...event,
+            backendImagePath: event.image || "",
             // actual File stored here 👇
             image: imageFile,
             // preview for UI
             imagePreview,
+            imageChanged: false,
             eventDate: formatDate(event.eventDate),
             // Ensure all required fields are present with fallbacks
             event_at: event.event_at || "",
@@ -298,6 +303,8 @@ export default function ProgramAndEvents({ userRole }) {
         {
           image: null,
           imagePreview: null,
+          imageChanged: false,
+          backendImagePath: "",
           title: "",
           description: "",
           eventType:
@@ -344,11 +351,22 @@ export default function ProgramAndEvents({ userRole }) {
       }
 
       // Basic validation with reasonable requirements
-      if (!e.image) {
+      // Image rules:
+      // - New events (no id) must have an uploaded image
+      // - Existing events do NOT require re-uploading image unless user changed it
+      const isNewEvent = !e.id;
+      const hasAnyImage = !!e.image || !!e.imagePreview || !!e.backendImagePath;
+      if (isNewEvent && !hasAnyImage) {
         alert(`Event #${i + 1}: Image is required`);
         setLoading(false);
         return;
       }
+      if (!isNewEvent && e.imageChanged && !e.image) {
+        alert(`Event #${i + 1}: Please select an image file`);
+        setLoading(false);
+        return;
+      }
+
       if (!e.title || e.title.trim().length < 5) {
         alert(`Event #${i + 1}: Title must be at least 5 characters`);
         setLoading(false);
@@ -501,7 +519,8 @@ export default function ProgramAndEvents({ userRole }) {
       );
 
       // Append images with proper field name format
-      if (event.image && typeof event.image !== "string") {
+      // Only upload when user actually selected a new image
+      if (event.imageChanged && event.image && typeof event.image !== "string") {
         const eventType = event.eventType || userRole;
         formData.append(`eventimages[${index}][${eventType}]`, event.image);
       }
