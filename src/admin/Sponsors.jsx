@@ -20,15 +20,7 @@ export default function Sponsors({ userRole }) {
     imagePreview: ""
   });
 
-  const urlToFile = async (url, filename) => {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new File([blob], filename, {
-      type: blob.type,
-      lastModified: Date.now(),
-    });
-  };
-
+  
   const fetchSponsors = async () => {
     setLoading(true);
     try {
@@ -37,29 +29,21 @@ export default function Sponsors({ userRole }) {
       if (res?.success && res?.sponsors?.length > 0) {
         const mappedSponsors = await Promise.all(
           res.sponsors.map(async (sponsor) => {
-            let imageFile = null;
-            let imagePreview = null;
+            // IMPORTANT:
+            // Do NOT fetch existing images as blobs here.
+            // In production, /uploads may not send CORS headers, so fetch() will fail.
+            // For preview, a direct <img src="..."> works fine without CORS.
             const imageUrl = sponsor.image || sponsor.logo;
+            const imagePreview = imageUrl ? `${API_URL}/${imageUrl.replace(/^uploads\//, '')}` : null;
             const title = sponsor.title || sponsor.name || "";
             const link = sponsor.link || sponsor.website || "";
-            
-            if (imageUrl) {
-              const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${API_URL}/${imageUrl}`;
-              const filename = imageUrl.split("/").pop();
-              
-              try {
-                imageFile = await urlToFile(fullImageUrl, filename);
-                imagePreview = URL.createObjectURL(imageFile);
-              } catch (error) {
-                console.error("Error converting image URL to file:", error);
-              }
-            }
-            
+
             return {
               _id: sponsor._id,
               title,
               link,
-              image: imageFile,
+              // Only set a File when user uploads a new one
+              image: null,
               imagePreview,
               createdAt: sponsor.createdAt
             };
