@@ -28,6 +28,7 @@ const navigationItems = [
 
 export function AdminDashboard({   }) {
   const [userRole, setUserRole] = useState(null);
+  console.log("hello on home page");
   const scheduleAutoLogout = () => {
       const expiry = localStorage.getItem("35gntgij@3e#ed");
       if (!expiry) return;
