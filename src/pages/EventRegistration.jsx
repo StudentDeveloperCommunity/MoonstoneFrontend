@@ -76,17 +76,15 @@ const deleteMember = (index) => {
     setForm((prev) => ({ ...prev, [key]: val }));
   };
 
-  const onChange = (key) => (e) => {
-    let val = e.target.value;
-
-    if (key === "leadPhone") {
-      val = val.replace(/\D/g, "").slice(0, 10);
+  const onChange = (field) => (e) => {
+    const value = e.target.value;
+    // Allow only numbers for UTR
+    if (field === "utrNumber") {
+      const numericValue = value.replace(/\D/g, "");
+      setForm({ ...form, [field]: numericValue });
+    } else {
+      setForm({ ...form, [field]: value });
     }
-    if (key.endsWith("Name")) {
-      val = val.slice(0, 20);
-    }
-
-    setField(key, val);
   };
 
   /** --------------- FILE VALIDATION (1 MB LIMIT) ----------------- */
@@ -317,6 +315,7 @@ members.forEach((m, i) => {
             <Input
               label="UTR Number"
               name="utrNumber"
+              type="tel"
               placeholder="Make sure to provide correct UTR Number"
               value={form.utrNumber}
               onChange={onChange("utrNumber")}

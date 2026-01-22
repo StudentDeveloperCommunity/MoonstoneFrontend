@@ -189,7 +189,7 @@ const Navbar = memo(function Navbar() {
                 />
               </svg>
               <span className="text-lg font-medium tracking-wide group-hover:translate-x-1 transition-transform duration-300">
-                About
+                Highlights
               </span>
             </Link>
 
