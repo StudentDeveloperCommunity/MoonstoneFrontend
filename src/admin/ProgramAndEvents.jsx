@@ -246,29 +246,18 @@ export default function ProgramAndEvents({ userRole }) {
     if (res?.success && res?.events?.length > 0) {
       const mappedEvents = await Promise.all(
         res.events.map(async (event) => {
-          let imageFile = null;
-          let imagePreview = null;
-
-          if (event.image) {
-            const imageUrl = `${API_URL}/${event.image}`;
-            const filename = event.image.split("/").pop();
-
-            // 🔥 Convert backend image URL → REAL File
-            imageFile = await urlToFile(imageUrl, filename);
-
-            if (imageFile) {
-              imagePreview = URL.createObjectURL(imageFile);
-            } else {
-              imagePreview = null;
-            }
-          }
+          // IMPORTANT:
+          // Do NOT fetch existing images as blobs here.
+          // In production, /uploads may not send CORS headers, so fetch() will fail.
+          // For preview, a direct <img src="..."> works fine without CORS.
+          const backendImagePath = event.image || "";
+          const imagePreview = backendImagePath ? `${API_URL}/${backendImagePath}` : null;
 
           return {
             ...event,
-            backendImagePath: event.image || "",
-            // actual File stored here 👇
-            image: imageFile,
-            // preview for UI
+            backendImagePath,
+            // Only set a File when user uploads a new one
+            image: null,
             imagePreview,
             imageChanged: false,
             eventDate: formatDate(event.eventDate),
