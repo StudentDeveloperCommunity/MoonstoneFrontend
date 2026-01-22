@@ -3,7 +3,7 @@ import { API_URL } from "../../NwConfig";
 
 const DeleteSponsor = async (sponsorId) => {
   try {
-    const response = await axios.delete(`${API_URL}/api/sponsor/${sponsorId}`, {
+    const response = await axios.delete(`${API_URL}/api/sponsor/delete/${sponsorId}`, {
       withCredentials: true,
     });
     console.log("Delete response:", response.data);
