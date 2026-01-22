@@ -11,7 +11,8 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import Eventsindetails from "./pages/Eventsindetails.jsx";
 import Payment from "./pages/Payment.jsx";
 import CheckRegistrationStatus from "./pages/CheckRegistrationStatus.jsx";
-import Developers from "./pages/Developers.jsx"
+import Developers from "./pages/Developers.jsx";
+import NotFound from "./pages/NotFound.jsx";
 // import Sponsers from "./components/Sponsors.jsx";
 const AppContent = () => {
   const location = useLocation();
@@ -32,6 +33,9 @@ const AppContent = () => {
         <Route path="/check-registration" element={<CheckRegistrationStatus />} />
         <Route path="/admin" element={<Login />} />
         <Route path="/admin_dashboard" element={<AdminDashboard />} />
+
+        {/* 404 Not Found Route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       {!isExcluded && <Footer />}

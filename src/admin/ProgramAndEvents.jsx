@@ -1,4 +1,14 @@
 import { useEffect, useState } from "react";
+// Helper to format time in 12-hour format with AM/PM
+function formatTime12Hour(time24) {
+  if (!time24) return "";
+  const [hour, minute] = time24.split(":");
+  let h = parseInt(hour, 10);
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12;
+  if (h === 0) h = 12;
+  return `${h}:${minute} ${ampm}`;
+}
 import EventAdd from "../api-files/EventAPIs/EventAdd";
 import WebsiteLoader from "../Loader/WebsiteLoader";
 import EventFetcher from "../api-files/EventAPIs/EventFetcher";
@@ -273,6 +283,7 @@ export default function ProgramAndEvents({ userRole }) {
             maxParticipants: event.maxParticipants || 1,
             fee: event.fee || "",
             eventTime: event.eventTime || "",
+            lastRegistrationDate: event.lastRegistrationDate ? new Date(event.lastRegistrationDate).toISOString().split("T")[0] : "",
             description: event.description || "",
             title: event.title || "",
             // Preserve the original event type
@@ -474,6 +485,7 @@ export default function ProgramAndEvents({ userRole }) {
       formData.append(`events[${index}][description]`, event.description || "");
       formData.append(`events[${index}][eventDate]`, event.eventDate || "");
       formData.append(`events[${index}][eventTime]`, event.eventTime || "");
+      formData.append(`events[${index}][lastRegistrationDate]`, event.lastRegistrationDate || "");
       formData.append(
         `events[${index}][eventCategory]`,
         event.eventCategory || "",
@@ -861,6 +873,7 @@ export default function ProgramAndEvents({ userRole }) {
                 }
               />
 
+
               {/* EVENT TIME */}
               <label className="block font-medium mb-2">Event Time</label>
               <input
@@ -872,6 +885,22 @@ export default function ProgramAndEvents({ userRole }) {
                 onChange={(e) =>
                   updateEvent(index, "eventTime", e.target.value)
                 }
+              />
+              {/* Display formatted time */}
+              {event.eventTime && (
+                <div className="text-xs text-gray-600 mb-4">
+                  <b>12-hour format:</b> {formatTime12Hour(event.eventTime)}
+                </div>
+              )}
+
+              {/* LAST REGISTRATION DATE */}
+              <label className="block font-medium mb-2">Last Registration Date</label>
+              <input
+                type="date"
+                className={`w-full p-2 border rounded mb-4 ${isFieldReadOnly(index) ? "bg-gray-100" : ""}`}
+                value={event.lastRegistrationDate || ""}
+                readOnly={isFieldReadOnly(index)}
+                onChange={(e) => updateEvent(index, "lastRegistrationDate", e.target.value)}
               />
 
               {/* EVENT TYPE — ADMIN AND CLUB ADMINS */}
