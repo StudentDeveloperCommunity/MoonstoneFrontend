@@ -34,7 +34,7 @@ export default function Sponsors({ userRole }) {
             // In production, /uploads may not send CORS headers, so fetch() will fail.
             // For preview, a direct <img src="..."> works fine without CORS.
             const imageUrl = sponsor.image || sponsor.logo;
-            const imagePreview = imageUrl ? `${API_URL}/${imageUrl.replace(/^uploads\//, '')}` : null;
+            const imagePreview = imageUrl ? `${API_URL}/${imageUrl}` : null;
             const title = sponsor.title || sponsor.name || "";
             const link = sponsor.link || sponsor.website || "";
 
