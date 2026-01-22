@@ -2,6 +2,7 @@ import OfficeCatMan from '../assets/logo/Office cat man 😼.jpeg';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Mail, Phone } from 'lucide-react';
+import { FaLinkedin } from 'react-icons/fa';
 
 // Data for Developers
 const developerData = [
@@ -10,7 +11,7 @@ const developerData = [
         name: "Dr. Prashant Panse",
         role: "Mentor",
         department: "Computer Science Department",
-        email: "gmail.com",
+        email: "@university.edu",
         category: "Mentors",
         image: ""
     },
@@ -20,7 +21,8 @@ const developerData = [
         name: "Avdhesh Bhadoriya",
         role: "Project Lead",
         department: "Information Technology",
-        email: "avdheshbhadoriya@gmail.com",
+            email: "avdheshbhadoriya090@gmail.com",
+            linkedin: "https://www.linkedin.com/in/avdhesh-bhadoriya/",
         category: "Project Lead",
         image: OfficeCatMan
     },
@@ -94,7 +96,7 @@ const developerData = [
     id: 14,
     name: "Dr. Kailash C. Bandu",
     role: "Mentor",
-    department: "Information Technology Department",
+    department: "Computer Science Department",
     email: "@university.edu",
     category: "Mentors",
     image: ""
@@ -220,10 +222,23 @@ export default function Developers() {
 
                                                     <div className="mt-3 text-gray-600 text-sm space-y-1">
                                                         <p className="text-xs text-gray-500 mb-1 truncate">{dev.department}</p>
-                                                        <div className="flex items-center gap-2 hover:text-blue-600 transition-colors cursor-pointer truncate">
+                                                        <div className="flex items-center gap-2 hover:text-blue-600 transition-colors cursor-pointer break-all">
                                                             <Mail className="w-3.5 h-3.5 shrink-0" />
-                                                            <span className="text-xs truncate">{dev.email}</span>
+                                                            <span className="text-xs">{dev.email}</span>
                                                         </div>
+                                                        {dev.linkedin && dev.role === "Project Lead" && (
+                                                            <div className="flex items-center mt-1">
+                                                                <a
+                                                                    href={dev.linkedin}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-blue-700 text-xs font-semibold hover:underline flex items-center gap-1 break-all"
+                                                                >
+                                                                    <FaLinkedin className="w-4 h-4" />
+                                                                    LinkedIn
+                                                                </a>
+                                                            </div>
+                                                        )}
                                                         <div className="flex items-center gap-2 hover:text-blue-600 transition-colors cursor-pointer truncate">
                                                             {/* <Phone className="w-3.5 h-3.5 shrink-0" /> */}
                                                             <span className="text-xs truncate">{dev.phone}</span>
