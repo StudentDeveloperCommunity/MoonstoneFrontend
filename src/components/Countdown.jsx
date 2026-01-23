@@ -45,7 +45,7 @@ export function Countdown({ onComplete }) {
   const padZero = (num) => String(num).padStart(2, "0");
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center mb-16">
       {/* COUNTER GRID */}
       <div
         className="
@@ -64,7 +64,7 @@ export function Countdown({ onComplete }) {
               bg-[rgb(140_140_140_/_20%)]
               rounded-md sm:rounded-lg
               px-2 py-3
-              sm:px-4 sm:py-5
+              sm:px-3 sm:py-3
               md:px-0 md:py-0 md:aspect-square
             "
           >
