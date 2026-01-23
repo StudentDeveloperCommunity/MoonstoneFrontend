@@ -218,7 +218,7 @@ export default function ProgramAndEvents({ userRole }) {
   const urlToFile = async (url, filename) => {
     try {
       console.log("Fetching image from:", url);
-      const response = await fetch(url);
+      const response = await fetch(url, { credentials: "include" });
 
       if (!response.ok) {
         console.error(
