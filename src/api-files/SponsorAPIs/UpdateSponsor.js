@@ -3,8 +3,11 @@ import { API_URL } from "../../NwConfig";
 
 const UpdateSponsor = async (sponsorId, formData) => {
   try {
-    // Prefer explicit update path to avoid dynamic route matching issues
-    const res = await axios.put(`${API_URL}/api/sponsor/update/${sponsorId}`, formData, {
+    // Add sponsorId to formData for POST request
+    formData.append("sponsorId", sponsorId);
+    
+    // Use POST method like delete route
+    const res = await axios.post(`${API_URL}/api/sponsor/update`, formData, {
       withCredentials: true,
       headers: { "Content-Type": "multipart/form-data" },
     });
