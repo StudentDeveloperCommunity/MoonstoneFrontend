@@ -3,13 +3,12 @@ import { Countdown } from "../components/Countdown";
 import Events from "../components/Events";
 import Clubs from "../components/Clubs";
 import VideoCarousel from "../components/VideoCarousel";
-
 import Faq from "../components/Faq";
 import Sponsors from "../components/Sponsors";
 
 export default function Index() {
   const [countdownStart] = useState(
-    new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+    new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
   );
 
   const stars = useMemo(() => {
@@ -44,7 +43,7 @@ export default function Index() {
 
   return (
     <div className="relative w-full bg-black overflow-hidden">
-      {/* background */}
+      {/* ✅ background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         {stars.map((star) => (
           <div
@@ -68,31 +67,31 @@ export default function Index() {
       </div>
 
       <div className="relative z-10 w-full">
-        <div className="relative min-h-screen w-full overflow-hidden">
+        {/* ✅ HERO SECTION */}
+        <section className="relative w-full overflow-hidden">
           <div
-            className="relative flex flex-col items-center text-center px-2"
-            style={{ paddingTop: "20vh" }}
+            className="mx-auto flex min-h-screen w-full max-w-[1600px] flex-col items-center justify-start text-center 
+                       px-3 sm:px-6 lg:px-10
+                       pt-32 sm:pt-40 md:pt-28 lg:pt-32 xl:pt-36 2xl:pt-40
+                       pb-0 m-0"
           >
-            <div className="flex flex-col items-center justify-center  space-y-0">
+            {/* ✅ Title */}
+            <div className="flex flex-col items-center justify-center m-0 p-0 space-y-1 sm:space-y-2">
               <h1
-                className="flex items-center justify-center text-white leading-none flex-nowrap gap-[0.20em]"
+                className="flex items-center justify-center text-white leading-none flex-nowrap gap-2 sm:gap-3 m-0 p-0"
                 style={{
                   fontFamily: "Tac One",
                   fontWeight: 1000,
-                  letterSpacing: "-0.12em",
-                  fontSize: "clamp(100px, 10vw, 140px)",
+                  letterSpacing: "-0.10em",
+                  fontSize: "clamp(56px, 10vw, 140px)",
                 }}
               >
                 <span>M</span>
 
-                <div
-                  style={{
-                    perspective: "1000px",
-                  }}
-                >
-                  <div className="w-[clamp(70px,10vw,110px)] h-[clamp(70px,10vw,110px)] rounded-full overflow-hidden">
+                <div style={{ perspective: "1000px" }}>
+                  <div className="rounded-full overflow-hidden w-[clamp(52px,9vw,110px)] h-[clamp(52px,9vw,110px)] m-0 p-0">
                     <video
-                      src={"https://res.cloudinary.com/desybsga6/video/upload/v1768939310/moon_zsbpxz.mp4"}
+                      src="https://res.cloudinary.com/desybsga6/video/upload/v1768939310/moon_zsbpxz.mp4"
                       autoPlay
                       loop
                       muted
@@ -107,8 +106,8 @@ export default function Index() {
                   style={{
                     fontFamily: "Symbol",
                     fontWeight: 1000,
-                    letterSpacing: "-0.12em",
-                    fontSize: "clamp(70px, 10vw, 100px)",
+                    letterSpacing: "-0.10em",
+                    fontSize: "clamp(52px, 9vw, 110px)",
                   }}
                 >
                   O
@@ -118,8 +117,8 @@ export default function Index() {
                   style={{
                     fontFamily: "Tac One",
                     fontWeight: 1000,
-                    letterSpacing: "-0.12em",
-                    fontSize: "clamp(70px, 10vw, 110px)",
+                    letterSpacing: "-0.10em",
+                    fontSize: "clamp(52px, 9vw, 120px)",
                   }}
                 >
                   N
@@ -127,26 +126,27 @@ export default function Index() {
               </h1>
 
               <h2
-                className="text-white mt-0.2 drop-shadow-lg"
+                className="text-white drop-shadow-lg m-0 p-0"
                 style={{
                   fontFamily: "Squada One",
                   fontWeight: 900,
                   letterSpacing: "-0.02em",
-                  fontSize: "clamp(50px, 8vw, 90px)",
+                  fontSize: "clamp(30px, 7vw, 90px)",
                 }}
               >
                 STONE ' 26
               </h2>
             </div>
 
-            <div className="mb-8 md:mb-10">
+            {/* ✅ Button */}
+            <div className="mt-2 sm:mt-3 md:mt-4 mb-3 sm:mb-4 md:mb-5 m-0 p-0">
               <button
                 onClick={() => {
                   document
                     .getElementById("events-section")
                     ?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="inline-flex px-7 py-1.5 justify-center items-center gap-2.5 rounded-[25px] text-white text-[18px] md:text-[20px] font-normal transition-all duration-300 hover:scale-105 group"
+                className="inline-flex px-6 sm:px-7 py-2 justify-center items-center gap-2.5 rounded-[25px] text-white text-[16px] sm:text-[18px] md:text-[20px] font-normal transition-all duration-300 hover:scale-105 active:scale-95"
                 style={{
                   background: "rgba(255, 255, 255, 0.20)",
                   backdropFilter: "blur(2px)",
@@ -165,37 +165,60 @@ export default function Index() {
               </button>
             </div>
 
-            <div className="pt-6 scale-90 md:scale-95 mt-3 max-w-md">
-              <Countdown startTime={countdownStart} />
+            {/* ✅ COUNTDOWN + VIDEO CAROUSEL (NO GAP) */}
+            <div className="w-full flex flex-col items-center justify-start m-0 p-0 gap-0">
+              <div className="w-full flex justify-center m-0 p-0">
+                <div className="w-full max-w-[360px] sm:max-w-[420px] md:max-w-[520px] lg:max-w-[640px] m-0 p-0">
+                  <Countdown startTime={countdownStart} />
+                </div>
+              </div>
+
+              <div className="w-full m-0 p-0 -mt-[1px]">
+                <VideoCarousel />
+              </div>
             </div>
+
+            <style>{`
+              @keyframes twinkleStrong {
+                0%   { opacity: 0.05; transform: scale3d(0.9, 0.9, 1) translateZ(0); }
+                50%  { opacity: 1;    transform: scale3d(1.35, 1.35, 1) translateZ(0); }
+                100% { opacity: 0.15; transform: scale3d(1, 1, 1) translateZ(0); }
+              }
+
+              @keyframes moveStar {
+                0%   { transform: translate3d(0, 0, 0); }
+                100% { transform: translate3d(80px, -60px, 0); }
+              }
+
+              @keyframes spin3D {
+                from { transform: rotateY(0deg); }
+                to   { transform: rotateY(360deg); }
+              }
+            `}</style>
+          </div>
+        </section>
+
+        <div className="w-full flex flex-col m-0 p-0 space-y-2 sm:space-y-3 md:space-y-4">
+          {/* Events */}
+          <div id="events-section" className="w-full m-0 p-0 ">
+            <Events />
           </div>
 
-          <style>{`
-            @keyframes twinkleStrong {
-              0%   { opacity: 0.05; transform: scale3d(0.9, 0.9, 1) translateZ(0); }
-              50%  { opacity: 1;    transform: scale3d(1.35, 1.35, 1) translateZ(0); }
-              100% { opacity: 0.15; transform: scale3d(1, 1, 1) translateZ(0); }
-            }
+          {/* Clubs */}
+          <div className="w-full m-0 p-0">
+            <Clubs />
+          </div>
 
-            @keyframes moveStar {
-              0%   { transform: translate3d(0, 0, 0); }
-              100% { transform: translate3d(80px, -60px, 0); }
-            }
+          {/* Sponsors */}
+          <section id="sponsors" className="w-full m-0 p-0">
+            <Sponsors />
+          </section>
 
-            @keyframes spin3D {
-              from { transform: rotateY(0deg); }
-              to   { transform: rotateY(360deg); }
-            }
-          `}</style>
+          {/* FAQ */}
+          <div className="w-full m-0 p-0">
+            <Faq />
+          </div>
         </div>
-
-        <VideoCarousel />
-        <Events />
-        <Clubs />
-        <section id="sponsors">
-        <Sponsors />
-        </section>
-        <Faq />
       </div>
     </div>
   );

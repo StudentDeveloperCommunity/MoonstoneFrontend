@@ -27,11 +27,11 @@ export default function Index() {
   return (
     <div
       id="events-section"
-      className="min-h-screen flex items-center justify-center px-4 py-16"
+      className="h-fit sm:min-h-fit flex items-center justify-center px-4 py-6 sm:py-12 md:py-16"
     >
       <div className="w-full max-w-[1440px]">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-6 sm:mb-10">
           <h2
             className="text-xl font-bold uppercase mb-4 tracking-wide text-gray-300"
             style={{
@@ -62,7 +62,7 @@ export default function Index() {
         </div>
 
         {/* Event Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 place-items-center" style={{ contain: 'layout style paint' }}>
+        <div className="grid grid-cols-1  md:grid-cols-3 lg:grid-cols-3 gap-4 px-4 place-items-center" style={{ contain: 'layout style paint' }}>
           {events.map((event) => (
             <Link
               key={event.id}

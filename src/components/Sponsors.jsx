@@ -157,7 +157,7 @@ export default function Sponsors() {
               rel="noopener noreferrer"
               className="
                 flex-shrink-0
-                w-[100px] h-[70px]
+                w-[300px] h-[200px]
                 sm:w-[200px] sm:h-[140px]
                 md:w-[280px] md:h-[180px]
                 lg:w-[400px] lg:h-[240px]
@@ -227,19 +227,19 @@ export default function Sponsors() {
         }
 
         .animate-sponsor-marquee {
-          animation: sponsorMarquee 25s linear infinite;
+          animation: sponsorMarquee 35s linear infinite;
         }
 
         /* Much faster on mobile/tablet to show all sponsors quickly */
         @media (max-width: 768px) {
           .animate-sponsor-marquee {
-            animation: sponsorMarquee 12s linear infinite;
+            animation: sponsorMarquee 18s linear infinite;
           }
         }
 
         @media (max-width: 480px) {
           .animate-sponsor-marquee {
-            animation: sponsorMarquee 5s linear infinite;
+            animation: sponsorMarquee 8s linear infinite;
           }
         }
 

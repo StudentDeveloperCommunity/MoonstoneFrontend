@@ -18,7 +18,7 @@ const Navbar = memo(function Navbar() {
     <>
       {/* NAVBAR */}
       <nav className="fixed top-2 sm:top-4 inset-x-0 z-50 flex justify-center text-white font-sans">
-        <div className="relative w-full max-w-7xl px-2 sm:px-4">
+        <div className="relative w-full max-w-7xl px-2 sm:mb-8 sm:px-4">
           <div
             className="
             absolute inset-0
