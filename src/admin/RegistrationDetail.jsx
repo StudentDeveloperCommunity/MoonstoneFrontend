@@ -290,113 +290,131 @@ useEffect(() => {
           </thead>
 
           <tbody>
-            {filteredRegistrations?.map((r) => (
-              <tr key={r?._id} className="border-t hover:bg-gray-50">
-                <Td>
-                  <p className="font-semibold">{r?.LeadName}</p>
-                  <p className="text-sm text-gray-500">{r?.LeadEmail}</p>
-                  {userRole === 'admin' && <p className="text-xs text-gray-400">{r?.LeadMobileNumber}</p>}
-                </Td>
+            {filteredRegistrations?.length > 0 ? (
+              filteredRegistrations?.map((r) => (
+                <tr key={r?._id} className="border-t hover:bg-gray-50">
+                  <Td>
+                    <p className="font-semibold">{r?.LeadName}</p>
+                    <p className="text-sm text-gray-500">{r?.LeadEmail}</p>
+                    {userRole === 'admin' && <p className="text-xs text-gray-400">{r?.LeadMobileNumber}</p>}
+                  </Td>
 
-                <Td>
-                  <p className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">{r?._id}</p>
-                </Td>
+                  <Td>
+                    <p className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">{r?._id}</p>
+                  </Td>
 
-                <Td>
-                  <p className="font-medium">{r?.eventID?.title}</p>
-                  <span className="text-xs capitalize text-gray-500">
-                    {r?.event_type}
-                  </span>
-                </Td>
+                  <Td>
+                    <p className="font-medium">{r?.eventID?.title}</p>
+                    <span className="text-xs capitalize text-gray-500">
+                      {r?.event_type}
+                    </span>
+                  </Td>
 
-                <Td>
-                  {r?.members.length
-                    ? r?.members.map((m, i) => (
-                        <div key={i}>{m.name} ({m.enroll})</div>
-                      ))
-                    : "Single Person Event"}
-                </Td>
+                  <Td>
+                    {r?.members.length
+                      ? r?.members.map((m, i) => (
+                          <div key={i}>{m.name} ({m.enroll})</div>
+                        ))
+                      : "Single Person Event"}
+                  </Td>
 
-                <Td>₹{r?.fee}</Td>
+                  <Td>₹{r?.fee}</Td>
 
-                <Td>
-                  <StatusBadge status={r?.approved} />
-                </Td>
+                  <Td>
+                    <StatusBadge status={r?.approved} />
+                  </Td>
 
-                <Td>
-                  <button
-                    onClick={() => {
-                      const imagePath = r?.paymentFile?.startsWith('uploads/') ? r?.paymentFile : `uploads/${r?.paymentFile}`;
-                      setPreviewImage(`${API_URL}/${imagePath}`);
-                      setutrNumber(r?.utrNumber);
-                    }}
-                    className="text-blue-600 underline"
-                  >
-                    View
-                  </button>
-                </Td>
+                  <Td>
+                    <button
+                      onClick={() => {
+                        const imagePath = r?.paymentFile?.startsWith('uploads/') ? r?.paymentFile : `uploads/${r?.paymentFile}`;
+                        setPreviewImage(`${API_URL}/${imagePath}`);
+                        setutrNumber(r?.utrNumber);
+                      }}
+                      className="text-blue-600 underline"
+                    >
+                      View
+                    </button>
+                  </Td>
 
                   <Td className="space-x-2">
-{userRole === 'admin' && (
-  <div className="flex gap-2">
-    <select
-      onChange={(e) => {
-        if (e.target.value && e.target.value !== r?.approved) {
-          updateStatus(r?._id, e.target.value);
-          e.target.value = ''; // Reset select
-        }
-      }}
-      className="px-2 py-1 border rounded text-sm"
-      defaultValue=""
-    >
-      <option value="" disabled>Change Status</option>
-      <option value="approved">Approve</option>
-      <option value="pending">Pending</option>
-      <option value="rejected">Reject</option>
-    </select>
-    <button
-      onClick={() => deleteRegistration(r?._id)}
-      className="bg-red-600 text-white px-3 py-1 rounded-md flex items-center gap-1"
-      title="Delete Registration"
-    >
-      <Trash2 size={14} />
-      Delete
-    </button>
-  </div>
-)}
-{["techno", "cultural", "sports"].includes(userRole) && (
-  <div className="flex gap-2">
-    <select
-      onChange={(e) => {
-        if (e.target.value && e.target.value !== r?.approved) {
-          updateStatus(r?._id, e.target.value);
-          e.target.value = ''; // Reset select
-        }
-      }}
-      className="px-2 py-1 border rounded text-sm"
-      defaultValue=""
-    >
-      <option value="" disabled>Change Status</option>
-      <option value="approved">Approve</option>
-      <option value="pending">Pending</option>
-      <option value="rejected">Reject</option>
-    </select>
-    <button
-      onClick={() => alert('This feature is only available for Master admin. Kinly contact him to take this action.')}
-      className="bg-red-600 text-white px-3 py-1 rounded-md flex items-center gap-1"
-      title="Delete Registration"
-    >
-      <Trash2 size={14} />
-      Delete
-    </button>
-    <div className="text-xs text-gray-500 italic self-center">
-      Club Admin
-    </div>
-  </div>
-)}
+                    {userRole === 'admin' && (
+                      <div className="flex gap-2">
+                        <select
+                          onChange={(e) => {
+                            if (e.target.value && e.target.value !== r?.approved) {
+                              updateStatus(r?._id, e.target.value);
+                              e.target.value = ''; // Reset select
+                            }
+                          }}
+                          className="px-2 py-1 border rounded text-sm"
+                          defaultValue=""
+                        >
+                          <option value="" disabled>Change Status</option>
+                          <option value="approved">Approve</option>
+                          <option value="pending">Pending</option>
+                          <option value="rejected">Reject</option>
+                        </select>
+                        <button
+                          onClick={() => deleteRegistration(r?._id)}
+                          className="bg-red-600 text-white px-3 py-1 rounded-md flex items-center gap-1"
+                          title="Delete Registration"
+                        >
+                          <Trash2 size={14} />
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                    {["techno", "cultural", "sports"].includes(userRole) && (
+                      <div className="flex gap-2">
+                        <select
+                          onChange={(e) => {
+                            if (e.target.value && e.target.value !== r?.approved) {
+                              updateStatus(r?._id, e.target.value);
+                              e.target.value = ''; // Reset select
+                            }
+                          }}
+                          className="px-2 py-1 border rounded text-sm"
+                          defaultValue=""
+                        >
+                          <option value="" disabled>Change Status</option>
+                          <option value="approved">Approve</option>
+                          <option value="pending">Pending</option>
+                          <option value="rejected">Reject</option>
+                        </select>
+                        <button
+                          onClick={() => alert('This feature is only available for Master admin. Kinly contact him to take this action.')}
+                          className="bg-red-600 text-white px-3 py-1 rounded-md flex items-center gap-1"
+                          title="Delete Registration"
+                        >
+                          <Trash2 size={14} />
+                          Delete
+                        </button>
+                        <div className="text-xs text-gray-500 italic self-center">
+                          Club Admin
+                        </div>
+                      </div>
+                    )}
                   </Td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" className="text-center py-8 text-gray-500">
+                  <div className="flex flex-col items-center">
+                    <p className="text-lg font-medium">No entries found</p>
+                    <p className="text-sm text-gray-400">
+                      {eventFilter !== "all" 
+                        ? "No registrations found for the selected event and filters."
+                        : statusFilter !== "all"
+                        ? "No registrations found for the selected status."
+                        : "No registrations found for the selected filters."
+                      }
+                    </p>
+                  </div>
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
