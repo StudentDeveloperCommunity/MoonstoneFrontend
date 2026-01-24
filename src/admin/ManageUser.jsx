@@ -8,19 +8,15 @@ import WebsiteLoader from "../Loader/WebsiteLoader";
 export default function ManageUser() {
   const [open, setOpen] = useState(false);
   const handleAddUser = async (newUser) => {
-    const res=await AdminRegister(newUser)
-    console.log(res)
-    if(res?.message=="Successfully User Created"){
-        alert("User Created Successfully")
-        setUsers((prev) => [...prev, newUser]);
-        setOpen(false);
+    const res = await AdminRegister(newUser);
+    if (res?.success) {
+      alert("User Created Successfully");
+      // Use the saved user from the API so _id is present for future deletes
+      setUsers((prev) => [...prev, res.user]);
+      setOpen(false);
+    } else {
+      alert(res?.message || "User with same email already exists");
     }
-    else{
-        alert("User with same email already exists")
-        // setOpen(false);
-    }
-    // setUsers((prev) => [...prev, newUser]);
-    console.log("New User Added:", newUser);
   };
 
   const handleRemoveUser = async (userId) => {
@@ -42,25 +38,7 @@ export default function ManageUser() {
     }
   };
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "Ayaan Shaikh",
-      email: "ayaan@example.com",
-      password: "Ayaan@123",
-      role: "Admin",
-      showPassword: false,
-    },
-    {
-      id: 2,
-      name: "Hafsa Khan",
-      email: "hafsa@example.com",
-      password: "Hafsa@789",
-      role: "techno",
-      showPassword: false,
-    },
-    
-  ]);
+  const [users, setUsers] = useState([]);
 
   const getusers=async()=>{
     setLoading(true);
