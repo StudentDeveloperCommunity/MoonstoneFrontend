@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Countdown } from "../components/Countdown";
 import Events from "../components/Events";
 import Clubs from "../components/Clubs";
@@ -8,8 +8,18 @@ import Sponsors from "../components/Sponsors";
 
 export default function Index() {
   const [countdownStart] = useState(
-    new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
+    new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
   );
+
+  // Hide the right-side scrollbar on Home page only (html + body)
+  useEffect(() => {
+    document.body.classList.add("scrollbar-none");
+    document.documentElement.classList.add("scrollbar-none");
+    return () => {
+      document.body.classList.remove("scrollbar-none");
+      document.documentElement.classList.remove("scrollbar-none");
+    };
+  }, []);
 
   const stars = useMemo(() => {
     const STAR_COUNT = 150;
@@ -142,9 +152,16 @@ export default function Index() {
             <div className="mt-2 sm:mt-3 md:mt-4 mb-3 sm:mb-4 md:mb-5 m-0 p-0">
               <button
                 onClick={() => {
-                  document
-                    .getElementById("events-section")
-                    ?.scrollIntoView({ behavior: "smooth" });
+                  // Scroll to Explore Events (Discover What's Happening Next)
+                  const target = document.querySelector("#events-section");
+                  if (target) {
+                    const top =
+                      target.getBoundingClientRect().top + window.scrollY - 80; // account for navbar
+                    window.scrollTo({ top, behavior: "smooth" });
+                  } else {
+                    // Fallback: navigate to All Events page
+                    window.location.href = "/allevents";
+                  }
                 }}
                 className="inline-flex px-6 sm:px-7 py-2 justify-center items-center gap-2.5 rounded-[25px] text-white text-[16px] sm:text-[18px] md:text-[20px] font-normal transition-all duration-300 hover:scale-105 active:scale-95"
                 style={{
@@ -199,8 +216,8 @@ export default function Index() {
         </section>
 
         <div className="w-full flex flex-col m-0 p-0 space-y-2 sm:space-y-3 md:space-y-4">
-          {/* Events */}
-          <div id="events-section" className="w-full m-0 p-0 ">
+          {/* Glimpses Of Events */}
+          <div id="glimpses-section" className="w-full m-0 p-0 ">
             <Events />
           </div>
 
