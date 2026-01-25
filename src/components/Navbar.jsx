@@ -1,5 +1,5 @@
 import { useState, memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/logo/FinalLogo.png";
 
 const Navbar = memo(function Navbar() {
@@ -7,6 +7,9 @@ const Navbar = memo(function Navbar() {
 
   const gradientTextHover =
     "hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-orange-400 hover:via-pink-500 hover:to-cyan-400 hover:drop-shadow-[0_0_10px_rgba(236,72,153,0.5)] transition-all duration-300";
+
+  const activeText =
+    "text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-pink-500 to-cyan-400 drop-shadow-[0_0_10px_rgba(236,72,153,0.5)]";
 
   const mobileLinkStyle =
     "group flex items-center gap-4 p-3.5 rounded-xl text-white/90 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all duration-300 active:scale-[0.98]";
@@ -38,44 +41,44 @@ const Navbar = memo(function Navbar() {
                 <img
                   src={logo}
                   alt="Moonstone Logo"
-                  className="w-32 sm:w-44 lg:w-56 h-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                  className="w-40 sm:w-44 lg:w-56 h-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
                 />
               </div>
             </Link>
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center gap-6 xl:gap-8">
-              <Link
+              <NavLink
                 to="/"
-                className={`text-white/90 text-[15px] font-medium tracking-wide ${gradientTextHover}`}
+                className={({ isActive }) => `text-[15px] font-medium tracking-wide ${isActive ? activeText : "text-white/90"} ${gradientTextHover}`}
               >
                 Home
-              </Link>
+              </NavLink>
               {/* about page changed  as highlights */}
-              <Link
-                className={`text-white/90 text-[15px] font-medium tracking-wide ${gradientTextHover}`}
+              <NavLink
+                className={({ isActive }) => `text-[15px] font-medium tracking-wide ${isActive ? activeText : "text-white/90"} ${gradientTextHover}`}
                 to="/about"
               >
                 Highlights
-              </Link>
+              </NavLink>
 
               <div className="relative group">
-                <button
-                  onClick={() => (window.location.href = "/allevents?id:all")}
-                  className={`text-white/90 text-[15px] font-medium tracking-wide flex items-center gap-1 ${gradientTextHover}`}
+                <NavLink
+                  to="/allevents?id=all"
+                  className={({ isActive }) => `text-[15px] font-medium tracking-wide flex items-center gap-1 ${isActive ? activeText : "text-white/90"} ${gradientTextHover}`}
                 >
                   Events
-                </button>
+                </NavLink>
               </div>
 
-              <Link
+              <NavLink
                 to="/developers"
-                className={`text-white/90 text-[15px] font-medium tracking-wide ${gradientTextHover}`}
+                className={({ isActive }) => `text-[15px] font-medium tracking-wide ${isActive ? activeText : "text-white/90"} ${gradientTextHover}`}
               >
                 Developers
-              </Link>
+              </NavLink>
 
-              <Link
+              <NavLink
                 className="
                   relative px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300
                   bg-gradient-to-r from-orange-500 via-pink-500 to-cyan-500
@@ -88,7 +91,7 @@ const Navbar = memo(function Navbar() {
                 to="/check-registration"
               >
                 Check Registration
-              </Link>
+              </NavLink>
             </div>
 
             <button
@@ -132,14 +135,14 @@ const Navbar = memo(function Navbar() {
 
           <div
             className="
-            fixed top-[4.5rem] sm:top-[5.5rem] inset-x-0
+            fixed top-[5.5rem] sm:top-[6.5rem] inset-x-0
             mx-auto w-[95%] max-w-sm
             bg-black/90 backdrop-blur-2xl
             border border-white/15
             rounded-2xl
-            p-4
+            p-6
             z-40
-            space-y-2
+            space-y-3
             shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)]
             max-h-[80vh] overflow-y-auto
             animate-in fade-in slide-in-from-top-4 duration-300 ease-out
@@ -185,7 +188,7 @@ const Navbar = memo(function Navbar() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
                 />
               </svg>
               <span className="text-lg font-medium tracking-wide group-hover:translate-x-1 transition-transform duration-300">
@@ -194,12 +197,10 @@ const Navbar = memo(function Navbar() {
             </Link>
 
             {/* Events */}
-            <button
-              onClick={() => {
-                window.location.href = "/allevents?id:all";
-                setIsMobileOpen(false);
-              }}
-              className={`${mobileLinkStyle} w-full`}
+            <NavLink
+              to="/allevents?id=all"
+              onClick={() => setIsMobileOpen(false)}
+              className={({ isActive }) => `${mobileLinkStyle} w-full ${isActive ? "bg-white/10 border-white/20" : ""}`}
             >
               <svg
                 className={mobileIconStyle}
@@ -217,7 +218,7 @@ const Navbar = memo(function Navbar() {
               <span className="text-lg font-medium tracking-wide group-hover:translate-x-1 transition-transform duration-300">
                 Events
               </span>
-            </button>
+            </NavLink>
 
             {/* Developers */}
             <Link
