@@ -15,8 +15,8 @@ const developerData = [
   {
     id: 1,
     name: "Dr. Prashant Panse",
-    role: "Secretary",
-    department: "Dean of Digitalization",
+    role: "Mentor",
+    department: "Associate Dean of Digitalization",
     email: "@university.edu",
     linkedin: "https://www.linkedin.com/in/prof-prashant-panse-19709041/",
     category: "Mentors",
@@ -107,8 +107,8 @@ const developerData = [
   {
     id: 13,
     name: "Dr. Sanket Gupta",
-    role: "Manager",
-    department: "Computer Science Department",
+    role: "Mentor",
+    department: "Assistant Professor in CSE Department",
     email: "@university.edu",
     linkedin: "https://www.linkedin.com/in/dr-sanket-gupta-04a11895/",
     category: "Mentors",
@@ -117,8 +117,8 @@ const developerData = [
   {
     id: 14,
     name: "Dr. Kailash C. Bandu",
-    role: "Chairperson",
-    department: "Computer Science Department",
+    role: "Mentor",
+    department: "HOD of CSE Department",
     email: "@university.edu",
     linkedin: "https://www.linkedin.com/in/prof-dr-kailash-chandra-bandhu-941a9928/",
     category: "Mentors",
