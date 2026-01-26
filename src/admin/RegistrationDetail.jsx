@@ -278,7 +278,7 @@ export default function RegistrationDetail({ userRole }) {
               <Th className="text-center">Lead</Th>
               <Th className="text-center">Registration ID</Th>
               <Th className="text-center">UTR Number</Th>
-              <Th className="text-center">Event</Th>
+              <Th className="text-center min-w-[180px]">Event</Th>
               <Th className="text-center">Members</Th>
               <Th className="text-center">Fee</Th>
               <Th className="text-center">Status</Th>
