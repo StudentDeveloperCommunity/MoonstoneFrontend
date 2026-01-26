@@ -17,7 +17,7 @@ const developerData = [
     name: "Dr. Prashant Panse",
     role: "Mentor",
     department: "Associate Dean of Digitalization",
-    email: "@university.edu",
+    email: "prashant.panse@medicaps.ac.in",
     linkedin: "https://www.linkedin.com/in/prof-prashant-panse-19709041/",
     category: "Mentors",
     image: pansesir,
@@ -96,20 +96,20 @@ const developerData = [
   {
     id: 10,
     name: "Avdhesh Bhadoriya",
-    role: "Deployer",
+    role: "DevOps Engineer",
     department: "Information Technology",
     email: "avdheshbhadoriya090@gmail.com",
     linkedin: "https://www.linkedin.com/in/avdhesh-bhadoriya/",
-    category: "Deployers",
+    category: "DevOps Engineer",
     image: OfficeCatMan,
   },
 
   {
     id: 13,
     name: "Dr. Sanket Gupta",
-    role: "Mentor",
+    role: "Mentor & Faculty In-Charge, SDC",
     department: "Assistant Professor in CSE Department",
-    email: "@university.edu",
+    email: "sanket.gupta@medicaps.ac.in",
     linkedin: "https://www.linkedin.com/in/dr-sanket-gupta-04a11895/",
     category: "Mentors",
     image: sanketsir,
@@ -119,7 +119,7 @@ const developerData = [
     name: "Dr. Kailash C. Bandu",
     role: "Mentor",
     department: "HOD of CSE Department",
-    email: "@university.edu",
+    email: "kailash.bandhu@medicaps.ac.in",
     linkedin: "https://www.linkedin.com/in/prof-dr-kailash-chandra-bandhu-941a9928/",
     category: "Mentors",
     image: bandhusir,
@@ -131,7 +131,7 @@ const categories = [
   "Project Lead",
   "Frontend Developers",
   "Backend Developers",
-  "Deployers",
+  "DevOps Engineer",
 ];
 
 export default function Developers() {
