@@ -60,14 +60,14 @@ const Events = memo(function Events() {
             gap: 1rem;
           }
           
-          .scroll-container:hover {
-            animation-play-state: paused;
-          }
+          // .scroll-container:hover {
+          //   animation-play-state: paused;
+          // }
           
-          .carousel-image {
-            will-change: transform;
-            transform: translateZ(0);
-          }
+          // .carousel-image {
+          //   will-change: transform;
+          //   transform: translateZ(0);
+          // }
         `}</style>
 
         <div className="flex gap-4 scroll-container">
@@ -79,18 +79,22 @@ const Events = memo(function Events() {
             ...imagesTop,
           ].map((img, index) => (
             <motion.div
-              key={index}
-              className="relative min-w-[160px] xs:min-w-[200px] sm:min-w-[280px] md:min-w-[350px] lg:min-w-[400px] h-28 xs:h-32 sm:h-48 md:h-64 lg:h-72 cursor-pointer rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-xl flex-shrink-0 carousel-image"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            >
-              <img
-                src={img}
-                alt={`Event ${index}`}
-                className="w-full h-full object-cover carousel-image"
-                loading="lazy"
-              />
-            </motion.div>
+  key={index}
+  className="relative min-w-[160px] xs:min-w-[200px] sm:min-w-[280px] md:min-w-[350px] lg:min-w-[400px]
+             h-28 xs:h-32 sm:h-48 md:h-64 lg:h-72
+             cursor-pointer rounded-lg sm:rounded-xl md:rounded-2xl
+             overflow-hidden shadow-xl flex-shrink-0"
+  whileHover={{ scale: 1.05 }}
+  transition={{ duration: 1, ease: "easeOut" }}
+>
+  <img
+    src={img}
+    alt={`Event ${index}`}
+    loading="lazy"
+    className="absolute inset-0 w-full h-full object-cover"
+  />
+</motion.div>
+
           ))}
         </div>
       </div>
