@@ -89,7 +89,7 @@ export default function About() {
               </h1>
 
               <p
-                className="className= text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
+                className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed text-justify"
                 // style={{ fontFamily: "Istok Web, sans-serif" }}
               >
                 The fest is an unbeatable combination of talent and teamwork,

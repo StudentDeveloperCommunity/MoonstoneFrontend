@@ -13,12 +13,12 @@ const Events = memo(function Events() {
   return (
     <section
       id="events"
-      className="py-12 sm:py-20 pt-8 sm:pt-14 text-white scroll-mt-24"
+      className="py-8 sm:py-16 pt-6 sm:pt-12 text-white scroll-mt-24"
     >
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-        <div className="text-center mb-6 sm:mb-10">
+      <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8">
+        <div className="text-center mb-4 sm:mb-8">
           <h2
-            className="text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase mb-2 sm:mb-4 tracking-wide text-gray-300"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase mb-1 sm:mb-3 tracking-wide text-gray-300"
             style={{
               WebkitTextStroke: "0.2px white",
               fontFamily: "Istok Web, sans-serif",

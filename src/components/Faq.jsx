@@ -40,35 +40,29 @@ export default function Index() {
 
   return (
     
-    <div className="bg-black/40 flex items-center justify-center mt-8 py-2 px-4 sm:px-6 lg:px-6">
+    <div className="bg-black/40 flex items-center justify-center mt-6 py-2 px-3 sm:px-6 lg:px-6">
       <div className="w-full max-w-[1440px]">
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <h1
-  
-className="
-    text-4xl md:text-5xl font-bold uppercase mb-4
-    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
-    bg-clip-text text-transparent
-  "
->
-  FAQ's
-</h1>
+            className="text-2xl sm:text-4xl md:text-5xl font-bold uppercase mb-3 sm:mb-4 bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent"
+          >
+            FAQ's
+          </h1>
           <div
-            className="text-xl sm:text-2xl font-bold uppercase mb-3"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase mb-2 sm:mb-3"
             style={{
               color: "white",
-              // fontFamily: "Istok Web, sans-serif",
+              fontFamily: "Istok Web, sans-serif",
             }}
           >
             Frequently asked questions
-            
           </div>
 
           
 
 
           <p
-           className="text-gray-300 max-w-2xl mx-auto leading-relaxed"
+            className="text-xs sm:text-sm md:text-base text-gray-300 max-w-2xl mx-auto leading-relaxed"
             style={{
               fontFamily: "'Istok Web',sans-serif",
             }}
