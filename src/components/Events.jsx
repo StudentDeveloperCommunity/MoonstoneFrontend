@@ -13,12 +13,12 @@ const Events = memo(function Events() {
   return (
     <section
       id="events"
-      className="py-12 sm:py-20 pt-8 sm:pt-14 text-white scroll-mt-24"
+      className="py-8 sm:py-16 pt-6 sm:pt-12 text-white scroll-mt-24"
     >
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-        <div className="text-center mb-6 sm:mb-10">
+      <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8">
+        <div className="text-center mb-4 sm:mb-8">
           <h2
-            className="text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase mb-2 sm:mb-4 tracking-wide text-gray-300"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase mb-1 sm:mb-3 tracking-wide text-gray-300"
             style={{
               WebkitTextStroke: "0.2px white",
               fontFamily: "Istok Web, sans-serif",
@@ -80,7 +80,7 @@ const Events = memo(function Events() {
           ].map((img, index) => (
             <motion.div
               key={index}
-              className="relative min-w-[250px] sm:min-w-[350px] md:min-w-[400px] h-40 sm:h-56 md:h-72 cursor-pointer rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-xl flex-shrink-0 carousel-image"
+              className="relative min-w-[160px] xs:min-w-[200px] sm:min-w-[280px] md:min-w-[350px] lg:min-w-[400px] h-28 xs:h-32 sm:h-48 md:h-64 lg:h-72 cursor-pointer rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-xl flex-shrink-0 carousel-image"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 1, ease: "easeOut" }}
             >
