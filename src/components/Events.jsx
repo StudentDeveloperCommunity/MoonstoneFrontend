@@ -80,7 +80,7 @@ const Events = memo(function Events() {
           ].map((img, index) => (
             <motion.div
               key={index}
-              className="relative min-w-[250px] sm:min-w-[350px] md:min-w-[400px] h-40 sm:h-56 md:h-72 cursor-pointer rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-xl flex-shrink-0 carousel-image"
+              className="relative min-w-[160px] xs:min-w-[200px] sm:min-w-[280px] md:min-w-[350px] lg:min-w-[400px] h-28 xs:h-32 sm:h-48 md:h-64 lg:h-72 cursor-pointer rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-xl flex-shrink-0 carousel-image"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 1, ease: "easeOut" }}
             >
