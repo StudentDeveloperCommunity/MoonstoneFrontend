@@ -14,7 +14,7 @@ import WebsiteLoader from "../Loader/WebsiteLoader";
 import EventFetcher from "../api-files/EventAPIs/EventFetcher";
 import { API_URL } from "../NwConfig";
 import EventDelete from "../api-files/EventAPIs/EventDelete";
-import defaultEventImage from "../assets/events/Gemini_Generated_Image_yfmm0ryfmm0ryfmm (1).webp";
+// import defaultEventImage from "../assets/events/Gemini_Generated_Image_yfmm0ryfmm0ryfmm (1).webp";
 
 export default function ProgramAndEvents({ userRole }) {
   const [events, setEvents] = useState([]);

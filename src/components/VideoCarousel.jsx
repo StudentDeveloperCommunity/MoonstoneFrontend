@@ -62,7 +62,7 @@ export default function About() {
                 onError={() => setVideoLoaded(true)}
               >
                 <source
-                  src="https://res.cloudinary.com/desybsga6/video/upload/v1768937362/moonstonediary_ocotcz.mp4"
+                  src="https://res.cloudinary.com/desybsga6/video/upload/v1769590591/moonstonediary_wpo6mu.mp4"
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
