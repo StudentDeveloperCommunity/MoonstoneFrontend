@@ -9,7 +9,7 @@ import sanketsir from "../assets/developers/sanket.webp";
 import nikhilsharma from "../assets/developers/nikhilsharma.webp";
 import srashti from "../assets/developers/srashti.webp";
 import karishma from "../assets/developers/karishma.webp";
-import avdhesh from "../assets/developers/avdhesh.jpeg";
+import avdhesh from "../assets/developers/avdhesh.webp";
 
 // Data for Developers
 const developerData = [
