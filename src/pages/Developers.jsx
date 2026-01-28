@@ -9,6 +9,7 @@ import sanketsir from "../assets/developers/sanket.webp";
 import nikhilsharma from "../assets/developers/nikhilsharma.webp";
 import srashti from "../assets/developers/srashti.webp";
 import karishma from "../assets/developers/karishma.webp";
+import avdhesh from "../assets/developers/avdhesh.webp";
 
 // Data for Developers
 const developerData = [
@@ -31,7 +32,7 @@ const developerData = [
     email: "avdheshbhadoriya090@gmail.com",
     linkedin: "https://www.linkedin.com/in/avdhesh-bhadoriya/",
     category: "Project Lead",
-    image: OfficeCatMan,
+    image: avdhesh,
   },
   {
     id: 5,
