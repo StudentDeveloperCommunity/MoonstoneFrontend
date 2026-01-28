@@ -13,7 +13,7 @@ const Events = memo(function Events() {
   return (
     <section
       id="events"
-      className="py-8 sm:py-16 pt-6 sm:pt-12 text-white scroll-mt-24"
+      className="py-8 sm:py-16 pt-2 sm:pt-12 text-white scroll-mt-24"
     >
       <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8">
         <div className="text-center mb-4 sm:mb-8">
@@ -79,22 +79,21 @@ const Events = memo(function Events() {
             ...imagesTop,
           ].map((img, index) => (
             <motion.div
-  key={index}
-  className="relative min-w-[160px] xs:min-w-[200px] sm:min-w-[280px] md:min-w-[350px] lg:min-w-[400px]
-             h-28 xs:h-32 sm:h-48 md:h-64 lg:h-72
+              key={index}
+              className="relative min-w-[240px] xs:min-w-[280px] sm:min-w-[320px] md:min-w-[350px] lg:min-w-[450px]
+             h-40 xs:h-48 sm:h-48 md:h-64 lg:h-72
              cursor-pointer rounded-lg sm:rounded-xl md:rounded-2xl
              overflow-hidden shadow-xl flex-shrink-0"
-  whileHover={{ scale: 1.05 }}
-  transition={{ duration: 1, ease: "easeOut" }}
->
-  <img
-    src={img}
-    alt={`Event ${index}`}
-    loading="lazy"
-    className="absolute inset-0 w-full h-full object-cover"
-  />
-</motion.div>
-
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            >
+              <img
+                src={img}
+                alt={`Event ${index}`}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </motion.div>
           ))}
         </div>
       </div>

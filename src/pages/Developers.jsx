@@ -73,7 +73,7 @@ const developerData = [
     email: "avdheshbhadoriya090@gmail.com",
     linkedin: "https://www.linkedin.com/in/avdhesh-bhadoriya/",
     category: "Backend Developers",
-    image: OfficeCatMan,
+    image: avdhesh,
   },
 //   {
 //     id: 8,
@@ -102,7 +102,7 @@ const developerData = [
     email: "avdheshbhadoriya090@gmail.com",
     linkedin: "https://www.linkedin.com/in/avdhesh-bhadoriya/",
     category: "DevOps Engineer",
-    image: OfficeCatMan,
+    image: avdhesh,
   },
 
   {
@@ -264,7 +264,7 @@ export default function Developers() {
                             <p className="text-xs text-gray-500 mb-1 truncate">
                               {dev.department}
                             </p>
-                            <div className="flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 hover:text-blue-600 transition-colors cursor-pointer break-all">
+                            <div className="flex items-center justify-center sm:justify-start gap-1 sm:gap-1 hover:text-blue-600 transition-colors cursor-pointer break-all">
                               <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
                               <span className="text-xs break-all">{dev.email}</span>
                             </div>
@@ -281,7 +281,7 @@ export default function Developers() {
                                 </a>
                               </div>
                             )}
-                            <div className="flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 hover:text-blue-600 transition-colors cursor-pointer truncate">
+                            <div className="flex items-center justify-center sm:justify-start gap-1 sm:gap-1 hover:text-blue-600 transition-colors cursor-pointer truncate">
                               {/* <Phone className="w-3.5 h-3.5 shrink-0" /> */}
                               <span className="text-xs truncate">
                                 {dev.phone}
