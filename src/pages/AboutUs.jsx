@@ -1,7 +1,6 @@
 
 import React, { useMemo } from "react";
 
-import banner from "../assets/events/Banner_Ashking.png";
 
 export default function AboutUs() {
   // ⭐ Generate stars ONLY ONCE (so they don't change on re-render)
@@ -67,7 +66,7 @@ export default function AboutUs() {
         <section className="w-3/4 h-3/4 mb-20">
           {/* Full Width Image */}
           <img
-            src={banner}
+            src='https://res.cloudinary.com/desybsga6/image/upload/v1769589852/Banner_Ashking_wksqif.png'
             alt="Moonstone at Medicaps"
             className="w-full h-1/2 object-cover mb-8"
           />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import eventImg from "../assets/events/TAN04895.webp";
+// import eventImg from "../assets/events/TAN04895.webp";
 import { useLocation } from "react-router-dom";
 import { API_URL, Frontend_API_URL } from "../NwConfig";
 import RegisterToEvent from "../api-files/RegisertAPIs/RegiseterToEvent";
