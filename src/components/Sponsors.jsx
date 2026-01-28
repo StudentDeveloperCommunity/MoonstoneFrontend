@@ -73,30 +73,25 @@ export default function Sponsors() {
 
   if (sponsors.length === 0) {
     return (
-      <section className="w-full py-14 bg-black/45 overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+      <section className="w-full py-10 sm:py-14 bg-black/45 overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8">
           <div className="text-center">
             <h3
-             className="text-xl sm:text-2xl font-bold uppercase mb-3"
-            style={{
-              color: "white",
+              className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase mb-2 sm:mb-3"
+              style={{
+                color: "white",
+                fontFamily: "Istok Web, sans-serif",
               }}
             >
               Event Sponsors
             </h3>
             <h2
-              className="
-    
-    text-4xl md:text-5xl font-bold uppercase mb-4
-    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
-    bg-clip-text text-transparent
-  "
-              // style={{ fontFamily: "Istok Web, sans-serif" }}
+              className="text-2xl sm:text-4xl md:text-5xl font-bold uppercase mb-3 sm:mb-4 bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent"
             >
               Supporting Every Step
             </h2>
 
-            <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-gray-300 max-w-2xl mx-auto leading-relaxed">
               Our sponsors help make this event possible. Check back soon to see
               our amazing partners!
             </p>
@@ -107,12 +102,12 @@ export default function Sponsors() {
   }
 
   return (
-    <section className="w-full py-14 bg-black/45 overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+    <section className="w-full py-10 sm:py-14 bg-black/45 overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8">
         {/* Heading */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8 sm:mb-10">
           <h2
-            className="text-xl font-bold uppercase mb-4 tracking-wide text-gray-300"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase mb-2 sm:mb-3 tracking-wide text-gray-300"
             style={{
               WebkitTextStroke: "0.2px white",
               fontFamily: "Istok Web, sans-serif",
@@ -122,17 +117,13 @@ export default function Sponsors() {
           </h2>
 
           <h2
-            className="
-    text-4xl md:text-5xl font-bold uppercase mb-4
-    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
-    bg-clip-text text-transparent
-  "
+            className="text-2xl sm:text-4xl md:text-5xl font-bold uppercase mb-3 sm:mb-4 bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent"
           >
             Supporting Every Step
           </h2>
 
           <p
-            className="text-white/90 text-sm md:text-base max-w-[851px] mx-auto"
+            className="text-xs sm:text-sm md:text-base text-white/90 max-w-[851px] mx-auto"
             style={{ fontFamily: "Istok Web, sans-serif" }}
           >
             This year's fest is shaped and strengthened by the support of our

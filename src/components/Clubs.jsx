@@ -1,25 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-
 export default function Index() {
   const events = [
     {
       id: 1,
       title: "Sports",
-      image: "https://res.cloudinary.com/desybsga6/image/upload/v1768938825/Kabaddi_1_akr5kj.webp",
+      image:
+        "https://res.cloudinary.com/desybsga6/image/upload/v1768938825/Kabaddi_1_akr5kj.webp",
       linkto: "/allevents?id=2",
     },
     {
       id: 2,
       title: "Techno",
-      image: "https://res.cloudinary.com/desybsga6/image/upload/v1768938646/Gemini_Generated_Image_yfmm0ryfmm0ryfmm_1_ghfkwd.webp",
+      image:
+        "https://res.cloudinary.com/desybsga6/image/upload/v1768938646/Gemini_Generated_Image_yfmm0ryfmm0ryfmm_1_ghfkwd.webp",
       linkto: "/allevents?id=1",
     },
     {
       id: 3,
       title: "Cultural",
-      image: "https://res.cloudinary.com/desybsga6/image/upload/v1768938427/199A4372_oc9cng.webp",
+      image:
+        "https://res.cloudinary.com/desybsga6/image/upload/v1768938427/199A4372_oc9cng.webp",
       linkto: "/allevents?id=3",
     },
   ];
@@ -27,13 +29,13 @@ export default function Index() {
   return (
     <div
       id="events-section"
-      className="h-fit sm:min-h-fit flex items-center justify-center px-4 py-6 sm:py-12 md:py-16"
+      className="h-fit sm:min-h-fit flex items-center justify-center px-3 sm:px-4 py-1 sm:py-8 md:py-1"
     >
       <div className="w-full max-w-[1440px]">
         {/* Header */}
-        <div className="text-center mb-6 sm:mb-10">
+        <div className="text-center mb-4 sm:mb-8">
           <h2
-            className="text-xl font-bold uppercase mb-4 tracking-wide text-gray-300"
+            className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase mb-2 sm:mb-3 tracking-wide text-gray-300"
             style={{
               WebkitTextStroke: "0.2px white",
               fontFamily: "Istok Web, sans-serif",
@@ -42,18 +44,13 @@ export default function Index() {
             Explore events
           </h2>
 
-         <h1
-  className="
-    text-4xl md:text-5xl font-bold uppercase mb-4
-    bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500
-    bg-clip-text text-transparent
-  "
->
-  Discover What's Happening Next
-</h1>
+          <h1
+            className="text-2xl sm:text-4xl md:text-5xl font-bold uppercase mb-3 sm:mb-4 bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent"
+          >
+            Discover What's Happening Next
+          </h1>
 
-
-          <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Stay in the loop with the exciting moments unfolding around you.
             From fresh experiences to major highlights, every event is crafted
             to spark curiosity and celebration. There’s always something new
@@ -62,7 +59,10 @@ export default function Index() {
         </div>
 
         {/* Event Grid */}
-        <div className="grid grid-cols-1  md:grid-cols-3 lg:grid-cols-3 gap-4 px-4 place-items-center" style={{ contain: 'layout style paint' }}>
+        <div
+          className="grid grid-cols-1  md:grid-cols-3 lg:grid-cols-3 gap-4 px-3 sm:px-4 place-items-center"
+          style={{ contain: "layout style paint" }}
+        >
           {events.map((event) => (
             <Link
               key={event.id}

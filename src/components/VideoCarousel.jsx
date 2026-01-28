@@ -62,7 +62,7 @@ export default function About() {
                 onError={() => setVideoLoaded(true)}
               >
                 <source
-                  src="https://res.cloudinary.com/desybsga6/video/upload/v1768937362/moonstonediary_ocotcz.mp4"
+                  src="https://res.cloudinary.com/desybsga6/video/upload/v1769590591/moonstonediary_wpo6mu.mp4"
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
@@ -89,7 +89,7 @@ export default function About() {
               </h1>
 
               <p
-                className="className= text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
+                className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed text-justify"
                 // style={{ fontFamily: "Istok Web, sans-serif" }}
               >
                 The fest is an unbeatable combination of talent and teamwork,

@@ -5,7 +5,7 @@ import {
   FaLinkedinIn,
   FaInstagram,
   FaYoutube,
-  FaFacebookF,
+  FaFacebookF,  
 } from "react-icons/fa6";
 
 export default function Footer() {
@@ -119,14 +119,18 @@ export default function Footer() {
         >
           {/* ✅ MAIN ROW (Aligned like image) */}
           <div className="flex flex-col xl:flex-row items-start justify-between gap-12 mb-10">
-            {/* LEFT: LOGO */}
-            <div className="group cursor-pointer w-full xl:w-[32%] flex justify-center xl:justify-start">
+            {/* LEFT: LOGO - navigates to Home */}
+            <Link
+              to="/"
+              aria-label="Go to Home"
+              className="group cursor-pointer w-full xl:w-[32%] flex justify-center xl:justify-start"
+            >
               <img
                 src={logo}
                 alt="Moonstone Logo"
                 className="w-80 sm:w-96 md:w-[28rem] h-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
               />
-            </div>
+            </Link>
 
             {/* CENTER: LINKS (two columns) */}
             <div className="w-full xl:w-[38%] flex justify-center">

@@ -16,12 +16,17 @@ html, body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  background-color: #000; /* Ensure page background is black to avoid right-side white gutter */
+  /* Ensure proper text sizing on all devices */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
+  background-color: #000; /* Match root background to black */
 }
 
 /* Hide scrollbar for all browsers */

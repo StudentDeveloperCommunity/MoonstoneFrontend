@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import eventImg from "../assets/events/TAN04895.webp";
+// import eventImg from "../assets/events/TAN04895.webp";
 import { useLocation } from "react-router-dom";
 import { API_URL, Frontend_API_URL } from "../NwConfig";
 import RegisterToEvent from "../api-files/RegisertAPIs/RegiseterToEvent";
@@ -78,13 +78,7 @@ const deleteMember = (index) => {
 
   const onChange = (field) => (e) => {
     const value = e.target.value;
-    // Allow only numbers for UTR
-    if (field === "utrNumber") {
-      const numericValue = value.replace(/\D/g, "");
-      setForm({ ...form, [field]: numericValue });
-    } else {
-      setForm({ ...form, [field]: value });
-    }
+    setForm({ ...form, [field]: value });
   };
 
   /** --------------- FILE VALIDATION (1 MB LIMIT) ----------------- */
@@ -129,9 +123,6 @@ members.forEach((m, i) => {
 
     if (!paymentFile) e.paymentFile = "Payment screenshot required";
 
-    if (!form.utrNumber.trim()) e.utrNumber = "UTR number required";
-    else if (form.utrNumber.trim().length < 5) e.utrNumber = "UTR number must be at least 5 characters";
-
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -150,7 +141,6 @@ members.forEach((m, i) => {
   formData.append("LeadEnroll", form.leadEnroll);
   formData.append("LeadEmail", form.leadEmail);
   formData.append("LeadMobileNumber", form.leadPhone);
-  formData.append("utrNumber", form.utrNumber);
   formData.append("event_type", form.eventType);
   formData.append("fee", form.eventfee);
   formData.append("eventID", form.eventId);
@@ -310,18 +300,6 @@ members.forEach((m, i) => {
               File selected: {paymentFile.name}
             </p>
           )}
-
-          <div className="mt-4">
-            <Input
-              label="UTR Number"
-              name="utrNumber"
-              type="tel"
-              placeholder="Make sure to provide correct UTR Number"
-              value={form.utrNumber}
-              onChange={onChange("utrNumber")}
-              error={errors.utrNumber}
-            />
-          </div>
         </FormSection>
 
         {/* Submit */}
