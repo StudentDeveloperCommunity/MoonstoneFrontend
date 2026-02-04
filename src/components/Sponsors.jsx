@@ -139,7 +139,7 @@ export default function Sponsors() {
         <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black/45 to-transparent z-10" />
 
         {/* ✅ marquee track - continuous smooth animation */}
-        <div className="flex items-center gap-2 sm:gap-4 md:gap-8 lg:gap-12 animate-sponsor-marquee py-8 will-change-transform">
+        <div className="flex items-center gap-4 animate-sponsor-marquee py-8 will-change-transform">
           {marqueeSponsors.map((sp, idx) => (
             <a
               key={`${sp.id}-${idx}`}
