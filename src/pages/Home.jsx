@@ -54,19 +54,25 @@ export default function Index() {
     console.log('Download PDF clicked');
     
     try {
-      // Create download link for actual PDF file
+      // Create download link for actual PDF file from frontend public folder
       const link = document.createElement('a');
       link.href = '/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.pdf';
       link.download = 'Moonstone 2k26 Events Timeline-Updated.pdf';
       link.style.display = 'none';
+      // Force download behavior
+      link.setAttribute('download', 'Moonstone 2k26 Events Timeline-Updated.pdf');
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
       document.body.appendChild(link);
       
-      console.log('Triggering PDF download...');
+      console.log('Triggering PDF download...', link.href);
       link.click();
       
       // Cleanup
       setTimeout(() => {
-        document.body.removeChild(link);
+        if (document.body.contains(link)) {
+          document.body.removeChild(link);
+        }
         console.log('PDF download completed');
       }, 100);
       
@@ -80,19 +86,25 @@ export default function Index() {
     console.log('Download Excel clicked');
     
     try {
-      // Create download link for actual Excel file
+      // Create download link for actual Excel file from frontend public folder
       const link = document.createElement('a');
       link.href = '/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.xlsx';
       link.download = 'Moonstone 2k26 Events Timeline-Updated.xlsx';
       link.style.display = 'none';
+      // Force download behavior
+      link.setAttribute('download', 'Moonstone 2k26 Events Timeline-Updated.xlsx');
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
       document.body.appendChild(link);
       
-      console.log('Triggering Excel download...');
+      console.log('Triggering Excel download...', link.href);
       link.click();
       
       // Cleanup
       setTimeout(() => {
-        document.body.removeChild(link);
+        if (document.body.contains(link)) {
+          document.body.removeChild(link);
+        }
         console.log('Excel download completed');
       }, 100);
       
