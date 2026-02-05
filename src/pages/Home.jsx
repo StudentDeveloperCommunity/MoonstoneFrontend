@@ -56,7 +56,7 @@ export default function Index() {
     try {
       // Create download link for actual PDF file
       const link = document.createElement('a');
-      link.href = '/src/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.pdf';
+      link.href = '/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.pdf';
       link.download = 'Moonstone 2k26 Events Timeline-Updated.pdf';
       link.style.display = 'none';
       document.body.appendChild(link);
@@ -77,12 +77,12 @@ export default function Index() {
   };
   
   const downloadCSV = () => {
-    console.log('Download CSV clicked');
+    console.log('Download Excel clicked');
     
     try {
       // Create download link for actual Excel file
       const link = document.createElement('a');
-      link.href = '/src/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.xlsx';
+      link.href = '/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.xlsx';
       link.download = 'Moonstone 2k26 Events Timeline-Updated.xlsx';
       link.style.display = 'none';
       document.body.appendChild(link);
