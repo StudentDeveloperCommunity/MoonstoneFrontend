@@ -300,6 +300,18 @@ members.forEach((m, i) => {
               File selected: {paymentFile.name}
             </p>
           )}
+
+          <div className="mt-4">
+            <Input
+              label="UTR Number"
+              name="utrNumber"
+              placeholder="Enter valid UTR number"
+              value={form.utrNumber}
+              onChange={onChange("utrNumber")}
+              error={errors.utrNumber}
+            />
+          </div>
+          
         </FormSection>
 
         {/* Submit */}
