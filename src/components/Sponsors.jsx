@@ -44,15 +44,10 @@ export default function Sponsors() {
     return () => clearInterval(interval);
   }, []);
 
-  // ✅ duplicate array for seamless marquee loop (8x for perfect mobile scroll)
+  // ✅ duplicate array for seamless marquee loop
   const marqueeSponsors = useMemo(() => {
     if (sponsors.length === 0) return [];
-    // 8x duplication ensures all sponsors scroll continuously on mobile
-    const repeated = [];
-    for (let i = 0; i < 8; i++) {
-      repeated.push(...sponsors);
-    }
-    return repeated;
+    return [...sponsors, ...sponsors];
   }, [sponsors]);
 
   if (loading) {
@@ -139,7 +134,7 @@ export default function Sponsors() {
         <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black/45 to-transparent z-10" />
 
         {/* ✅ marquee track - continuous smooth animation */}
-        <div className="flex items-center gap-2 sm:gap-4 md:gap-8 lg:gap-12 animate-sponsor-marquee py-8 will-change-transform">
+        <div className="inline-flex items-center gap-3 animate-sponsor-marquee py-8 will-change-transform w-max">
           {marqueeSponsors.map((sp, idx) => (
             <a
               key={`${sp.id}-${idx}`}
@@ -148,8 +143,8 @@ export default function Sponsors() {
               rel="noopener noreferrer"
               className="
                 flex-shrink-0
-                w-[300px] h-[200px]
-                sm:w-[200px] sm:h-[140px]
+                w-[220px] h-[140px]
+                sm:w-[240px] sm:h-[160px]
                 md:w-[280px] md:h-[180px]
                 lg:w-[400px] lg:h-[240px]
                 xl:w-[440px] xl:h-[260px]

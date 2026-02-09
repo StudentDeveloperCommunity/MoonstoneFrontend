@@ -13,10 +13,10 @@ const Events = memo(function Events() {
   return (
     <section
       id="events"
-      className="py-8 sm:py-16 pt-2 sm:pt-12 text-white scroll-mt-24"
+      className="py-10 sm:py-14 text-white scroll-mt-24"
     >
       <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8">
-        <div className="text-center mb-4 sm:mb-8">
+        <div className="text-center mb-8 sm:mb-10">
           <h2
             className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase mb-1 sm:mb-3 tracking-wide text-gray-300"
             style={{
