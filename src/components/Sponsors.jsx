@@ -208,7 +208,7 @@ export default function Sponsors() {
             transform: translateX(0); 
           }
           100% { 
-            transform: translateX(-20%); 
+            transform: translateX(-14%); 
           }
         }
 
