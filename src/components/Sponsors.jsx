@@ -50,6 +50,28 @@ export default function Sponsors() {
     return [...sponsors, ...sponsors];
   }, [sponsors]);
 
+  // Calculate dynamic animation duration based on number of sponsors
+  const animationDuration = useMemo(() => {
+    if (sponsors.length <= 0) return 30; // Default fallback
+    // Base duration + 2s per sponsor
+    return Math.max(20, sponsors.length * 2);
+  }, [sponsors.length]);
+
+  // Calculate dynamic translation based on number of sponsors
+  const getMarqueeKeyframes = useMemo(() => {
+    if (sponsors.length <= 0) return `@keyframes sponsorMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-25%); } }`;
+    
+    // Calculate percentage to translate based on number of sponsors
+    const translatePercentage = Math.min(50, Math.max(25, sponsors.length * 10)); // Between 25% and 50%
+    
+    return `
+      @keyframes sponsorMarquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-${translatePercentage}%); }
+      }
+    `;
+  }, [sponsors.length]);
+
   if (loading) {
     return (
       <section className="w-full py-14 bg-black/45 overflow-hidden">
@@ -201,31 +223,32 @@ export default function Sponsors() {
 
       {/* optional bottom line like screenshot */}
 
-      {/* ✅ Smooth infinite marquee animation */}
+      {/* Smooth infinite marquee animation */}
       <style>{`
-        @keyframes sponsorMarquee {
-          0% { 
-            transform: translateX(0); 
-          }
-          100% { 
-            transform: translateX(-14%); 
-          }
-        }
+        ${getMarqueeKeyframes}
 
         .animate-sponsor-marquee {
-          animation: sponsorMarquee 35s linear infinite;
+          animation: sponsorMarquee ${animationDuration}s linear infinite;
+          display: flex;
+          width: max-content;
         }
 
-        /* Much faster on mobile/tablet to show all sponsors quickly */
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+          .animate-sponsor-marquee {
+            animation-duration: ${Math.max(15, sponsors.length * 1.5)}s;
+          }
+        }
+
         @media (max-width: 768px) {
           .animate-sponsor-marquee {
-            animation: sponsorMarquee 18s linear infinite;
+            animation-duration: ${Math.max(10, sponsors.length * 1.2)}s;
           }
         }
 
         @media (max-width: 480px) {
           .animate-sponsor-marquee {
-            animation: sponsorMarquee 8s linear infinite;
+            animation-duration: ${Math.max(8, sponsors.length)}s;
           }
         }
 
