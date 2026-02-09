@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import eventImg from "../assets/events/TAN04895.webp";
+// import eventImg from "../assets/events/TAN04895.webp";
 import { useLocation } from "react-router-dom";
 import { API_URL, Frontend_API_URL } from "../NwConfig";
 import RegisterToEvent from "../api-files/RegisertAPIs/RegiseterToEvent";
@@ -71,6 +71,7 @@ const deleteMember = (index) => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   const phoneRegex = /^[6-9]\d{9}$/;
+  const utrRegex = /^\d+$/;
 
   const setField = (key, val) => {
     setForm((prev) => ({ ...prev, [key]: val }));
@@ -78,6 +79,19 @@ const deleteMember = (index) => {
 
   const onChange = (field) => (e) => {
     const value = e.target.value;
+    
+    // UTR validation logic
+    if (field === "utrNumber") {
+      const trimmed = value.trim();
+      if (trimmed && !utrRegex.test(trimmed)) {
+        setErrors((prev) => ({ ...prev, utrNumber: "Enter a valid UTR (numbers only)" }));
+      } else if (trimmed && trimmed.length < 5) {
+        setErrors((prev) => ({ ...prev, utrNumber: "UTR must be at least 5 digits" }));
+      } else {
+        setErrors((prev) => ({ ...prev, utrNumber: null }));
+      }
+    }
+    
     setForm({ ...form, [field]: value });
   };
 
@@ -122,6 +136,13 @@ members.forEach((m, i) => {
     else if (!phoneRegex.test(form.leadPhone)) e.leadPhone = "Enter valid Indian mobile";
 
     if (!paymentFile) e.paymentFile = "Payment screenshot required";
+    
+    if (!form.utrNumber.trim()) e.utrNumber = "UTR number is required";
+    else {
+      const trimmedUtr = form.utrNumber.trim();
+      if (!utrRegex.test(trimmedUtr)) e.utrNumber = "Enter a valid UTR (numbers only)";
+      else if (trimmedUtr.length < 5) e.utrNumber = "UTR must be at least 5 digits";
+    }
 
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -145,6 +166,7 @@ members.forEach((m, i) => {
   formData.append("fee", form.eventfee);
   formData.append("eventID", form.eventId);
   formData.append("members", JSON.stringify(members));
+  formData.append("utrNumber", form.utrNumber);
   formData.append("paymentFile", paymentFile);
     const res=await RegisterToEvent(formData);
     // console.log(res);
@@ -300,6 +322,17 @@ members.forEach((m, i) => {
               File selected: {paymentFile.name}
             </p>
           )}
+          <div className="mt-4">
+            <Input
+              label="UTR Number"
+              required
+              name="utrNumber"
+              placeholder="Make sure to provide correct UTR Number"
+              value={form.utrNumber}
+              onChange={onChange("utrNumber")}
+              error={errors.utrNumber}
+            />
+          </div>
         </FormSection>
 
         {/* Submit */}

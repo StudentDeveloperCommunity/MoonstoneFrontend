@@ -96,9 +96,6 @@ export default function EventRegistration() {
     else {
       const trimmedUtr = form.utrNumber.trim();
       const testResult = utrRegex.test(trimmedUtr);
-      console.log("UTR debug:", { raw: form.utrNumber, trimmed: trimmedUtr, test: testResult });
-      // On-screen debug for non-dev users
-      alert(`UTR debug:\nRaw: "${form.utrNumber}"\nTrimmed: "${trimmedUtr}"\nRegex test: ${testResult}`);
       if (!testResult) e.utrNumber = "Enter a valid UTR (numbers only)";
       else if (trimmedUtr.length < 5) e.utrNumber = "UTR must be at least 5 digits";
     }
@@ -244,6 +241,7 @@ export default function EventRegistration() {
           <div className="mt-4">
             <Input
               label="UTR Number"
+              required
               name="utrNumber"
               placeholder="Make sure to provide correct UTR Number"
               value={form.utrNumber}
