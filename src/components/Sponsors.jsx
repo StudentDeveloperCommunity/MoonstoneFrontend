@@ -50,29 +50,6 @@ export default function Sponsors() {
     return [...sponsors, ...sponsors];
   }, [sponsors]);
 
-  // Calculate dynamic animation duration based on number of sponsors
-  const animationDuration = useMemo(() => {
-    if (sponsors.length <= 0) return 25; // Fixed duration
-    // Fixed duration of 25 seconds (faster)
-    return 25;
-  }, [sponsors.length]);
-
-  // Calculate dynamic translation based on number of sponsors
-  const getMarqueeKeyframes = useMemo(() => {
-    if (sponsors.length <= 0) return `@keyframes sponsorMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-25%); } }`;
-    
-    // Calculate percentage to translate based on number of sponsors
-    // Use an even smaller percentage for more slower movement
-    const translatePercentage = Math.min(21, Math.max(16, sponsors.length * 2.1)); // Between 16% and 21%
-    
-    return `
-      @keyframes sponsorMarquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-${translatePercentage}%); }
-      }
-    `;
-  }, [sponsors.length]);
-
   if (loading) {
     return (
       <section className="w-full py-14 bg-black/45 overflow-hidden">
@@ -226,31 +203,15 @@ export default function Sponsors() {
 
       {/* Smooth infinite marquee animation */}
       <style>{`
-        ${getMarqueeKeyframes}
+        @keyframes sponsorMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
 
         .animate-sponsor-marquee {
-          animation: sponsorMarquee ${animationDuration}s linear infinite;
+          animation: sponsorMarquee 28s linear infinite;
           display: flex;
           width: max-content;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 1024px) {
-          .animate-sponsor-marquee {
-            animation-duration: 30s;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .animate-sponsor-marquee {
-            animation-duration: 30s;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .animate-sponsor-marquee {
-            animation-duration: 30s;
-          }
         }
 
         /* Pause animation on hover to see details */
