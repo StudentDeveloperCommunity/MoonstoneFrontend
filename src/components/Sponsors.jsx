@@ -44,7 +44,7 @@ export default function Sponsors() {
     return () => clearInterval(interval);
   }, []);
 
-  // ✅ duplicate array for seamless marquee loop
+  // duplicate array for seamless marquee loop
   const marqueeSponsors = useMemo(() => {
     if (sponsors.length === 0) return [];
     return [...sponsors, ...sponsors];
@@ -52,9 +52,9 @@ export default function Sponsors() {
 
   // Calculate dynamic animation duration based on number of sponsors
   const animationDuration = useMemo(() => {
-    if (sponsors.length <= 0) return 30; // Default fallback
-    // Base duration + 2s per sponsor
-    return Math.max(20, sponsors.length * 2);
+    if (sponsors.length <= 0) return 25; // Fixed duration
+    // Fixed duration of 25 seconds (faster)
+    return 25;
   }, [sponsors.length]);
 
   // Calculate dynamic translation based on number of sponsors
@@ -62,7 +62,8 @@ export default function Sponsors() {
     if (sponsors.length <= 0) return `@keyframes sponsorMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-25%); } }`;
     
     // Calculate percentage to translate based on number of sponsors
-    const translatePercentage = Math.min(50, Math.max(25, sponsors.length * 10)); // Between 25% and 50%
+    // Use an even smaller percentage for more slower movement
+    const translatePercentage = Math.min(21, Math.max(16, sponsors.length * 2.1)); // Between 16% and 21%
     
     return `
       @keyframes sponsorMarquee {
@@ -236,19 +237,19 @@ export default function Sponsors() {
         /* Responsive adjustments */
         @media (max-width: 1024px) {
           .animate-sponsor-marquee {
-            animation-duration: ${Math.max(15, sponsors.length * 1.5)}s;
+            animation-duration: 30s;
           }
         }
 
         @media (max-width: 768px) {
           .animate-sponsor-marquee {
-            animation-duration: ${Math.max(10, sponsors.length * 1.2)}s;
+            animation-duration: 30s;
           }
         }
 
         @media (max-width: 480px) {
           .animate-sponsor-marquee {
-            animation-duration: ${Math.max(8, sponsors.length)}s;
+            animation-duration: 30s;
           }
         }
 
