@@ -117,9 +117,9 @@ const developerData = [
   },
   {
     id: 14,
-    name: "Dr. Kailash C. Bandu",
+    name: "Dr. Kailash C. Bandhu",
     role: "Mentor",
-    department: "HOD of CSE Department",
+    department: "HOD, CSEgit",
     email: "kailash.bandhu@medicaps.ac.in",
     linkedin: "https://www.linkedin.com/in/prof-dr-kailash-chandra-bandhu-941a9928/",
     category: "Mentors",
