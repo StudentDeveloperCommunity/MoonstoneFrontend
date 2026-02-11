@@ -10,7 +10,6 @@ export default function Sponsors() {
     const fetchSponsors = async () => {
       try {
         const res = await SponsorFetcher();
-        console.log("Sponsors API response:", res);
         if (res?.success && res?.sponsors?.length > 0) {
           const mappedSponsors = res.sponsors
             .map((sponsor) => ({
