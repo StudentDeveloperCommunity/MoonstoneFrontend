@@ -13,6 +13,7 @@ import Payment from "./pages/Payment.jsx";
 import CheckRegistrationStatus from "./pages/CheckRegistrationStatus.jsx";
 import Developers from "./pages/Developers.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import { Analytics } from "@vercel/analytics/react";
 // import Sponsers from "./components/Sponsors.jsx";
 const AppContent = () => {
   const location = useLocation();
@@ -46,6 +47,7 @@ const AppContent = () => {
 function App() {
   return (
     <Router>
+      <Analytics />
       <AppContent />
     </Router>
   );
