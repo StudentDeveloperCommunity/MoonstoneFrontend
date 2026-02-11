@@ -1,0 +1,92 @@
+import hcl from "../assets/HCL.png";
+
+import { FaLinkedinIn, FaInstagram, FaTwitter, FaGlobe } from "react-icons/fa6";
+
+export default function EliteSponsors() {
+  return (
+    <div className="w-full text-white mt-8 px-4 sm:px-6  md:px-10">
+      {/* ✅ Heading */}
+      <div className="text-center">
+        <h1 className="text-xl sm:text-3xl md:text-4xl font-bold uppercase pb-6 sm:mb-4 bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+          Special Thanks to HCLTech
+        </h1>
+      </div>
+
+      {/* ✅ Main Layout */}
+      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center space-x-8 justify-center gap-6 text-center lg:text-left">
+        {/* ✅ Image Card */}
+        <div className="w-full lg:w-[32%] bg-gradient-to-r from-indigo-500 via-cyan-500 to-indigo-500 rounded-2xl p-3 sm:p-4 shadow-lg">
+          <img
+            src={hcl}
+            alt="HCL Sponsor"
+            className="w-full h-auto object-contain rounded-xl"
+          />
+        </div>
+
+        {/* ✅ Text Section */}
+        <div className="w-full lg:w-[45%] space-y-4">
+          <p
+            className="
+            pr-8 
+            sm:text-lg 
+            md:text-xl 
+            text-gray-300 
+            leading-relaxed
+            text-justify 
+            font-semibold
+          "
+          >
+            We sincerely thank HCLTech for their valuable support and
+            partnership in making Moonstone 2026 – Medi-Caps University a
+            success. Your contribution strengthens innovation, learning, and
+            industry collaboration within the student community.
+          </p>
+
+          <h3 className="text-sm sm:text-base text-gray-300 font-semibold pt-4">
+            Connect with HCLTech
+          </h3>
+
+          {/* ✅ Icons Row */}
+          <div
+            className="
+            flex 
+            items-center 
+            justify-center 
+            lg:justify-start 
+            gap-6 
+            text-gray-400
+        "
+          >
+            <a
+              href="https://in.linkedin.com/company/hcltech"
+              className="hover:text-cyan-400 transition"
+            >
+              <FaLinkedinIn className="text-xl hover:scale-110 transition-transform duration-200" />
+            </a>
+
+            <a
+              href="https://www.instagram.com/hcltech/"
+              className="hover:text-cyan-400 transition"
+            >
+              <FaInstagram className="text-xl hover:scale-110 transition-transform duration-200" />
+            </a>
+
+            <a
+              href="https://x.com/hcltech"
+              className="hover:text-cyan-400 transition"
+            >
+              <FaTwitter className="text-xl hover:scale-110 transition-transform duration-200" />
+            </a>
+
+            <a
+              href="https://www.hcltech.com/"
+              className="hover:text-cyan-400 transition"
+            >
+              <FaGlobe className="text-xl hover:scale-110 transition-transform duration-200" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
