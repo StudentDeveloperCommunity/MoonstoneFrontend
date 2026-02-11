@@ -8,12 +8,13 @@ import Sponsors from "../components/Sponsors";
 import { Download, Calendar, X } from "lucide-react";
 import axios from "axios";
 import { API_URL, getevents } from "../NwConfig";
+import EliteSponsors from "../components/EliteSponsors";
 
 export default function Index() {
   const [countdownStart] = useState(
     new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
   );
-  
+
   const [showTimelineModal, setShowTimelineModal] = useState(false);
   const [eventsData, setEventsData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,102 +31,138 @@ export default function Index() {
 
   // Fetch all events for timeline download
   const fetchAllEvents = async () => {
-    console.log('Fetching all events...');
+    console.log("Fetching all events...");
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}${getevents}`, { role: 'admin', page: 1, limit: 100 }, { withCredentials: true });
-      console.log('API response:', response.data);
+      const response = await axios.post(
+        `${API_URL}${getevents}`,
+        { role: "admin", page: 1, limit: 100 },
+        { withCredentials: true },
+      );
+      console.log("API response:", response.data);
       if (response.data?.success) {
         const events = response.data.events || [];
-        console.log('Events fetched successfully:', events);
+        console.log("Events fetched successfully:", events);
         setEventsData(events);
       } else {
-        console.log('API response unsuccessful:', response.data);
+        console.log("API response unsuccessful:", response.data);
       }
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error("Error fetching events:", error);
     } finally {
       setLoading(false);
     }
   };
-  
+
   // Download functions
   const downloadPDF = () => {
-    console.log('Download PDF clicked');
-    
+    console.log("Download PDF clicked");
+
     try {
       // Create download link for actual PDF file from frontend public folder
-      const link = document.createElement('a');
-      link.href = '/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.pdf';
-      link.download = 'Moonstone 2k26 Events Timeline-Updated.pdf';
-      link.style.display = 'none';
+      const link = document.createElement("a");
+      link.href =
+        "/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.pdf";
+      link.download = "Moonstone 2k26 Events Timeline-Updated.pdf";
+      link.style.display = "none";
       // Force download behavior
-      link.setAttribute('download', 'Moonstone 2k26 Events Timeline-Updated.pdf');
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
+      link.setAttribute(
+        "download",
+        "Moonstone 2k26 Events Timeline-Updated.pdf",
+      );
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
       document.body.appendChild(link);
-      
-      console.log('Triggering PDF download...', link.href);
+
+      console.log("Triggering PDF download...", link.href);
       link.click();
-      
+
       // Cleanup
       setTimeout(() => {
         if (document.body.contains(link)) {
           document.body.removeChild(link);
         }
-        console.log('PDF download completed');
+        console.log("PDF download completed");
       }, 100);
-      
     } catch (error) {
-      console.error('PDF download error:', error);
-      alert('Failed to download PDF. Please check console for details.');
+      console.error("PDF download error:", error);
+      alert("Failed to download PDF. Please check console for details.");
     }
   };
-  
+
   const downloadCSV = () => {
-    console.log('Download Excel clicked');
-    
+    console.log("Download Excel clicked");
+
     try {
       // Create download link for actual Excel file from frontend public folder
-      const link = document.createElement('a');
-      link.href = '/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.xlsx';
-      link.download = 'Moonstone 2k26 Events Timeline-Updated.xlsx';
-      link.style.display = 'none';
+      const link = document.createElement("a");
+      link.href =
+        "/assets/EventsTimeline/Moonstone 2k26 Events Timeline-Updated.xlsx";
+      link.download = "Moonstone 2k26 Events Timeline-Updated.xlsx";
+      link.style.display = "none";
       // Force download behavior
-      link.setAttribute('download', 'Moonstone 2k26 Events Timeline-Updated.xlsx');
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
+      link.setAttribute(
+        "download",
+        "Moonstone 2k26 Events Timeline-Updated.xlsx",
+      );
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
       document.body.appendChild(link);
-      
-      console.log('Triggering Excel download...', link.href);
+
+      console.log("Triggering Excel download...", link.href);
       link.click();
-      
+
       // Cleanup
       setTimeout(() => {
         if (document.body.contains(link)) {
           document.body.removeChild(link);
         }
-        console.log('Excel download completed');
+        console.log("Excel download completed");
       }, 100);
-      
     } catch (error) {
-      console.error('Excel download error:', error);
-      alert('Failed to download Excel file. Please check console for details.');
+      console.error("Excel download error:", error);
+      alert("Failed to download Excel file. Please check console for details.");
     }
   };
-  
+
   const handleTimelineClick = () => {
     // Auto-load sample data for testing
     const sampleData = [
-      { title: 'Moonstone Tech Fest', eventDate: '2024-01-15', eventType: 'Technical', description: 'Annual technical festival with coding competitions and workshops' },
-      { title: 'Cultural Night', eventDate: '2024-01-20', eventType: 'Cultural', description: 'Music, dance and drama performances by students' },
-      { title: 'Sports Meet', eventDate: '2024-01-25', eventType: 'Sports', description: 'Annual sports competition with various athletic events' },
-      { title: 'Hackathon', eventDate: '2024-02-01', eventType: 'Technical', description: '24-hour coding challenge with exciting prizes' },
-      { title: 'Alumni Meet', eventDate: '2024-02-10', eventType: 'Networking', description: 'Connect with alumni and share experiences' }
+      {
+        title: "Moonstone Tech Fest",
+        eventDate: "2024-01-15",
+        eventType: "Technical",
+        description:
+          "Annual technical festival with coding competitions and workshops",
+      },
+      {
+        title: "Cultural Night",
+        eventDate: "2024-01-20",
+        eventType: "Cultural",
+        description: "Music, dance and drama performances by students",
+      },
+      {
+        title: "Sports Meet",
+        eventDate: "2024-01-25",
+        eventType: "Sports",
+        description: "Annual sports competition with various athletic events",
+      },
+      {
+        title: "Hackathon",
+        eventDate: "2024-02-01",
+        eventType: "Technical",
+        description: "24-hour coding challenge with exciting prizes",
+      },
+      {
+        title: "Alumni Meet",
+        eventDate: "2024-02-10",
+        eventType: "Networking",
+        description: "Connect with alumni and share experiences",
+      },
     ];
     setEventsData(sampleData);
-    console.log('Sample data auto-loaded:', sampleData);
-    
+    console.log("Sample data auto-loaded:", sampleData);
+
     // Open modal after a small delay to ensure state is updated
     setTimeout(() => {
       setShowTimelineModal(true);
@@ -288,7 +325,7 @@ export default function Index() {
               >
                 Explore Events
               </button>
-              
+
               {/* ✅ EVENTS TIMELINE TOGGLE */}
               <button
                 onClick={handleTimelineClick}
@@ -304,8 +341,10 @@ export default function Index() {
                 <span className="bg-gradient-to-r from-purple-200 to-blue-200 bg-clip-text text-transparent">
                   See All Events Timeline
                 </span>
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600/10 to-blue-600/10 
-                            opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600/10 to-blue-600/10 
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
               </button>
             </div>
 
@@ -344,23 +383,36 @@ export default function Index() {
 
         {/* ✅ TIMELINE MODAL */}
         {showTimelineModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ zIndex: 9999 }}>
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowTimelineModal(false)} />
-            <div className="relative bg-gray-900 border border-gray-700 rounded-2xl p-8 max-w-md w-full 
-                        shadow-2xl transform transition-all duration-300 scale-100" style={{ zIndex: 10000 }}>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ zIndex: 9999 }}
+          >
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setShowTimelineModal(false)}
+            />
+            <div
+              className="relative bg-gray-900 border border-gray-700 rounded-2xl p-8 max-w-md w-full 
+                        shadow-2xl transform transition-all duration-300 scale-100"
+              style={{ zIndex: 10000 }}
+            >
               <button
                 onClick={() => setShowTimelineModal(false)}
                 className="absolute top-4 right-4 p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
               >
                 <X className="w-5 h-5 text-gray-400" />
               </button>
-              
+
               <div className="flex flex-col items-center space-y-6">
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-white mb-2">Download Events Timeline</h3>
-                  <p className="text-gray-400 text-sm">Choose your preferred format</p>
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    Download Events Timeline
+                  </h3>
+                  <p className="text-gray-400 text-sm">
+                    Choose your preferred format
+                  </p>
                 </div>
-                
+
                 {loading ? (
                   <div className="flex items-center justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
@@ -368,34 +420,34 @@ export default function Index() {
                 ) : (
                   <div className="flex flex-col sm:flex-row gap-6 w-full">
                     <button
-                      onClick={() => { 
-                        console.log('PDF button clicked!'); 
-                        console.log('Current eventsData:', eventsData);
-                        console.log('EventsData length:', eventsData.length);
-                        downloadPDF(); 
+                      onClick={() => {
+                        console.log("PDF button clicked!");
+                        console.log("Current eventsData:", eventsData);
+                        console.log("EventsData length:", eventsData.length);
+                        downloadPDF();
                       }}
                       className="flex-1 flex items-center justify-center gap-3 px-6 py-4 
                                bg-gradient-to-r from-red-600 to-pink-600 
                                text-white rounded-xl font-medium
                                transition-all duration-300 hover:scale-105 active:scale-95
                                hover:shadow-lg hover:shadow-red-600/25"
-                      style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+                      style={{ pointerEvents: "auto", cursor: "pointer" }}
                     >
                       <Download className="w-5 h-5" />
                       <span>Download PDF</span>
                     </button>
-                    
+
                     <button
-                      onClick={() => { 
-                        console.log('Excel button clicked!'); 
-                        downloadCSV(); 
+                      onClick={() => {
+                        console.log("Excel button clicked!");
+                        downloadCSV();
                       }}
                       className="flex-1 flex items-center justify-center gap-3 px-6 py-4 
                                bg-gradient-to-r from-green-600 to-emerald-600 
                                text-white rounded-xl font-medium
                                transition-all duration-300 hover:scale-105 active:scale-95
                                hover:shadow-lg hover:shadow-green-600/25"
-                      style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+                      style={{ pointerEvents: "auto", cursor: "pointer" }}
                     >
                       <Download className="w-5 h-5" />
                       <span>Download Excel</span>
@@ -417,6 +469,9 @@ export default function Index() {
           <div className="w-full m-0 p-0">
             <Clubs />
           </div>
+          <section className="my-12">
+            <EliteSponsors />
+          </section>
 
           {/* Sponsors */}
           <section id="sponsors" className="w-full m-0 p-0">
