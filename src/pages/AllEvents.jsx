@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import EventsHero from "../components/Events/EventsHero";
@@ -66,7 +66,7 @@ export default function AllEvents() {
   const [totalPages, setTotalPages] = useState(1);
 
   /* ---------------- FETCH EVENTS (UNCHANGED LOGIC) ---------------- */
-  const getclubevents = async () => {
+  const getclubevents = useCallback(async () => {
     try {
       const form = { role, page, limit: 6 };
       const res = await EventFetcher(form);
@@ -82,7 +82,7 @@ export default function AllEvents() {
       setEvents([]);
       setTotalPages(1);
     }
-  };
+  }, [role, page]);
 
   /* ---------------- URL PARAM → ROLE ---------------- */
   useEffect(() => {
@@ -112,37 +112,33 @@ export default function AllEvents() {
   /* 🔑 If API fails → use DEMO_EVENTS */
   const sourceEvents = events.length > 0 ? events : DEMO_EVENTS;
 
-  const filteredEvents = sourceEvents.filter((event) => {
-    const matchCategory = filter === "all" || event.eventType === filter;
+  /* ✅ Memoized filtering for performance */
+  const filteredEvents = useMemo(() => {
+    return sourceEvents.filter((event) => {
+      const matchCategory = filter === "all" || event.eventType === filter;
+      const matchSearch = !search || event.title.toLowerCase().includes(search.toLowerCase());
+      return matchCategory && matchSearch;
+    });
+  }, [sourceEvents, filter, search]);
 
-    const matchSearch =
-      !search || event.title.toLowerCase().includes(search.toLowerCase());
-
-    return matchCategory && matchSearch;
-  });
-
-  const handlePageChange = (page) => {
+  const handlePageChange = useCallback((page) => {
     setPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  }, []);
 
-  /* ✅ STABLE STAR BACKGROUND */
+  /* ✅ OPTIMIZED STAR BACKGROUND */
   const stars = useMemo(() => {
-    const STAR_COUNT = 140;
+    const STAR_COUNT = 40; // Reduced from 140 to 40 for performance
 
     return Array.from({ length: STAR_COUNT }).map((_, i) => {
-      const size = Math.random() > 0.75 ? 2 : 1;
+      const size = Math.random() > 0.8 ? 2 : 1;
       const left = Math.random() * 98;
       const top = Math.random() * 100;
 
-      const twinkleDuration = 0.8 + Math.random() * 1.8;
+      // Simplified animations - only twinkle, no complex movement
+      const twinkleDuration = 2 + Math.random() * 3;
       const twinkleDelay = Math.random() * 2;
-
-      const moveDuration = 10 + Math.random() * 18;
-      const moveDelay = Math.random() * 3;
-
-      const opacity = 0.35 + Math.random() * 0.65;
-      const glow = 6 + Math.random() * 10;
+      const opacity = 0.3 + Math.random() * 0.7;
 
       return {
         id: i,
@@ -151,10 +147,7 @@ export default function AllEvents() {
         top,
         twinkleDuration,
         twinkleDelay,
-        moveDuration,
-        moveDelay,
         opacity,
-        glow,
       };
     });
   }, []);
@@ -173,11 +166,7 @@ export default function AllEvents() {
               left: `${Math.min(star.left, 98)}%`,
               top: `${star.top}%`,
               opacity: star.opacity,
-              boxShadow: `0 0 ${star.glow}px rgba(255,255,255,0.9)`,
-              animation: `
-                twinkleStrong ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate,
-                moveStar ${star.moveDuration}s linear ${star.moveDelay}s infinite alternate
-              `,
+              animation: `twinkle ${star.twinkleDuration}s ease-in-out ${star.twinkleDelay}s infinite alternate`,
             }}
           />
         ))}
@@ -210,15 +199,10 @@ export default function AllEvents() {
       </section>
 
       <style>{`
-        @keyframes twinkleStrong {
-          0%   { opacity: 0.15; transform: scale(0.9); }
-          50%  { opacity: 1; transform: scale(1.5); }
-          100% { opacity: 0.25; transform: scale(1); }
-        }
-
-        @keyframes moveStar {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(80px, -60px); }
+        @keyframes twinkle {
+          0%   { opacity: 0.2; transform: scale(0.9); }
+          50%  { opacity: 1; transform: scale(1.2); }
+          100% { opacity: 0.3; transform: scale(1); }
         }
       `}</style>
     </>
