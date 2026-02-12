@@ -1,9 +1,12 @@
 import { API_URL } from "../../NwConfig";
 import { useNavigate } from "react-router-dom";
+import { useState, memo } from "react";
 import fallbackImg from "../../assets/eventsindetails/Frame.svg";
 
-export default function EventCard({ event }) {
+const EventCard = memo(({ event }) => {
   const navigate = useNavigate();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const redirecttoregister = () => {
     navigate("/eventsindetails", { state: { event } });
@@ -35,19 +38,29 @@ export default function EventCard({ event }) {
         hover:-translate-y-1 hover:shadow-xl
       "
     >
-      {/* ✅ IMAGE WITH FALLBACK */}
-      <img
-        src={
-          event?.image
-            ? `${API_URL}/${event.image}`
-            : fallbackImg
-        }
-        onError={(e) => {
-          e.currentTarget.src = fallbackImg;
-        }}
-        alt={event?.title || "Event"}
-        className="w-full h-full object-cover block"
-      />
+      {/* ✅ OPTIMIZED IMAGE WITH FALLBACK */}
+      <div className="relative w-full h-full">
+        {!imageLoaded && !imageError && (
+          <div className="absolute inset-0 bg-gray-800 animate-pulse" />
+        )}
+        <img
+          src={
+            imageError || !event?.image
+              ? fallbackImg
+              : `${API_URL}/${event.image}`
+          }
+          loading="lazy"
+          onLoad={() => setImageLoaded(true)}
+          onError={() => {
+            setImageError(true);
+            setImageLoaded(true);
+          }}
+          alt={event?.title || "Event"}
+          className={`w-full h-full object-cover block transition-opacity duration-300 ${
+            imageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      </div>
 
       {/* DATE BADGE */}
       <div className="absolute top-3 right-3 z-20">
@@ -85,4 +98,8 @@ export default function EventCard({ event }) {
       </div>
     </div>
   );
-}
+});
+
+EventCard.displayName = 'EventCard';
+
+export default EventCard;
