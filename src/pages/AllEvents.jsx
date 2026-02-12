@@ -61,26 +61,36 @@ export default function AllEvents() {
 
   const [role, setRole] = useState("admin");
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   /* ---------------- FETCH EVENTS (UNCHANGED LOGIC) ---------------- */
   const getclubevents = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    
     try {
       const form = { role, page, limit: 6 };
       const res = await EventFetcher(form);
 
       if (res?.success && Array.isArray(res.events)) {
+        // Clear previous events immediately to prevent mixing
         setEvents(res.events);
         setTotalPages(res.pagination?.totalPages || 1);
       } else {
         setEvents([]);
         setTotalPages(1);
+        setError("No events found");
       }
     } catch (err) {
       setEvents([]);
       setTotalPages(1);
+      setError("Failed to load events. Please try again.");
+    } finally {
+      setLoading(false);
     }
   }, [role, page]);
 
@@ -102,6 +112,10 @@ export default function AllEvents() {
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
+    // Clear events immediately when filter changes to prevent mixing
+    setEvents([]);
+    setLoading(true);
+    setError(null);
     setRole(filter === "all" ? "admin" : filter);
     setPage(1);
   }, [filter]);
@@ -109,8 +123,8 @@ export default function AllEvents() {
   /* ---------------- SEARCH ---------------- */
   const [search, setSearch] = useState("");
 
-  /* 🔑 If API fails → use DEMO_EVENTS */
-  const sourceEvents = events.length > 0 ? events : DEMO_EVENTS;
+  /* ✅ Use real events only - no demo fallback */
+  const sourceEvents = events;
 
   /* ✅ Memoized filtering for performance */
   const filteredEvents = useMemo(() => {
@@ -122,6 +136,9 @@ export default function AllEvents() {
   }, [sourceEvents, filter, search]);
 
   const handlePageChange = useCallback((page) => {
+    // Clear events when changing page to prevent mixing
+    setEvents([]);
+    setLoading(true);
     setPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -182,13 +199,51 @@ export default function AllEvents() {
         <EventsSearch search={search} setSearch={setSearch} />
         <EventsFilters filter={filter} setFilter={setFilter} />
 
-        {/* ✅ EVENTS GRID */}
+        {/* ✅ EVENTS GRID WITH LOADING SCREEN */}
         <div className="relative z-20 max-w-[1100px] mx-auto mt-12 px-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
-            {filteredEvents.map((event) => (
-              <EventCard key={event._id} event={event} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              {/* Mobile-optimized Loading Spinner */}
+              <div className="relative mb-8">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="absolute inset-0 w-12 h-12 sm:w-16 sm:h-16 border-4 border-purple-600 border-b-transparent rounded-full animate-spin animation-delay-150"></div>
+              </div>
+              
+              {/* Loading Text */}
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Loading Events</h3>
+              <p className="text-gray-400 text-center max-w-md px-4 text-sm sm:text-base">
+                Fetching {filter === "all" ? "all" : filter} events for you...
+              </p>
+              
+              {/* Loading Dots */}
+              <div className="flex gap-2 mt-6">
+                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-600 rounded-full animate-bounce animation-delay-0"></div>
+                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-purple-600 rounded-full animate-bounce animation-delay-150"></div>
+                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-600 rounded-full animate-bounce animation-delay-300"></div>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <div className="text-red-500 text-xl mb-4">{error}</div>
+              <button 
+                onClick={getclubevents}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Retry
+              </button>
+            </div>
+          ) : filteredEvents.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 text-xl">No events found</div>
+              <p className="text-gray-500 mt-2">Try adjusting your filters or search</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
+              {filteredEvents.map((event) => (
+                <EventCard key={event._id} event={event} />
+              ))}
+            </div>
+          )}
         </div>
 
         <Pagination
@@ -203,6 +258,18 @@ export default function AllEvents() {
           0%   { opacity: 0.2; transform: scale(0.9); }
           50%  { opacity: 1; transform: scale(1.2); }
           100% { opacity: 0.3; transform: scale(1); }
+        }
+        
+        .animation-delay-0 {
+          animation-delay: 0ms;
+        }
+        
+        .animation-delay-150 {
+          animation-delay: 150ms;
+        }
+        
+        .animation-delay-300 {
+          animation-delay: 300ms;
         }
       `}</style>
     </>

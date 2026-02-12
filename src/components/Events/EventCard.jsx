@@ -1,12 +1,62 @@
 import { API_URL } from "../../NwConfig";
 import { useNavigate } from "react-router-dom";
-import { useState, memo } from "react";
+import { useState, memo, useEffect } from "react";
 import fallbackImg from "../../assets/eventsindetails/Frame.svg";
 
 const EventCard = memo(({ event }) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [currentEventId, setCurrentEventId] = useState(null);
+
+  // Preload image when component mounts or event changes
+  useEffect(() => {
+    // Reset state when event changes
+    setImageLoaded(false);
+    setImageError(false);
+    setImageSrc(null);
+    
+    const eventId = event?._id || event?.id;
+    if (!eventId || eventId !== currentEventId) {
+      setCurrentEventId(eventId);
+    }
+
+    if (!event?.image) {
+      setImageSrc(fallbackImg);
+      setImageLoaded(true);
+      return;
+    }
+
+    const img = new Image();
+    const fullUrl = `${API_URL}/${event.image}`;
+    
+    img.onload = () => {
+      // Only update if this is still the current event
+      if (eventId === currentEventId) {
+        setImageSrc(fullUrl);
+        setImageLoaded(true);
+      }
+    };
+    
+    img.onerror = () => {
+      // Only update if this is still the current event
+      if (eventId === currentEventId) {
+        setImageSrc(fallbackImg);
+        setImageError(true);
+        setImageLoaded(true);
+      }
+    };
+    
+    // Start loading the image
+    img.src = fullUrl;
+    
+    return () => {
+      // Cleanup if component unmounts or event changes
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [event?.image, event?._id, event?.id, currentEventId]);
 
   const redirecttoregister = () => {
     navigate("/eventsindetails", { state: { event } });
@@ -38,28 +88,20 @@ const EventCard = memo(({ event }) => {
         hover:-translate-y-1 hover:shadow-xl
       "
     >
-      {/* ✅ OPTIMIZED IMAGE WITH FALLBACK */}
+      {/* ✅ OPTIMIZED IMAGE WITH PRELOADING */}
       <div className="relative w-full h-full">
-        {!imageLoaded && !imageError && (
+        {!imageLoaded && (
           <div className="absolute inset-0 bg-gray-800 animate-pulse" />
         )}
-        <img
-          src={
-            imageError || !event?.image
-              ? fallbackImg
-              : `${API_URL}/${event.image}`
-          }
-          loading="lazy"
-          onLoad={() => setImageLoaded(true)}
-          onError={() => {
-            setImageError(true);
-            setImageLoaded(true);
-          }}
-          alt={event?.title || "Event"}
-          className={`w-full h-full object-cover block transition-opacity duration-300 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
+        {imageSrc && (
+          <img
+            src={imageSrc}
+            alt={event?.title || "Event"}
+            className={`w-full h-full object-cover block transition-opacity duration-300 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
       </div>
 
       {/* DATE BADGE */}
