@@ -13,7 +13,7 @@ const EventForm = memo(({
     if (!isFieldReadOnly(index)) {
       updateEvent(index, field, value);
     }
-  }, [index, isFieldReadOnly, updateEvent]);
+  }, [isFieldReadOnly, updateEvent]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
