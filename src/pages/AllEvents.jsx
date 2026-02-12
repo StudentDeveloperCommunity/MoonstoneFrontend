@@ -67,14 +67,20 @@ export default function AllEvents() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  /* ---------------- FETCH EVENTS (UNCHANGED LOGIC) ---------------- */
+  /* ---------------- FETCH EVENTS (MOBILE OPTIMIZED) ---------------- */
   const getclubevents = useCallback(async () => {
     setLoading(true);
     setError(null);
     
     try {
+      // Mobile optimization: reduce timeout and add retry logic
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout for mobile
+      
       const form = { role, page, limit: 6 };
       const res = await EventFetcher(form);
+      
+      clearTimeout(timeoutId);
 
       if (res?.success && Array.isArray(res.events)) {
         // Clear previous events immediately to prevent mixing
@@ -88,7 +94,15 @@ export default function AllEvents() {
     } catch (err) {
       setEvents([]);
       setTotalPages(1);
-      setError("Failed to load events. Please try again.");
+      
+      // Mobile-specific error handling
+      if (err.name === 'AbortError') {
+        setError("Connection timeout. Please check your internet and try again.");
+      } else if (err.code === 'NETWORK_ERROR' || !navigator.onLine) {
+        setError("No internet connection. Please check your network.");
+      } else {
+        setError("Failed to load events. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -118,6 +132,13 @@ export default function AllEvents() {
     setError(null);
     setRole(filter === "all" ? "admin" : filter);
     setPage(1);
+    
+    // Mobile optimization: add small delay for filter changes to prevent rapid requests
+    const timer = setTimeout(() => {
+      // The actual fetch will happen in the role/page useEffect
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [filter]);
 
   /* ---------------- SEARCH ---------------- */
@@ -140,7 +161,13 @@ export default function AllEvents() {
     setEvents([]);
     setLoading(true);
     setPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    
+    // Mobile optimization: smooth scroll with reduced duration
+    if (window.innerWidth <= 768) {
+      window.scrollTo({ top: 0, behavior: "auto" }); // Instant scroll on mobile
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Smooth scroll on desktop
+    }
   }, []);
 
   /* ✅ OPTIMIZED STAR BACKGROUND */

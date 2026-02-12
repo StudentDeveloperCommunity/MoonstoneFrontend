@@ -9,13 +9,15 @@ const EventCard = memo(({ event }) => {
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [currentEventId, setCurrentEventId] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  // Preload image when component mounts or event changes
+  // Mobile-optimized image preloading with retry logic
   useEffect(() => {
     // Reset state when event changes
     setImageLoaded(false);
     setImageError(false);
     setImageSrc(null);
+    setRetryCount(0);
     
     const eventId = event?._id || event?.id;
     if (!eventId || eventId !== currentEventId) {
@@ -28,34 +30,63 @@ const EventCard = memo(({ event }) => {
       return;
     }
 
-    const img = new Image();
-    const fullUrl = `${API_URL}/${event.image}`;
-    
-    img.onload = () => {
-      // Only update if this is still the current event
-      if (eventId === currentEventId) {
-        setImageSrc(fullUrl);
-        setImageLoaded(true);
-      }
+    const loadImage = (attempt = 0) => {
+      const img = new Image();
+      const fullUrl = `${API_URL}/${event.image}`;
+      
+      // Mobile optimization: shorter timeout
+      const timeoutId = setTimeout(() => {
+        img.src = ''; // Cancel loading
+        if (attempt < 2 && eventId === currentEventId) {
+          // Retry up to 2 times for mobile
+          setTimeout(() => loadImage(attempt + 1), 1000 * (attempt + 1));
+        } else {
+          // Final fallback
+          if (eventId === currentEventId) {
+            setImageSrc(fallbackImg);
+            setImageError(true);
+            setImageLoaded(true);
+          }
+        }
+      }, 5000); // 5s timeout for mobile
+      
+      img.onload = () => {
+        clearTimeout(timeoutId);
+        // Only update if this is still the current event
+        if (eventId === currentEventId) {
+          setImageSrc(fullUrl);
+          setImageLoaded(true);
+          setRetryCount(0);
+        }
+      };
+      
+      img.onerror = () => {
+        clearTimeout(timeoutId);
+        // Only update if this is still the current event
+        if (eventId === currentEventId) {
+          if (attempt < 2) {
+            // Retry for mobile
+            setTimeout(() => loadImage(attempt + 1), 1000 * (attempt + 1));
+          } else {
+            // Final fallback
+            setImageSrc(fallbackImg);
+            setImageError(true);
+            setImageLoaded(true);
+          }
+        }
+      };
+      
+      // Start loading the image
+      img.src = fullUrl;
+      
+      return () => {
+        clearTimeout(timeoutId);
+        img.onload = null;
+        img.onerror = null;
+      };
     };
-    
-    img.onerror = () => {
-      // Only update if this is still the current event
-      if (eventId === currentEventId) {
-        setImageSrc(fallbackImg);
-        setImageError(true);
-        setImageLoaded(true);
-      }
-    };
-    
-    // Start loading the image
-    img.src = fullUrl;
-    
-    return () => {
-      // Cleanup if component unmounts or event changes
-      img.onload = null;
-      img.onerror = null;
-    };
+
+    loadImage();
   }, [event?.image, event?._id, event?.id, currentEventId]);
 
   const redirecttoregister = () => {
@@ -88,10 +119,15 @@ const EventCard = memo(({ event }) => {
         hover:-translate-y-1 hover:shadow-xl
       "
     >
-      {/* ✅ OPTIMIZED IMAGE WITH PRELOADING */}
+      {/* MOBILE-OPTIMIZED IMAGE WITH PRELOADING */}
       <div className="relative w-full h-full">
         {!imageLoaded && (
-          <div className="absolute inset-0 bg-gray-800 animate-pulse" />
+          <div className="absolute inset-0 bg-gray-800 animate-pulse">
+            {/* Mobile-optimized loading indicator */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            </div>
+          </div>
         )}
         {imageSrc && (
           <img
@@ -100,6 +136,8 @@ const EventCard = memo(({ event }) => {
             className={`w-full h-full object-cover block transition-opacity duration-300 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
+            loading="eager" // Load immediately for better UX
+            decoding="async" // Async decoding for performance
           />
         )}
       </div>
