@@ -91,7 +91,9 @@ export default function ProgramAndEvents({ userRole }) {
       setEvents(updated);
     };
     reader.onerror = (error) => {
-      console.error("FileReader error:", error);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("FileReader error:", error);
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -158,15 +160,9 @@ export default function ProgramAndEvents({ userRole }) {
 
       try {
         const res = await EventDelete(newevent);
-        console.log("Delete response received:", res);
 
         // Check if it's an axios error (has response property)
         if (res && res.response) {
-          console.error(
-            "Delete API Error:",
-            res.response.status,
-            res.response.data,
-          );
           alert(
             `Error deleting event: ${res.response.data?.message || "Please try again."}`,
           );
@@ -175,17 +171,14 @@ export default function ProgramAndEvents({ userRole }) {
         }
 
         if (res?.success) {
-          console.log("Delete successful, removing event from list");
           setEvents(events.filter((_, i) => i !== index));
           setLoading(false);
           alert("Event deleted successfully!");
         } else {
-          console.error("Delete failed - no success flag:", res);
           alert(res?.message || "Error Deleting Event!!");
           setLoading(false);
         }
       } catch (error) {
-        console.error("Delete function error:", error);
         alert("Error deleting event. Please try again.");
         setLoading(false);
       }
@@ -465,7 +458,6 @@ export default function ProgramAndEvents({ userRole }) {
 
     // Check if it's an axios error (has response property)
     if (res && res.response) {
-      console.error("API Error:", res.response.status, res.response.data);
       alert(
         `Error adding events: ${res.response.data?.message || "Please try again."}`,
       );
@@ -480,7 +472,6 @@ export default function ProgramAndEvents({ userRole }) {
       // Refresh events from backend to get the latest data
       await geteventsinfo();
     } else {
-      console.error("Unexpected response:", res);
       alert(`Error adding events: ${res?.message || "Please try again."}`);
       setLoading(false);
       return;
