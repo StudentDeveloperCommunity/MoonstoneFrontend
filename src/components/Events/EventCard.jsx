@@ -11,7 +11,7 @@ const EventCard = memo(({ event }) => {
   const [currentEventId, setCurrentEventId] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
-  // Mobile-optimized image preloading with retry logic
+  // Universal-optimized image loading with fast retry logic
   useEffect(() => {
     // Reset state when event changes
     setImageLoaded(false);
@@ -34,12 +34,13 @@ const EventCard = memo(({ event }) => {
       const img = new Image();
       const fullUrl = `${API_URL}/${event.image}`;
       
-      // Mobile optimization: shorter timeout
+      // Universal optimization: fast timeout for all images
       const timeoutId = setTimeout(() => {
         img.src = ''; // Cancel loading
-        if (attempt < 2 && eventId === currentEventId) {
-          // Retry up to 2 times for mobile
-          setTimeout(() => loadImage(attempt + 1), 1000 * (attempt + 1));
+        if (attempt < 3 && eventId === currentEventId) {
+          // Fast retry for all images
+          const retryDelay = 400 * (attempt + 1); // 400ms, 800ms, 1.2s, 1.6s
+          setTimeout(() => loadImage(attempt + 1), retryDelay);
         } else {
           // Final fallback
           if (eventId === currentEventId) {
@@ -48,11 +49,11 @@ const EventCard = memo(({ event }) => {
             setImageLoaded(true);
           }
         }
-      }, 5000); // 5s timeout for mobile
+      }, 2500); // 2.5s timeout for all images
       
       img.onload = () => {
         clearTimeout(timeoutId);
-        // Only update if this is still the current event
+        // Only update if this is still current event
         if (eventId === currentEventId) {
           setImageSrc(fullUrl);
           setImageLoaded(true);
@@ -62,11 +63,12 @@ const EventCard = memo(({ event }) => {
       
       img.onerror = () => {
         clearTimeout(timeoutId);
-        // Only update if this is still the current event
+        // Only update if this is still current event
         if (eventId === currentEventId) {
-          if (attempt < 2) {
-            // Retry for mobile
-            setTimeout(() => loadImage(attempt + 1), 1000 * (attempt + 1));
+          if (attempt < 3) {
+            // Fast retry for all images
+            const retryDelay = 400 * (attempt + 1); // 400ms, 800ms, 1.2s, 1.6s
+            setTimeout(() => loadImage(attempt + 1), retryDelay);
           } else {
             // Final fallback
             setImageSrc(fallbackImg);

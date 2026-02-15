@@ -67,15 +67,15 @@ export default function AllEvents() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  /* ---------------- FETCH EVENTS (MOBILE OPTIMIZED) ---------------- */
+  /* ---------------- FETCH EVENTS (UNIVERSAL OPTIMIZATION) ---------------- */
   const getclubevents = useCallback(async () => {
     setLoading(true);
     setError(null);
     
     try {
-      // Mobile optimization: reduce timeout and add retry logic
+      // Universal optimization: fast timeout for all event types
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout for mobile
+      const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s for all events
       
       const form = { role, page, limit: 6 };
       const res = await EventFetcher(form);
@@ -83,6 +83,9 @@ export default function AllEvents() {
       clearTimeout(timeoutId);
 
       if (res?.success && Array.isArray(res.events)) {
+        // Preload all images immediately for fast loading
+        preloadAllImages(res.events);
+        
         // Clear previous events immediately to prevent mixing
         setEvents(res.events);
         setTotalPages(res.pagination?.totalPages || 1);
@@ -95,9 +98,9 @@ export default function AllEvents() {
       setEvents([]);
       setTotalPages(1);
       
-      // Mobile-specific error handling
+      // Universal error handling
       if (err.name === 'AbortError') {
-        setError("Connection timeout. Please check your internet and try again.");
+        setError("Events loading timeout. Please check your connection and try again.");
       } else if (err.code === 'NETWORK_ERROR' || !navigator.onLine) {
         setError("No internet connection. Please check your network.");
       } else {
@@ -107,6 +110,31 @@ export default function AllEvents() {
       setLoading(false);
     }
   }, [role, page]);
+
+  /* ---------------- UNIVERSAL IMAGE PRELOADING ---------------- */
+  const preloadAllImages = useCallback((events) => {
+    if (!events || !Array.isArray(events)) return;
+    
+    events.forEach((event, index) => {
+      if (event?.image) {
+        // Stagger preloads to avoid overwhelming the network
+        setTimeout(() => {
+          const img = new Image();
+          const fullUrl = `${API_URL}/${event.image}`;
+          
+          img.onload = () => {
+            console.log(`✅ Image preloaded: ${event.title || `Event ${index + 1}`}`);
+          };
+          
+          img.onerror = () => {
+            console.log(`❌ Image failed to preload: ${event.title || `Event ${index + 1}`}`);
+          };
+          
+          img.src = fullUrl;
+        }, index * 150); // Faster stagger: 150ms between each preload
+      }
+    });
+  }, []);
 
   /* ---------------- URL PARAM → ROLE ---------------- */
   useEffect(() => {
