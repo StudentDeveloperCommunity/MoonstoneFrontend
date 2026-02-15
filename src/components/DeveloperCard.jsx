@@ -8,7 +8,7 @@ const DeveloperCard = memo(({ dev }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [currentDevId, setCurrentDevId] = useState(null);
 
-  // Fast image loading with retry logic
+  // Ultra-fast image loading with minimal delay
   useEffect(() => {
     // Reset state when dev changes
     setImageLoaded(false);
@@ -29,12 +29,12 @@ const DeveloperCard = memo(({ dev }) => {
     const loadImage = (attempt = 0) => {
       const img = new Image();
       
-      // Fast timeout for developer images
+      // Ultra-fast timeout for developer images
       const timeoutId = setTimeout(() => {
         img.src = ''; // Cancel loading
-        if (attempt < 3 && devId === currentDevId) {
-          // Fast retry for developer images
-          const retryDelay = 300 * (attempt + 1); // 300ms, 600ms, 900ms, 1.2s
+        if (attempt < 2 && devId === currentDevId) {
+          // Ultra-fast retry for developer images
+          const retryDelay = 100 * (attempt + 1); // 100ms, 200ms, 300ms
           setTimeout(() => loadImage(attempt + 1), retryDelay);
         } else {
           // Final fallback
@@ -43,7 +43,7 @@ const DeveloperCard = memo(({ dev }) => {
             setImageLoaded(true);
           }
         }
-      }, 2000); // 2s timeout for developer images
+      }, 1000); // 1s timeout for developer images
       
       img.onload = () => {
         clearTimeout(timeoutId);
@@ -58,9 +58,9 @@ const DeveloperCard = memo(({ dev }) => {
         clearTimeout(timeoutId);
         // Only update if this is still the current dev
         if (devId === currentDevId) {
-          if (attempt < 3) {
-            // Fast retry for developer images
-            const retryDelay = 300 * (attempt + 1); // 300ms, 600ms, 900ms, 1.2s
+          if (attempt < 2) {
+            // Ultra-fast retry for developer images
+            const retryDelay = 100 * (attempt + 1); // 100ms, 200ms, 300ms
             setTimeout(() => loadImage(attempt + 1), retryDelay);
           } else {
             // Final fallback
@@ -80,6 +80,7 @@ const DeveloperCard = memo(({ dev }) => {
       };
     };
 
+    // Start loading immediately
     loadImage();
   }, [dev?.image, dev?.id, currentDevId]);
 
@@ -87,10 +88,10 @@ const DeveloperCard = memo(({ dev }) => {
     <div className="group relative bg-white rounded-xl sm:rounded-2xl p-6 sm:p-7 md:p-6
                          transition-all duration-300 transform hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(100,180,255,0.4)] border border-transparent hover:border-blue-400/50 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 min-h-[200px]">
       <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-gray-300 shrink-0 bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-        {!imageLoaded && (
+        {!imageLoaded && !imageError && (
           <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-full">
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-4 h-4 border-2 border-gray-400 border-t-gray-600 rounded-full animate-spin"></div>
+              <div className="w-3 h-3 border-2 border-gray-400 border-t-gray-600 rounded-full animate-spin"></div>
             </div>
           </div>
         )}
@@ -98,7 +99,7 @@ const DeveloperCard = memo(({ dev }) => {
           <img
             src={imageSrc}
             alt={dev.name}
-            className="w-full h-full object-cover object-top transition-opacity duration-300"
+            className="w-full h-full object-cover object-top transition-opacity duration-200"
             style={{ opacity: imageLoaded ? 1 : 0 }}
             loading="eager" // Load immediately for better UX
             decoding="async" // Async decoding for performance
