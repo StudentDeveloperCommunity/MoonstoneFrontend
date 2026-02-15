@@ -61,7 +61,7 @@ export default function AboutUs() {
       </div>
 
       {/* ✅ Actual content above stars */}
-      <div className="relative z-10 w-full flex mt-0 flex-col items-center justify-center pt-20 pb-10">
+      <div className="relative z-10 w-full flex mt-0 flex-col items-center justify-center pt-28 pb-10">
         {/* ---------- TOP SECTION (FULL WIDTH IMAGE) ---------- */}
         <section className="w-3/4 h-3/4 mb-20">
           {/* Full Width Image */}
