@@ -249,7 +249,7 @@ export default function Index() {
                 <div style={{ perspective: "1000px" }}>
                   <div className="rounded-full overflow-hidden w-[clamp(52px,9vw,110px)] h-[clamp(52px,9vw,110px)] m-0 p-0">
                     <video
-                      src="https://res.cloudinary.com/desybsga6/video/upload/v1768939310/moon_zsbpxz.mp4"
+                      src="https://ik.imagekit.io/wciaxyg0zo/videos/moon.mp4?updatedAt=1771160801609"
                       autoPlay
                       loop
                       muted

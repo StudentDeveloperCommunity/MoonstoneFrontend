@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 
 const Events = memo(function Events() {
   const imagesTop = [
-    "https://res.cloudinary.com/desybsga6/image/upload/v1768937737/199A3109_dxm6od.webp",
-    "https://res.cloudinary.com/desybsga6/image/upload/v1768937602/199A2325_i2kkgi.webp",
-    "https://res.cloudinary.com/desybsga6/image/upload/v1768938467/TAN04895_tvoxxf.webp",
-    "https://res.cloudinary.com/desybsga6/image/upload/v1768938518/SHIV5804_rv0ssx.webp",
-    "https://res.cloudinary.com/desybsga6/image/upload/v1768938932/TAN06636_ahdmd0.webp",
+    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/TAN04895.webp?updatedAt=1771160768299",
+    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/TAN06636.webp?updatedAt=1771160767848",
+    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/SHIV5804.webp?updatedAt=1771160769266",
+    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/199A3109.webp?updatedAt=1771160768291",
+    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/199A2325.webp?updatedAt=1771160767809",
   ];
 
   return (

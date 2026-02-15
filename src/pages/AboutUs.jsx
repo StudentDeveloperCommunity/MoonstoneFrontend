@@ -66,7 +66,7 @@ export default function AboutUs() {
         <section className="w-3/4 h-3/4 mb-20">
           {/* Full Width Image */}
           <img
-            src='https://res.cloudinary.com/desybsga6/image/upload/v1769589852/Banner_Ashking_wksqif.png'
+            src='https://ik.imagekit.io/wciaxyg0zo/Highlights/Photos.jpg.jpeg'
             alt="Moonstone at Medicaps"
             className="w-full h-1/2 object-cover mb-8"
           />
@@ -95,7 +95,7 @@ export default function AboutUs() {
           <div className="flex justify-center items-center">
             <div className="rounded-2xl border border-white/20 p-3 bg-transparent shadow-lg">
               <img
-                src={"https://res.cloudinary.com/desybsga6/image/upload/v1768936832/techno-club-banner_qutmc7.jpg"}
+                src={"https://ik.imagekit.io/wciaxyg0zo/Highlights/techno-club-banner.png"}
                 alt="Techno Club"
                 className="w-full max-w-lg h-72 md:h-72 object-contain rounded-xl"
               />
@@ -131,7 +131,7 @@ export default function AboutUs() {
           <div className="md:order-2 flex justify-center items-center">
             <div className="rounded-2xl border border-white/20 p-3 bg-transparent shadow-lg">
               <img
-                src={"https://res.cloudinary.com/desybsga6/image/upload/v1768934610/cultural-club-banner_b7kwyo"}
+                src={"https://ik.imagekit.io/wciaxyg0zo/Explore%20Events-Home%20page/cultural-club-banner.png"}
                 alt="Cultural Club"
                 className="w-full max-w-lg h-60 md:h-80 object-contain rounded-xl"
               />
@@ -166,7 +166,7 @@ export default function AboutUs() {
           <div className="flex justify-center items-center">
             <div className="rounded-2xl border-2 border-white/20 p-3 bg-transparent shadow-lg">
               <img
-                src={"https://res.cloudinary.com/desybsga6/image/upload/v1768936941/sports-club-banner_tpvqqx.png"}
+                src={"https://ik.imagekit.io/wciaxyg0zo/Highlights/sports-club-banner.png"}
                 alt="Sports Club"
                 className="w-full max-w-lg h-80 object-contain rounded-xl"
               />

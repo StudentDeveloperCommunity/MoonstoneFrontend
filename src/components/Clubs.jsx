@@ -7,21 +7,21 @@ export default function Index() {
       id: 1,
       title: "Sports",
       image:
-        "https://res.cloudinary.com/desybsga6/image/upload/v1768938825/Kabaddi_1_akr5kj.webp",
+        "https://ik.imagekit.io/wciaxyg0zo/Explore%20Events-Home%20page/Kabaddi%20(1).webp?updatedAt=1771160747276",
       linkto: "/allevents?id=2",
     },
     {
       id: 2,
       title: "Techno",
       image:
-        "https://res.cloudinary.com/desybsga6/image/upload/v1768938646/Gemini_Generated_Image_yfmm0ryfmm0ryfmm_1_ghfkwd.webp",
+        "https://ik.imagekit.io/wciaxyg0zo/Explore%20Events-Home%20page/Gemini_Generated_Image_yfmm0ryfmm0ryfmm%20(1).webp?updatedAt=1771160747086",
       linkto: "/allevents?id=1",
     },
     {
       id: 3,
       title: "Cultural",
       image:
-        "https://res.cloudinary.com/desybsga6/image/upload/v1768938427/199A4372_oc9cng.webp",
+        "https://ik.imagekit.io/wciaxyg0zo/Explore%20Events-Home%20page/cultural-club-banner.png",
       linkto: "/allevents?id=3",
     },
   ];
