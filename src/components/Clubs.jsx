@@ -21,7 +21,7 @@ export default function Index() {
       id: 3,
       title: "Cultural",
       image:
-        "https://ik.imagekit.io/wciaxyg0zo/Explore%20Events-Home%20page/cultural-club-banner.png",
+        "https://ik.imagekit.io/wciaxyg0zo/Explore%20Events-Home%20page/WhatsApp%20Image%202026-02-15%20at%2020.06.14.jpg.jpeg?updatedAt=1771166358568",
       linkto: "/allevents?id=3",
     },
   ];

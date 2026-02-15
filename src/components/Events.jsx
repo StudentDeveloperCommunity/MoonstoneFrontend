@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 
 const Events = memo(function Events() {
   const imagesTop = [
-    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/TAN04895.webp?updatedAt=1771160768299",
-    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/TAN06636.webp?updatedAt=1771160767848",
-    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/SHIV5804.webp?updatedAt=1771160769266",
     "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/199A3109.webp?updatedAt=1771160768291",
     "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/199A2325.webp?updatedAt=1771160767809",
+    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/SHIV5804.webp?updatedAt=1771160769266",
+    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/TAN04895.webp?updatedAt=1771160768299",
+    "https://ik.imagekit.io/wciaxyg0zo/GLimpses%20of%20Event/TAN06636.webp?updatedAt=1771160767848",
   ];
 
   return (
