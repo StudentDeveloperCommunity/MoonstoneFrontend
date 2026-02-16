@@ -9,6 +9,7 @@ import { Download, Calendar, X } from "lucide-react";
 import axios from "axios";
 import { API_URL, getevents } from "../NwConfig";
 import EliteSponsors from "../components/EliteSponsors";
+import { getCachedVideo } from "../utils/videoPreloader";
 
 export default function Index() {
   const [countdownStart] = useState(
@@ -18,6 +19,19 @@ export default function Index() {
   const [showTimelineModal, setShowTimelineModal] = useState(false);
   const [eventsData, setEventsData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [moonVideoPreloaded, setMoonVideoPreloaded] = useState(false);
+
+  // Preload moon video for faster loading
+  useEffect(() => {
+    const moonVideoSrc = "https://ik.imagekit.io/wciaxyg0zo/videos/moon.mp4?updatedAt=1771160801609";
+    getCachedVideo(moonVideoSrc)
+      .then(() => {
+        setMoonVideoPreloaded(true);
+      })
+      .catch(() => {
+        console.warn('Failed to preload moon video');
+      });
+  }, []);
 
   // Hide the right-side scrollbar on Home page only (html + body)
   useEffect(() => {
@@ -247,7 +261,7 @@ export default function Index() {
                 <span>M</span>
 
                 <div style={{ perspective: "1000px" }}>
-                  <div className="rounded-full overflow-hidden w-[clamp(52px,9vw,110px)] h-[clamp(52px,9vw,110px)] m-0 p-0">
+                  <div className="rounded-full overflow-hidden w-[clamp(52px,9vw,110px)] h-[clamp(52px,9vw,110px)] m-0 p-0 relative bg-gradient-to-br from-purple-600 to-blue-600">
                     <video
                       src="https://ik.imagekit.io/wciaxyg0zo/videos/moon.mp4?updatedAt=1771160801609"
                       autoPlay
@@ -255,7 +269,20 @@ export default function Index() {
                       muted
                       playsInline
                       disablePictureInPicture
+                      preload={moonVideoPreloaded ? "auto" : "metadata"}
                       className="w-full h-full object-cover"
+                      style={{ 
+                        willChange: 'transform',
+                        transform: 'translateZ(0)',
+                        opacity: moonVideoPreloaded ? 1 : 0.8,
+                        transition: 'opacity 0.3s ease-in-out'
+                      }}
+                      onCanPlayThrough={(e) => {
+                        e.target.style.opacity = '1';
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
                     />
                   </div>
                 </div>
