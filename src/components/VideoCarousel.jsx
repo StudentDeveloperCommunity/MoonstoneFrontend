@@ -1,11 +1,25 @@
 import { useState, useEffect, useRef } from "react";
+import { getCachedVideo } from "../utils/videoPreloader";
 
 export default function About() {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
+  const [videoPreloaded, setVideoPreloaded] = useState(false);
 
   const containerRef = useRef(null);
   const videoRef = useRef(null);
+
+  // Preload video when component mounts
+  useEffect(() => {
+    const videoSrc = "https://ik.imagekit.io/wciaxyg0zo/videos/moonstonediary.mp4?updatedAt=1771160814115";
+    getCachedVideo(videoSrc)
+      .then(() => {
+        setVideoPreloaded(true);
+      })
+      .catch(() => {
+        console.warn('Failed to preload main video');
+      });
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -19,7 +33,7 @@ export default function About() {
       },
       {
         threshold: 0.1,
-        rootMargin: "300px",
+        rootMargin: "200px",
       },
     );
 
@@ -39,8 +53,8 @@ export default function About() {
             {!videoLoaded && (
               <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center z-10">
                 <div className="text-center">
-                  <div className="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
-                  <p className="text-gray-400 text-sm">Loading video...</p>
+                  <div className="w-8 h-8 border-3 border-gray-600 border-t-white rounded-full animate-spin mx-auto mb-3"></div>
+                  <p className="text-gray-400 text-xs sm:text-sm">Loading video...</p>
                 </div>
               </div>
             )}
@@ -48,18 +62,27 @@ export default function About() {
             {isInView && (
               <video
                 ref={videoRef}
-                className={`w-full h-full object-cover rounded-lg sm:ml-8 transition-opacity duration-500 ${
+                className={`w-full h-full object-cover rounded-lg sm:ml-8 transition-opacity duration-300 ${
                   videoLoaded ? "opacity-100" : "opacity-0"
                 }`}
                 autoPlay
                 loop
                 muted
                 playsInline
-                preload="metadata"
+                preload={videoPreloaded ? "auto" : "metadata"}
                 disablePictureInPicture
                 controlsList="nodownload noremoteplayback"
-                onCanPlay={() => setVideoLoaded(true)}
-                onError={() => setVideoLoaded(true)}
+                onLoadedData={() => {
+                  setVideoLoaded(true);
+                }}
+                onCanPlayThrough={() => {
+                  if (videoRef.current) {
+                    videoRef.current.play().catch(() => {});
+                  }
+                }}
+                onError={() => {
+                  setVideoLoaded(true);
+                }}
               >
                 <source
                   src="https://ik.imagekit.io/wciaxyg0zo/videos/moonstonediary.mp4?updatedAt=1771160814115"
