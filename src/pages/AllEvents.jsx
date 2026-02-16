@@ -8,52 +8,7 @@ import EventCard from "../components/Events/EventCard";
 import Pagination from "../components/Pagination";
 
 import EventFetcher from "../api-files/EventAPIs/EventFetcher";
-
-/* 🔹 TEMP DEMO DATA (ONLY FOR UI VISIBILITY) */
-const DEMO_EVENTS = [
-  {
-    _id: "1",
-    title: "Kampus Combat 2.0",
-    eventDate: "2026-02-12",
-    image: "uploads/demo1.jpg",
-    eventType: "sports",
-  },
-  {
-    _id: "2",
-    title: "Techno Clash",
-    eventDate: "2026-02-15",
-    image: "uploads/demo2.jpg",
-    eventType: "techno",
-  },
-  {
-    _id: "3",
-    title: "Cultural Night",
-    eventDate: "2026-02-20",
-    image: "uploads/demo3.jpg",
-    eventType: "cultural",
-  },
-  {
-    _id: "4",
-    title: "Hackathon",
-    eventDate: "2026-02-22",
-    image: "uploads/demo4.jpg",
-    eventType: "techno",
-  },
-  {
-    _id: "5",
-    title: "Drama Night",
-    eventDate: "2026-02-25",
-    image: "uploads/demo5.jpg",
-    eventType: "cultural",
-  },
-  {
-    _id: "6",
-    title: "Football League",
-    eventDate: "2026-02-28",
-    image: "uploads/demo6.jpg",
-    eventType: "sports",
-  },
-];
+import { API_URL } from "../NwConfig";
 
 export default function AllEvents() {
   const [searchParams] = useSearchParams();
@@ -73,14 +28,8 @@ export default function AllEvents() {
     setError(null);
     
     try {
-      // Universal optimization: fast timeout for all event types
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s for all events
-      
       const form = { role, page, limit: 6 };
       const res = await EventFetcher(form);
-      
-      clearTimeout(timeoutId);
 
       if (res?.success && Array.isArray(res.events)) {
         // Preload all images immediately for fast loading
@@ -92,7 +41,7 @@ export default function AllEvents() {
       } else {
         setEvents([]);
         setTotalPages(1);
-        setError("No events found");
+        setError(res?.message || "No events found");
       }
     } catch (err) {
       setEvents([]);
