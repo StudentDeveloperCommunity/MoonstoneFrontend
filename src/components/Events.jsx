@@ -90,8 +90,12 @@ const Events = memo(function Events() {
               <img
                 src={img}
                 alt={`Event ${index}`}
-                loading="lazy"
+                loading="eager"
                 className="absolute inset-0 w-full h-full object-cover"
+                style={{ opacity: 0 }}
+                onLoad={(e) => {
+                  e.target.style.opacity = '1';
+                }}
               />
             </motion.div>
           ))}

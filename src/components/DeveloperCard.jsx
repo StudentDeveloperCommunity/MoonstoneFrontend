@@ -8,7 +8,7 @@ const DeveloperCard = memo(({ dev }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [currentDevId, setCurrentDevId] = useState(null);
 
-  // Ultra-fast image loading with minimal delay
+  // Ultra-fast image loading with immediate display
   useEffect(() => {
     // Reset state when dev changes
     setImageLoaded(false);
@@ -26,62 +26,46 @@ const DeveloperCard = memo(({ dev }) => {
       return;
     }
 
-    const loadImage = (attempt = 0) => {
-      const img = new Image();
-      
-      // Ultra-fast timeout for developer images
-      const timeoutId = setTimeout(() => {
-        img.src = ''; // Cancel loading
-        if (attempt < 2 && devId === currentDevId) {
-          // Ultra-fast retry for developer images
-          const retryDelay = 100 * (attempt + 1); // 100ms, 200ms, 300ms
-          setTimeout(() => loadImage(attempt + 1), retryDelay);
-        } else {
-          // Final fallback
-          if (devId === currentDevId) {
-            setImageError(true);
-            setImageLoaded(true);
-          }
-        }
-      }, 1000); // 1s timeout for developer images
-      
-      img.onload = () => {
-        clearTimeout(timeoutId);
-        // Only update if this is still the current dev
-        if (devId === currentDevId) {
-          setImageSrc(dev.image);
-          setImageLoaded(true);
-        }
-      };
-      
-      img.onerror = () => {
-        clearTimeout(timeoutId);
-        // Only update if this is still the current dev
-        if (devId === currentDevId) {
-          if (attempt < 2) {
-            // Ultra-fast retry for developer images
-            const retryDelay = 100 * (attempt + 1); // 100ms, 200ms, 300ms
-            setTimeout(() => loadImage(attempt + 1), retryDelay);
-          } else {
-            // Final fallback
-            setImageError(true);
-            setImageLoaded(true);
-          }
-        }
-      };
-      
-      // Start loading the image
-      img.src = dev.image;
-      
-      return () => {
-        clearTimeout(timeoutId);
-        img.onload = null;
-        img.onerror = null;
-      };
+    // Set image source immediately for instant display
+    setImageSrc(dev.image);
+    
+    const img = new Image();
+    
+    // Ultra-fast timeout - fail quickly to show fallback
+    const timeoutId = setTimeout(() => {
+      img.src = ''; // Cancel loading
+      if (devId === currentDevId) {
+        setImageError(true);
+        setImageLoaded(true);
+      }
+    }, 1200); // 1.2s timeout - fail fast
+    
+    img.onload = () => {
+      clearTimeout(timeoutId);
+      // Only update if this is still current dev
+      if (devId === currentDevId) {
+        setImageSrc(dev.image);
+        setImageLoaded(true);
+      }
     };
-
-    // Start loading immediately
-    loadImage();
+    
+    img.onerror = () => {
+      clearTimeout(timeoutId);
+      // Only update if this is still current dev
+      if (devId === currentDevId) {
+        setImageError(true);
+        setImageLoaded(true);
+      }
+    };
+    
+    // Start loading the image immediately
+    img.src = dev.image;
+    
+    return () => {
+      clearTimeout(timeoutId);
+      img.onload = null;
+      img.onerror = null;
+    };
   }, [dev?.image, dev?.id, currentDevId]);
 
   return (

@@ -1,8 +1,37 @@
+import { useState, useEffect } from "react";
 import hcl from "../assets/HCL.png";
 
 import { FaLinkedinIn, FaInstagram, FaTwitter, FaGlobe } from "react-icons/fa6";
 
 export default function EliteSponsors() {
+  const [hclLoaded, setHclLoaded] = useState(false);
+  const [hclError, setHclError] = useState(false);
+
+  // Preload HCL image for instant display
+  useEffect(() => {
+    const img = new Image();
+    
+    // Fast timeout - fail quickly to show placeholder
+    const timeoutId = setTimeout(() => {
+      setHclError(true);
+      setHclLoaded(true);
+    }, 1000); // 1s timeout
+    
+    img.onload = () => {
+      clearTimeout(timeoutId);
+      setHclLoaded(true);
+    };
+    
+    img.onerror = () => {
+      clearTimeout(timeoutId);
+      setHclError(true);
+      setHclLoaded(true);
+    };
+    
+    // Start loading immediately
+    img.src = hcl;
+  }, []);
+
   return (
     <div className="w-full text-white mt-8 px-4 sm:px-6  md:px-10">
       {/* ✅ Heading */}
@@ -16,11 +45,26 @@ export default function EliteSponsors() {
       <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center lg:space-x-8 justify-center gap-6 text-center lg:text-left">
         {/* ✅ Image Card */}
         <div className="w-full lg:w-[32%] bg-gradient-to-r from-indigo-500 via-cyan-500 to-indigo-500 rounded-2xl p-3 sm:p-4 shadow-lg">
-          <img
-            src={hcl}
-            alt="HCL Sponsor"
-            className="w-full h-auto object-contain rounded-xl"
-          />
+          {!hclLoaded && (
+            <div className="w-full h-auto rounded-xl bg-gray-200 animate-pulse flex items-center justify-center">
+              <div className="w-8 h-8 border-4 border-gray-400 border-t-gray-600 rounded-full animate-spin"></div>
+            </div>
+          )}
+          {hclLoaded && !hclError && (
+            <img
+              src={hcl}
+              alt="HCL Sponsor"
+              className="w-full h-auto object-contain rounded-xl transition-opacity duration-300"
+              style={{ opacity: hclLoaded ? 1 : 0 }}
+              loading="eager"
+              decoding="async"
+            />
+          )}
+          {hclError && (
+            <div className="w-full h-auto rounded-xl bg-gray-200 flex items-center justify-center">
+              <span className="text-gray-500 font-semibold">HCLTech</span>
+            </div>
+          )}
         </div>
 
         {/* ✅ Text Section */}
