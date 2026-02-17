@@ -9,15 +9,13 @@ const EventCard = memo(({ event }) => {
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [currentEventId, setCurrentEventId] = useState(null);
-  const [retryCount, setRetryCount] = useState(0);
 
-  // Universal-optimized image loading with fast retry logic
+  // Ultra-fast image loading with immediate display
   useEffect(() => {
     // Reset state when event changes
     setImageLoaded(false);
     setImageError(false);
     setImageSrc(null);
-    setRetryCount(0);
     
     const eventId = event?._id || event?.id;
     if (!eventId || eventId !== currentEventId) {
@@ -30,65 +28,49 @@ const EventCard = memo(({ event }) => {
       return;
     }
 
-    const loadImage = (attempt = 0) => {
-      const img = new Image();
-      const fullUrl = `${API_URL}/${event.image}`;
-      
-      // Universal optimization: fast timeout for all images
-      const timeoutId = setTimeout(() => {
-        img.src = ''; // Cancel loading
-        if (attempt < 3 && eventId === currentEventId) {
-          // Fast retry for all images
-          const retryDelay = 400 * (attempt + 1); // 400ms, 800ms, 1.2s, 1.6s
-          setTimeout(() => loadImage(attempt + 1), retryDelay);
-        } else {
-          // Final fallback
-          if (eventId === currentEventId) {
-            setImageSrc(fallbackImg);
-            setImageError(true);
-            setImageLoaded(true);
-          }
-        }
-      }, 2500); // 2.5s timeout for all images
-      
-      img.onload = () => {
-        clearTimeout(timeoutId);
-        // Only update if this is still current event
-        if (eventId === currentEventId) {
-          setImageSrc(fullUrl);
-          setImageLoaded(true);
-          setRetryCount(0);
-        }
-      };
-      
-      img.onerror = () => {
-        clearTimeout(timeoutId);
-        // Only update if this is still current event
-        if (eventId === currentEventId) {
-          if (attempt < 3) {
-            // Fast retry for all images
-            const retryDelay = 400 * (attempt + 1); // 400ms, 800ms, 1.2s, 1.6s
-            setTimeout(() => loadImage(attempt + 1), retryDelay);
-          } else {
-            // Final fallback
-            setImageSrc(fallbackImg);
-            setImageError(true);
-            setImageLoaded(true);
-          }
-        }
-      };
-      
-      // Start loading the image
-      img.src = fullUrl;
-      
-      return () => {
-        clearTimeout(timeoutId);
-        img.onload = null;
-        img.onerror = null;
-      };
+    // Set image source immediately for instant display
+    const fullUrl = `${API_URL}/${event.image}`;
+    setImageSrc(fullUrl);
+    
+    const img = new Image();
+    
+    // Ultra-fast timeout - fail quickly to show fallback
+    const timeoutId = setTimeout(() => {
+      img.src = ''; // Cancel loading
+      if (eventId === currentEventId) {
+        setImageSrc(fallbackImg);
+        setImageError(true);
+        setImageLoaded(true);
+      }
+    }, 1500); // 1.5s timeout - fail fast
+    
+    img.onload = () => {
+      clearTimeout(timeoutId);
+      // Only update if this is still current event
+      if (eventId === currentEventId) {
+        setImageSrc(fullUrl);
+        setImageLoaded(true);
+      }
     };
-
-    loadImage();
+    
+    img.onerror = () => {
+      clearTimeout(timeoutId);
+      // Only update if this is still current event
+      if (eventId === currentEventId) {
+        setImageSrc(fallbackImg);
+        setImageError(true);
+        setImageLoaded(true);
+      }
+    };
+    
+    // Start loading the image immediately
+    img.src = fullUrl;
+    
+    return () => {
+      clearTimeout(timeoutId);
+      img.onload = null;
+      img.onerror = null;
+    };
   }, [event?.image, event?._id, event?.id, currentEventId]);
 
   const redirecttoregister = () => {

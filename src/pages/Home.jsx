@@ -19,18 +19,69 @@ export default function Index() {
   const [showTimelineModal, setShowTimelineModal] = useState(false);
   const [eventsData, setEventsData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [moonVideoPreloaded, setMoonVideoPreloaded] = useState(false);
+  const [moonVideoPreloaded, setMoonVideoPreloaded] = useState(true);
 
-  // Preload moon video for faster loading
+  // Preload moon video and image for instant display
   useEffect(() => {
     const moonVideoSrc = "https://ik.imagekit.io/wciaxyg0zo/videos/moon.mp4?updatedAt=1771160801609";
-    getCachedVideo(moonVideoSrc)
-      .then(() => {
-        setMoonVideoPreloaded(true);
-      })
-      .catch(() => {
-        console.warn('Failed to preload moon video');
+    const moonImageSrc = "https://ik.imagekit.io/wciaxyg0zo/moon.png?updatedAt=1771160801609";
+    
+    // Preload both video and image
+    const preloadAssets = async () => {
+      const videoPromises = [];
+      
+      // Preload video
+      const videoPromise = new Promise((resolve, reject) => {
+        const video = document.createElement('video');
+        video.preload = 'auto';
+        video.muted = true;
+        video.src = moonVideoSrc;
+        
+        video.oncanplay = () => {
+          resolve(video);
+        };
+        
+        video.onerror = () => {
+          reject(new Error('Video preload failed'));
+        };
+        
+        video.load();
       });
+      videoPromises.push(videoPromise);
+      
+      // Preload image
+      const imagePromise = new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = moonImageSrc;
+        
+        img.onload = () => {
+          resolve(img);
+        };
+        
+        img.onerror = () => {
+          reject(new Error('Image preload failed'));
+        };
+        
+        img.src = moonImageSrc;
+      });
+      imagePromise.push(imagePromise);
+      
+      // Wait for both to complete
+      try {
+        const [video, image] = await Promise.all(videoPromises);
+        setMoonVideoPreloaded(true);
+        setMoonImagePreloaded(true);
+        console.log('Moon assets preloaded successfully');
+      } catch (error) {
+        console.warn('Failed to preload moon assets:', error);
+        // Still set to true to avoid blue glare
+        setMoonVideoPreloaded(true);
+        setMoonImagePreloaded(true);
+      }
+    };
+
+    // Call the preload function
+    preloadAssets();
   }, []);
 
   // Hide the right-side scrollbar on Home page only (html + body)
@@ -278,6 +329,10 @@ export default function Index() {
                         transition: 'opacity 0.3s ease-in-out'
                       }}
                       onCanPlayThrough={(e) => {
+                        e.target.style.opacity = '1';
+                      }}
+                      onLoadedData={(e) => {
+                        // Video metadata loaded, set to fully opaque immediately
                         e.target.style.opacity = '1';
                       }}
                       onError={(e) => {
