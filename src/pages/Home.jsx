@@ -312,7 +312,7 @@ export default function Index() {
                 <span>M</span>
 
                 <div style={{ perspective: "1000px" }}>
-                  <div className="rounded-full overflow-hidden w-[clamp(52px,9vw,110px)] h-[clamp(52px,9vw,110px)] m-0 p-0 relative bg-gradient-to-br from-purple-600 to-blue-600">
+                  <div className="rounded-full overflow-hidden w-[clamp(52px,9vw,110px)] h-[clamp(52px,9vw,110px)] m-0 p-0 relative ">
                     <video
                       src="https://ik.imagekit.io/wciaxyg0zo/videos/moon.mp4?updatedAt=1771160801609"
                       autoPlay
