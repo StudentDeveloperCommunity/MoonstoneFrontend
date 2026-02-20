@@ -126,6 +126,36 @@ const developerData = [
     category: "Mentors",
     image: bandhusir,
   },
+  {
+    id: 101,
+    name: "Anshika",
+    role: "Support Team",
+    department: "Support",
+    email: "support@moonstone.team",
+    linkedin: "",
+    category: "Support Team",
+    image: OfficeCatMan,
+  },
+  {
+    id: 102,
+    name: "Anika",
+    role: "Support Team",
+    department: "Support",
+    email: "support@moonstone.team",
+    linkedin: "",
+    category: "Support Team",
+    image: OfficeCatMan,
+  },
+  {
+    id: 103,
+    name: "Snehika",
+    role: "Support Team",
+    department: "Support",
+    email: "support@moonstone.team",
+    linkedin: "",
+    category: "Support Team",
+    image: OfficeCatMan,
+  },
 ];
 
 const categories = [
@@ -134,6 +164,7 @@ const categories = [
   "Frontend Developers",
   "Backend Developers",
   "DevOps Engineer",
+  "Support Team",
 ];
 
 export default function Developers() {
