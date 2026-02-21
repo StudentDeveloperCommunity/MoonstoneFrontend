@@ -45,7 +45,6 @@ const SponsorCard = memo(({ sponsor }) => {
     img.src = sponsor.img;
     
     return () => {
-      clearTimeout(timeoutId);
       img.onload = null;
       img.onerror = null;
     };
