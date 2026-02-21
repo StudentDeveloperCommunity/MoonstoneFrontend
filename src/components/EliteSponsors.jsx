@@ -9,28 +9,27 @@ export default function EliteSponsors() {
 
   // Preload HCL image for instant display
   useEffect(() => {
+    // Set loaded immediately for instant display
+    setHclLoaded(true);
+    
+    // Preload in background
     const img = new Image();
-    
-    // Fast timeout - fail quickly to show placeholder
-    const timeoutId = setTimeout(() => {
-      setHclError(true);
-      setHclLoaded(true);
-    }, 1000); // 1s timeout
-    
     img.onload = () => {
-      clearTimeout(timeoutId);
       setHclLoaded(true);
     };
     
     img.onerror = () => {
-      clearTimeout(timeoutId);
       setHclError(true);
       setHclLoaded(true);
     };
     
-    // Start loading immediately
     img.src = hcl;
-  }, []);
+    
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [hcl]);
 
   return (
     <div className="w-full text-white mt-8 px-4 sm:px-6  md:px-10">

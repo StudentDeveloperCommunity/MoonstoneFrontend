@@ -29,32 +29,16 @@ const EventCard = memo(({ event }) => {
     }
 
     // Set image source immediately for instant display
-    const fullUrl = `${API_URL}/${event.image}`;
-    setImageSrc(fullUrl);
+    const fullImageUrl = `${API_URL}${event.image}`;
+    setImageSrc(fullImageUrl);
+    setImageLoaded(true); // Mark as loaded immediately
     
+    // Preload in background for smooth experience
     const img = new Image();
-    
-    // Ultra-fast timeout - fail quickly to show fallback
-    const timeoutId = setTimeout(() => {
-      img.src = ''; // Cancel loading
-      if (eventId === currentEventId) {
-        setImageSrc(fallbackImg);
-        setImageError(true);
-        setImageLoaded(true);
-      }
-    }, 1500); // 1.5s timeout - fail fast
-    
     img.onload = () => {
-      clearTimeout(timeoutId);
-      // Only update if this is still current event
-      if (eventId === currentEventId) {
-        setImageSrc(fullUrl);
-        setImageLoaded(true);
-      }
+      setImageLoaded(true);
     };
-    
     img.onerror = () => {
-      clearTimeout(timeoutId);
       // Only update if this is still current event
       if (eventId === currentEventId) {
         setImageSrc(fallbackImg);
@@ -64,14 +48,13 @@ const EventCard = memo(({ event }) => {
     };
     
     // Start loading the image immediately
-    img.src = fullUrl;
+    img.src = fullImageUrl;
     
     return () => {
-      clearTimeout(timeoutId);
       img.onload = null;
       img.onerror = null;
     };
-  }, [event?.image, event?._id, event?.id, currentEventId]);
+  }, [event, currentEventId, API_URL]);
 
   const redirecttoregister = () => {
     navigate("/eventsindetails", { state: { event } });
