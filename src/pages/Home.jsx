@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { Countdown } from "../components/Countdown";
 import Events from "../components/Events";
 import Clubs from "../components/Clubs";
@@ -20,6 +20,11 @@ export default function Index() {
   const [eventsData, setEventsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [moonVideoPreloaded, setMoonVideoPreloaded] = useState(true);
+  const [visibleSections, setVisibleSections] = useState(new Set(['hero']));
+  
+  // Refs for intersection observer
+  const observerRef = useRef(null);
+  const sectionRefs = useRef({});
 
   // Preload moon video and image for instant display
   useEffect(() => {
@@ -82,6 +87,43 @@ export default function Index() {
 
     // Call the preload function
     preloadAssets();
+  }, []);
+
+  // Intersection Observer for lazy loading sections
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const sectionId = entry.target.id;
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set([...prev, sectionId]));
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '100px', // Start loading 100px before visible
+        threshold: 0.1
+      }
+    );
+
+    observerRef.current = observer;
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  // Register sections for observation
+  const registerSection = useCallback((sectionId) => {
+    return (el) => {
+      if (el && !sectionRefs.current[sectionId]) {
+        sectionRefs.current[sectionId] = el;
+        observerRef.current?.observe(el);
+      }
+    };
   }, []);
 
   // Hide the right-side scrollbar on Home page only (html + body)
@@ -235,7 +277,7 @@ export default function Index() {
   };
 
   const stars = useMemo(() => {
-    const STAR_COUNT = 150;
+    const STAR_COUNT = 50; // Reduced from 150 for better performance
 
     return Array.from({ length: STAR_COUNT }).map((_, i) => {
       const size = Math.random() > 0.7 ? 2 : 1;
@@ -543,7 +585,7 @@ export default function Index() {
 
         <div className="w-full flex flex-col m-0 p-0 space-y-2 sm:space-y-3 md:space-y-4">
           {/* Glimpses Of Events */}
-          <div id="glimpses-section" className="w-full m-0 p-0 ">
+          <div id="glimpses-section" className="w-full m-0 p-0">
             <Events />
           </div>
 
