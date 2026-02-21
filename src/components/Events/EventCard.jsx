@@ -18,7 +18,7 @@ const EventCard = memo(({ event }) => {
       return;
     }
 
-    const fullImageUrl = `${API_URL}${event.image}`;
+    const fullImageUrl = `${API_URL}/${event.image}`;
     setImageSrc(fullImageUrl);
     
     // Simple image test
