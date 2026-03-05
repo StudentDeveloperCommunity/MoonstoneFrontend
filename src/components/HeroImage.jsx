@@ -20,33 +20,23 @@ const HeroImage = memo(({ src, alt, className = "" }) => {
 
     // Set image source immediately for instant display
     setImageSrc(src);
+    setImageLoaded(true); // Mark as loaded immediately
     
+    // Preload in background for smooth experience
     const img = new Image();
-    
-    // Ultra-fast timeout - fail quickly to show fallback
-    const timeoutId = setTimeout(() => {
-      img.src = ''; // Cancel loading
-      setImageError(true);
-      setImageLoaded(true);
-    }, 800); // 0.8s timeout - fail fast
-    
     img.onload = () => {
-      clearTimeout(timeoutId);
       setImageSrc(src);
       setImageLoaded(true);
     };
     
     img.onerror = () => {
-      clearTimeout(timeoutId);
       setImageError(true);
       setImageLoaded(true);
     };
     
-    // Start loading image immediately
     img.src = src;
     
     return () => {
-      clearTimeout(timeoutId);
       img.onload = null;
       img.onerror = null;
     };

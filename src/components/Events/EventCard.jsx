@@ -5,73 +5,36 @@ import fallbackImg from "../../assets/eventsindetails/Frame.svg";
 
 const EventCard = memo(({ event }) => {
   const navigate = useNavigate();
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
-  const [currentEventId, setCurrentEventId] = useState(null);
+  const [hasError, setHasError] = useState(false);
 
-  // Ultra-fast image loading with immediate display
+  // Simple, reliable image loading
   useEffect(() => {
-    // Reset state when event changes
-    setImageLoaded(false);
-    setImageError(false);
-    setImageSrc(null);
+    setHasError(false);
     
-    const eventId = event?._id || event?.id;
-    if (!eventId || eventId !== currentEventId) {
-      setCurrentEventId(eventId);
-    }
-
     if (!event?.image) {
       setImageSrc(fallbackImg);
-      setImageLoaded(true);
+      setHasError(true);
       return;
     }
 
-    // Set image source immediately for instant display
-    const fullUrl = `${API_URL}/${event.image}`;
-    setImageSrc(fullUrl);
+    const fullImageUrl = `${API_URL}/${event.image}`;
+    setImageSrc(fullImageUrl);
     
+    // Simple image test
     const img = new Image();
-    
-    // Ultra-fast timeout - fail quickly to show fallback
-    const timeoutId = setTimeout(() => {
-      img.src = ''; // Cancel loading
-      if (eventId === currentEventId) {
-        setImageSrc(fallbackImg);
-        setImageError(true);
-        setImageLoaded(true);
-      }
-    }, 1500); // 1.5s timeout - fail fast
-    
     img.onload = () => {
-      clearTimeout(timeoutId);
-      // Only update if this is still current event
-      if (eventId === currentEventId) {
-        setImageSrc(fullUrl);
-        setImageLoaded(true);
-      }
+      // Image loaded successfully
+      setImageSrc(fullImageUrl);
+      setHasError(false);
     };
-    
     img.onerror = () => {
-      clearTimeout(timeoutId);
-      // Only update if this is still current event
-      if (eventId === currentEventId) {
-        setImageSrc(fallbackImg);
-        setImageError(true);
-        setImageLoaded(true);
-      }
+      // Image failed, use fallback
+      setImageSrc(fallbackImg);
+      setHasError(true);
     };
-    
-    // Start loading the image immediately
-    img.src = fullUrl;
-    
-    return () => {
-      clearTimeout(timeoutId);
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [event?.image, event?._id, event?.id, currentEventId]);
+    img.src = fullImageUrl;
+  }, [event?.image, API_URL]);
 
   const redirecttoregister = () => {
     navigate("/eventsindetails", { state: { event } });
@@ -105,23 +68,17 @@ const EventCard = memo(({ event }) => {
     >
       {/* MOBILE-OPTIMIZED IMAGE WITH PRELOADING */}
       <div className="relative w-full h-full">
-        {!imageLoaded && (
-          <div className="absolute inset-0 bg-gray-800 animate-pulse">
-            {/* Mobile-optimized loading indicator */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            </div>
-          </div>
-        )}
         {imageSrc && (
           <img
             src={imageSrc}
             alt={event?.title || "Event"}
-            className={`w-full h-full object-cover block transition-opacity duration-300 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
+            className="w-full h-full object-cover block"
             loading="eager" // Load immediately for better UX
             decoding="async" // Async decoding for performance
+            onError={() => {
+              setImageSrc(fallbackImg);
+              setHasError(true);
+            }}
           />
         )}
       </div>

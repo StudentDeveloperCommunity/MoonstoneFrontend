@@ -26,29 +26,14 @@ const SponsorCard = memo(({ sponsor }) => {
 
     // Set image source immediately for instant display
     setImageSrc(sponsor.img);
+    setImageLoaded(true); // Mark as loaded immediately
     
+    // Preload in background for smooth experience
     const img = new Image();
-    
-    // Ultra-fast timeout - fail quickly to show fallback
-    const timeoutId = setTimeout(() => {
-      img.src = ''; // Cancel loading
-      if (sponsorId === currentSponsorId) {
-        setImageError(true);
-        setImageLoaded(true);
-      }
-    }, 1000); // 1s timeout - fail fast
-    
     img.onload = () => {
-      clearTimeout(timeoutId);
-      // Only update if this is still current sponsor
-      if (sponsorId === currentSponsorId) {
-        setImageSrc(sponsor.img);
-        setImageLoaded(true);
-      }
+      setImageLoaded(true);
     };
-    
     img.onerror = () => {
-      clearTimeout(timeoutId);
       // Only update if this is still current sponsor
       if (sponsorId === currentSponsorId) {
         setImageError(true);
@@ -60,7 +45,6 @@ const SponsorCard = memo(({ sponsor }) => {
     img.src = sponsor.img;
     
     return () => {
-      clearTimeout(timeoutId);
       img.onload = null;
       img.onerror = null;
     };

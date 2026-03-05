@@ -15,7 +15,7 @@ const DeveloperCard = memo(({ dev }) => {
     setImageError(false);
     setImageSrc(null);
     
-    const devId = dev?.id;
+    const devId = dev?._id || dev?.id;
     if (!devId || devId !== currentDevId) {
       setCurrentDevId(devId);
     }
@@ -28,20 +28,11 @@ const DeveloperCard = memo(({ dev }) => {
 
     // Set image source immediately for instant display
     setImageSrc(dev.image);
+    setImageLoaded(true); // Mark as loaded immediately
     
+    // Preload in background for smooth experience
     const img = new Image();
-    
-    // Ultra-fast timeout - fail quickly to show fallback
-    const timeoutId = setTimeout(() => {
-      img.src = ''; // Cancel loading
-      if (devId === currentDevId) {
-        setImageError(true);
-        setImageLoaded(true);
-      }
-    }, 1200); // 1.2s timeout - fail fast
-    
     img.onload = () => {
-      clearTimeout(timeoutId);
       // Only update if this is still current dev
       if (devId === currentDevId) {
         setImageSrc(dev.image);
@@ -50,7 +41,6 @@ const DeveloperCard = memo(({ dev }) => {
     };
     
     img.onerror = () => {
-      clearTimeout(timeoutId);
       // Only update if this is still current dev
       if (devId === currentDevId) {
         setImageError(true);
@@ -58,15 +48,13 @@ const DeveloperCard = memo(({ dev }) => {
       }
     };
     
-    // Start loading the image immediately
     img.src = dev.image;
     
     return () => {
-      clearTimeout(timeoutId);
       img.onload = null;
       img.onerror = null;
     };
-  }, [dev?.image, dev?.id, currentDevId]);
+  }, [dev, currentDevId]);
 
   return (
     <div className="group relative bg-white rounded-xl sm:rounded-2xl p-6 sm:p-7 md:p-6
