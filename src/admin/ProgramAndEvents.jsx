@@ -25,12 +25,18 @@ export default function ProgramAndEvents({ userRole }) {
   const [itemsPerPage, setItemsPerPage] = useState("all");
 
   const isAllSelected = itemsPerPage === "all";
-  const currentItemsPerPage = isAllSelected
-    ? events.length || 1
-    : Number(itemsPerPage);
-  const totalPages = Math.ceil(events.length / currentItemsPerPage) || 1;
-  const startIndex = (page - 1) * currentItemsPerPage;
-  const paginatedEvents = events.slice(startIndex, startIndex + currentItemsPerPage);
+  const parsedItemsPerPage = Number(itemsPerPage);
+  const currentItemsPerPage = Number.isFinite(parsedItemsPerPage)
+    && parsedItemsPerPage > 0
+    ? parsedItemsPerPage
+    : 1;
+  const totalPages = isAllSelected
+    ? 1
+    : Math.ceil(events.length / currentItemsPerPage) || 1;
+  const startIndex = isAllSelected ? 0 : (page - 1) * currentItemsPerPage;
+  const paginatedEvents = isAllSelected
+    ? events
+    : events.slice(startIndex, startIndex + currentItemsPerPage);
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -266,6 +272,10 @@ export default function ProgramAndEvents({ userRole }) {
   };
 
   const geteventsinfo = async () => {
+    if (!userRole) {
+      return;
+    }
+
     setLoading(true);
 
     // Revoke any stale object URLs to avoid broken previews
@@ -278,7 +288,11 @@ export default function ProgramAndEvents({ userRole }) {
     // Clear corrupted state first
     setEvents([]);
 
-    const data = { role: userRole };
+    const data = {
+      role: userRole,
+      page: 1,
+      limit: 10000,
+    };
     const res = await EventFetcher(data);
     if (res?.success && res?.events?.length > 0) {
       // Use simple map instead of Promise.all for better performance
@@ -294,7 +308,7 @@ export default function ProgramAndEvents({ userRole }) {
 
   useEffect(() => {
     geteventsinfo();
-  }, []);
+  }, [userRole]);
 
   useEffect(() => {
     if (page > totalPages) {
