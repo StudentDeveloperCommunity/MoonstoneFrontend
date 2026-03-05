@@ -5,6 +5,7 @@ import AdminRegister from "../api-files/AdminAPIs/AdminRegister";
 import GetAdminUsers from "../api-files/AdminAPIs/GetAdminUsers";
 import RemoveUser from "../api-files/AdminAPIs/RemoveUser";
 import WebsiteLoader from "../Loader/WebsiteLoader";
+import Pagination from "../components/Pagination";
 export default function ManageUser() {
   const [open, setOpen] = useState(false);
   const handleAddUser = async (newUser) => {
@@ -39,6 +40,17 @@ export default function ManageUser() {
   };
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const USERS_PER_PAGE = 6;
+
+  const totalPages = Math.ceil(users.length / USERS_PER_PAGE) || 1;
+  const startIndex = (page - 1) * USERS_PER_PAGE;
+  const paginatedUsers = users.slice(startIndex, startIndex + USERS_PER_PAGE);
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const getusers=async()=>{
     setLoading(true);
@@ -53,6 +65,12 @@ export default function ManageUser() {
   useEffect(()=>{
     getusers();
   },[])
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
 
   return (
     <div className="p-6 space-y-6">
@@ -83,12 +101,12 @@ export default function ManageUser() {
 
 
           <tbody>
-            {users.map((user, index) => (
+            {paginatedUsers.map((user, index) => (
               <tr
                 key={user._id || `user-${index}`}
                 className="border-b hover:bg-gray-50 transition"
               >
-                <td className="p-3">{index+1}</td>
+                <td className="p-3">{startIndex + index + 1}</td>
                 <td className="p-3">{user.email}</td>
                 <td className="p-3">{user.role}</td>
                 <td className="p-3">
@@ -106,6 +124,11 @@ export default function ManageUser() {
           </tbody>
         </table>
       </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
         <AddUserModal open={open} setOpen={setOpen} onAddUser={handleAddUser} />
     </div>
   );
