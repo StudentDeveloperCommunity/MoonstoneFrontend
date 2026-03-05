@@ -75,25 +75,6 @@ const developerData = [
     category: "Backend Developers",
     image: avdhesh,
   },
-//   {
-//     id: 8,
-//     name: "John Doe",
-//     role: "Backend",
-//     department: "Computer Science Department",
-//     email: "university.edu",
-//     category: "Backend Developers",
-//     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa",
-//   },
-//   {
-//     id: 9,
-//     name: "John Doe",
-//     role: "Backend",
-//     department: "Computer Science Department",
-//     email: "university.edu",
-//     category: "Backend Developers",
-//     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shilpa",
-//   },
-//   // --- Deployers ---
   {
     id: 10,
     name: "Avdhesh Bhadoriya",
