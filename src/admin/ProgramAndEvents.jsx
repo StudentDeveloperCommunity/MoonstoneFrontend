@@ -16,10 +16,28 @@ import { API_URL } from "../NwConfig";
 import EventDelete from "../api-files/EventAPIs/EventDelete";
 import defaultEventImage from "../assets/events/default-event-image.webp";
 import EventForm from "./EventForm";
+import Pagination from "../components/Pagination";
 
 export default function ProgramAndEvents({ userRole }) {
   const [events, setEvents] = useState([]);
   const [editMode, setEditMode] = useState({}); // Track edit mode for each event
+  const [page, setPage] = useState(1);
+  const EVENTS_PER_PAGE = 5;
+
+  const totalPages = useMemo(
+    () => Math.ceil(events.length / EVENTS_PER_PAGE) || 1,
+    [events.length],
+  );
+  const startIndex = (page - 1) * EVENTS_PER_PAGE;
+  const paginatedEvents = useMemo(
+    () => events.slice(startIndex, startIndex + EVENTS_PER_PAGE),
+    [events, startIndex],
+  );
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const toggleEditMode = (index) => {
     setEditMode((prev) => ({
@@ -100,6 +118,7 @@ export default function ProgramAndEvents({ userRole }) {
 
   const addNewEvent = () => {
     const timestamp = new Date().toLocaleTimeString();
+    setPage(1);
     setEvents([
       {
         image: null,
@@ -263,9 +282,11 @@ export default function ProgramAndEvents({ userRole }) {
       // Use simple map instead of Promise.all for better performance
       const mappedEvents = res.events.map(mapEvent);
       setEvents(mappedEvents);
+      setPage(1);
     } else {
       // Don't show dummy events - keep empty state
       setEvents([]);
+      setPage(1);
     }
 
     setLoading(false);
@@ -274,6 +295,13 @@ export default function ProgramAndEvents({ userRole }) {
   useEffect(() => {
     geteventsinfo();
   }, []);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
   const handleSubmit = async () => {
     setLoading(true);
 
@@ -518,7 +546,15 @@ export default function ProgramAndEvents({ userRole }) {
           </div>
         </div>
       ) : (
-        events.map((event, index) => (
+        <>
+          <div className="mb-4 text-sm text-gray-600">
+            Showing {startIndex + 1}-{Math.min(startIndex + paginatedEvents.length, events.length)} of {events.length} events
+          </div>
+
+          {paginatedEvents.map((event, pageIndex) => {
+            const index = startIndex + pageIndex;
+
+            return (
           <div
             key={event.id || `new-event-${index}`}
             className={`border p-6 mb-6 bg-white rounded-lg shadow-md ${editMode[index] ? "border-blue-500 border-2" : ""}`}
@@ -630,7 +666,15 @@ export default function ProgramAndEvents({ userRole }) {
               formatTime12Hour={formatTime12Hour}
             />
           </div>
-        ))
+            );
+          })}
+
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
     </div>
   );
