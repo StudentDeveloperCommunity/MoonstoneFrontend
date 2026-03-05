@@ -22,21 +22,24 @@ export default function ProgramAndEvents({ userRole }) {
   const [events, setEvents] = useState([]);
   const [editMode, setEditMode] = useState({}); // Track edit mode for each event
   const [page, setPage] = useState(1);
-  const EVENTS_PER_PAGE = 5;
+  const [itemsPerPage, setItemsPerPage] = useState("all");
 
-  const totalPages = useMemo(
-    () => Math.ceil(events.length / EVENTS_PER_PAGE) || 1,
-    [events.length],
-  );
-  const startIndex = (page - 1) * EVENTS_PER_PAGE;
-  const paginatedEvents = useMemo(
-    () => events.slice(startIndex, startIndex + EVENTS_PER_PAGE),
-    [events, startIndex],
-  );
+  const isAllSelected = itemsPerPage === "all";
+  const currentItemsPerPage = isAllSelected
+    ? events.length || 1
+    : Number(itemsPerPage);
+  const totalPages = Math.ceil(events.length / currentItemsPerPage) || 1;
+  const startIndex = (page - 1) * currentItemsPerPage;
+  const paginatedEvents = events.slice(startIndex, startIndex + currentItemsPerPage);
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(e.target.value);
+    setPage(1);
   };
 
   const toggleEditMode = (index) => {
@@ -118,7 +121,6 @@ export default function ProgramAndEvents({ userRole }) {
 
   const addNewEvent = () => {
     const timestamp = new Date().toLocaleTimeString();
-    setPage(1);
     setEvents([
       {
         image: null,
@@ -282,11 +284,9 @@ export default function ProgramAndEvents({ userRole }) {
       // Use simple map instead of Promise.all for better performance
       const mappedEvents = res.events.map(mapEvent);
       setEvents(mappedEvents);
-      setPage(1);
     } else {
       // Don't show dummy events - keep empty state
       setEvents([]);
-      setPage(1);
     }
 
     setLoading(false);
@@ -547,8 +547,28 @@ export default function ProgramAndEvents({ userRole }) {
         </div>
       ) : (
         <>
-          <div className="mb-4 text-sm text-gray-600">
-            Showing {startIndex + 1}-{Math.min(startIndex + paginatedEvents.length, events.length)} of {events.length} events
+          <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
+            <p className="text-sm text-gray-600">
+              Showing {events.length === 0 ? 0 : startIndex + 1}-
+              {Math.min(startIndex + paginatedEvents.length, events.length)} of {events.length} events
+            </p>
+
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-700 font-medium" htmlFor="events-per-page">
+                Per page
+              </label>
+              <select
+                id="events-per-page"
+                value={itemsPerPage}
+                onChange={handleItemsPerPageChange}
+                className="px-2 py-1 border rounded text-sm"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="all">All</option>
+              </select>
+            </div>
           </div>
 
           {paginatedEvents.map((event, pageIndex) => {
@@ -669,11 +689,13 @@ export default function ProgramAndEvents({ userRole }) {
             );
           })}
 
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          {!isAllSelected && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </>
       )}
     </div>
